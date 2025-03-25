@@ -10,5 +10,8 @@ EditorBuildSettings:
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
     path: Assets/Scenes/MirrorServerTestScene.unity
+    guid: 070c2fcfc82759b44bf259bfa4188e3d
+  - enabled: 1
+    path: Assets/Scenes/CWS_PlayerController.unity
     guid: 16a6cc7557005a44fb4a465144e4d506
   m_configObjects: {}
