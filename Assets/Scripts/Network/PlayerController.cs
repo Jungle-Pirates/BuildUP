@@ -2,11 +2,17 @@ using UnityEngine;
 using Mirror;
 using TMPro;
 using Steamworks;
+using Cinemachine;
+using System.Collections;
 
 public class PlayerController : NetworkBehaviour
 {
     [SerializeField]
     private TextMeshProUGUI playerName;
+    [SerializeField]
+    private CinemachineVirtualCamera virtualCamera;
+    [SyncVar(hook = nameof(OnDisplayNameChanged))]
+    private string displayName;
 
     [SerializeField] float m_speed = 4.0f;
     [SerializeField] float m_jumpForce = 7.5f;
@@ -21,9 +27,11 @@ public class PlayerController : NetworkBehaviour
     private Sensor_HeroKnight m_wallSensorR2;
     private Sensor_HeroKnight m_wallSensorL1;
     private Sensor_HeroKnight m_wallSensorL2;
+    private GameObject attackPoint;
     private bool m_isWallSliding = false;
     private bool m_grounded = false;
     private bool m_rolling = false;
+    [SyncVar(hook = nameof(OnFacingDirectionChanged))]
     private int m_facingDirection = 1;
     private int m_currentAttack = 0;
     private float m_timeSinceAttack = 0.0f;
@@ -35,8 +43,17 @@ public class PlayerController : NetworkBehaviour
     // Use this for initialization
     void Start()
     {
-        // 시작하면 스팀 닉네임을 플레이어 이름으로 설정
-        playerName.text = SteamFriends.GetPersonaName();
+        if (isLocalPlayer && SteamManager.Initialized)
+        {
+            // 내 이름을 가져와서 서버에 설정
+            string myName = SteamFriends.GetPersonaName();
+            CmdSetDisplayName(myName);
+            // 내 카메라만 꺼주기
+            virtualCamera.gameObject.SetActive(true);
+            //렌더러 우선순위 +1
+            GetComponent<SpriteRenderer>().sortingOrder += 1;
+        }
+
         transform.position = new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 0);
 
         m_animator = GetComponent<Animator>();
@@ -46,23 +63,46 @@ public class PlayerController : NetworkBehaviour
         m_wallSensorR2 = transform.Find("WallSensor_R2").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
+        attackPoint = transform.Find("AttackPoint").gameObject;
+        attackPoint.SetActive(false);
     }
 
-    //void Update()
-    //{
-    //    if (!isLocalPlayer)
-    //    {
-    //        return;
-    //    }
-    //    // 플레이어 이동
-    //    float h = Input.GetAxis("Horizontal");
-    //    float v = Input.GetAxis("Vertical");
-    //    Vector3 move = new Vector3(h, v, 0).normalized;
+    /// <summary>
+    /// 서버에 이름을 설정하도록 요청하는 Command
+    /// </summary>
+    [Command]
+    private void CmdSetDisplayName(string myName)
+    {
+        // 서버에서 이름 설정 (SyncVar를 통해 모든 클라이언트에 전파됨)
+        displayName = myName;
+    }
 
-    //    transform.Translate(move * moveSpeed * Time.deltaTime);
-    //}
+    /// <summary>
+    /// 이름이 변경될 때 호출되는 Hook 함수
+    /// </summary>
+    private void OnDisplayNameChanged(string oldName, string newName)
+    {
+        playerName.text = newName;
+    }
 
-    // Update is called once per frame
+    /// <summary>
+    /// 서버에 플레이어가 바라보는 방향을 설정하도록 요청하는 Command
+    /// </summary>
+    /// <param name="direction"></param>
+    [Command]
+    private void CmdSetFacingDirection(int direction)
+    {
+        m_facingDirection = direction;
+    }
+
+    /// <summary>
+    /// 방향이 변경될 때 호출되는 Hook 함수
+    /// </summary>
+    private void OnFacingDirectionChanged(int oldDirection, int newDirection)
+    {
+        GetComponent<SpriteRenderer>().flipX = newDirection == -1;
+    }
+
     void Update()
     {
         if (!isLocalPlayer)
@@ -103,12 +143,18 @@ public class PlayerController : NetworkBehaviour
         {
             GetComponent<SpriteRenderer>().flipX = false;
             m_facingDirection = 1;
+            CmdSetFacingDirection(m_facingDirection);
+            //flipX of attackPoint
+            attackPoint.transform.localPosition = new Vector3(1.0f, 0.7f, 0.0f);
         }
 
         else if (inputX < 0)
         {
             GetComponent<SpriteRenderer>().flipX = true;
             m_facingDirection = -1;
+            CmdSetFacingDirection(m_facingDirection);
+            //flipX of attackPoint
+            attackPoint.transform.localPosition = new Vector3(-1.0f, 0.7f, 0.0f);
         }
 
         // Move
@@ -138,6 +184,7 @@ public class PlayerController : NetworkBehaviour
         else if (Input.GetMouseButtonDown(0) && m_timeSinceAttack > 0.25f && !m_rolling)
         {
             m_currentAttack++;
+            StartCoroutine(AttackPointEnable());
 
             // Loop back to one after third attack
             if (m_currentAttack > 3)
@@ -219,5 +266,14 @@ public class PlayerController : NetworkBehaviour
             // Turn arrow in correct direction
             dust.transform.localScale = new Vector3(m_facingDirection, 1, 1);
         }
+    }
+    /// <summary>
+    /// 임시 공격 판정
+    /// </summary>
+    private IEnumerator AttackPointEnable()
+    {
+        attackPoint.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        attackPoint.SetActive(false);
     }
 }
