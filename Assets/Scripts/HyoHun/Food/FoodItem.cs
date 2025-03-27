@@ -10,6 +10,9 @@ public abstract class FoodItem : Item
     {
         itemType = ItemType.Food;
         equipable = Equipable.Hand;
+
+        canStack = true;
+        maxStackAmount = 64;
     }
 
     public override abstract void Use();

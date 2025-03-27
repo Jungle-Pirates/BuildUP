@@ -27,5 +27,8 @@ public abstract class Item : MonoBehaviour
     public string itemName;
     public Sprite icon;
 
+    public bool canStack;
+    public int maxStackAmount;
+
     public abstract void Use();
 }

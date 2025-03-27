@@ -10,6 +10,9 @@ public class FiberItem : Item
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
         itemName = "¼¶À¯";
+
+        canStack = true;
+        maxStackAmount = 64;
     }
 
     public override void Use()

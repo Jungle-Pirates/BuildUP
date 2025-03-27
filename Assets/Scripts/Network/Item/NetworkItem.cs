@@ -5,6 +5,7 @@ using Mirror;
 /// 개별 아이템 클래스
 /// 나무, 돌, 광석...
 /// </summary>
+/***
 public class NetworkItem : NetworkBehaviour
 {
     [Header("아이템 정보")]
@@ -111,3 +112,4 @@ public class NetworkItem : NetworkBehaviour
         NetworkServer.Destroy(gameObject);
     }
 }
+**********/

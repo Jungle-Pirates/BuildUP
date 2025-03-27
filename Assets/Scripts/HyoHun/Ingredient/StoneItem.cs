@@ -10,6 +10,9 @@ public class StoneItem : Item
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
         itemName = "µ¹";
+
+        canStack = true;
+        maxStackAmount = 64;
     }
 
     public override void Use()

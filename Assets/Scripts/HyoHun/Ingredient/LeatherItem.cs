@@ -10,6 +10,9 @@ public class LeatherItem : Item
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
         itemName = "°¡Á×";
+
+        canStack = true;
+        maxStackAmount = 64;
     }
 
     public override void Use()

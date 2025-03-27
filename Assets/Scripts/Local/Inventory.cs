@@ -5,6 +5,7 @@ using TMPro;
 using System;
 using UnityEngine.UI;
 
+/**********
 public class Inventory : MonoBehaviour
 {
     [Header("인벤토리 내부 아이템 목록")]
@@ -128,3 +129,4 @@ public class InventoryItem
         count += value;
     }
 }
+**********************************************/

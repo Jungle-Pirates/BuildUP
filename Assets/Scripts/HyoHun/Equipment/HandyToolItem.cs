@@ -13,6 +13,9 @@ public abstract class HandyToolItem : Item
     {
         itemType = ItemType.Equipment;
         equipable = Equipable.Hand;
+
+        canStack = false;
+        maxStackAmount = 1;
     }
 
     public override abstract void Use();

@@ -10,6 +10,9 @@ public class IronOreItem : Item
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
         itemName = "Ã¶±¤¼®";
+
+        canStack = true;
+        maxStackAmount = 64;
     }
 
     public override void Use()

@@ -10,6 +10,9 @@ public class DiamondItem : Item
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
         itemName = "다이아몬드";
+
+        canStack = true;
+        maxStackAmount = 64;
     }
 
     public override void Use()

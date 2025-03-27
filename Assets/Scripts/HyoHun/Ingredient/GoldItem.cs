@@ -10,6 +10,9 @@ public class GoldItem : Item
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
         itemName = "±Ý ÁÖ±«";
+
+        canStack = true;
+        maxStackAmount = 64;
     }
 
     public override void Use()

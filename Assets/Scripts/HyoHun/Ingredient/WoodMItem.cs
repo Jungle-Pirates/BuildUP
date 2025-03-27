@@ -10,6 +10,9 @@ public class WoodMItem : Item
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
         itemName = "∏Ò¿Á";
+
+        canStack = true;
+        maxStackAmount = 64;
     }
 
     public override void Use()
