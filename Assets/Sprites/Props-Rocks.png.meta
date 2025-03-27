@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 026bc5db4c8d7d249acd6b9ed7c30372
+guid: 389f1a62c1dfe044aa7ec9865e9351bc
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -69,7 +69,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 64
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -97,22 +97,43 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: wood_0
+      name: Props-Rocks_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 64
-        height: 64
+        x: 64
+        y: 256
+        width: 63
+        height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7b8f93b088173d545b8d3ee4ed1b9146
-      internalID: 874477044
+      spriteID: eb3c8e2a617f5fa4194cf1f4d33a7450
+      internalID: -332609712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Props-Rocks_1
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 256
+        width: 44
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ea183c9f147a3440be359a9dee01920
+      internalID: -1812731143
       vertices: []
       indices: 
       edges: []
@@ -128,7 +149,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      wood_0: 874477044
+      Props-Rocks_0: -332609712
+      Props-Rocks_1: -1812731143
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
