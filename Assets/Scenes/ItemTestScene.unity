@@ -1360,7 +1360,6 @@ MonoBehaviour:
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
-  - {fileID: 1516130435472132554, guid: 6ce5c7b5d09dcec4881f6db476d69ef1, type: 3}
   - {fileID: 5465408349737334575, guid: f1a7aab8f47064a44920c11eacaaa038, type: 3}
   - {fileID: 4328445041376920398, guid: a64739c261b43b94b91f5404049e9d90, type: 3}
   exceptionsDisconnect: 1
