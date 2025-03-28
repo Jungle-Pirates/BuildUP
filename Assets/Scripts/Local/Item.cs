@@ -19,6 +19,7 @@ public enum Equipable
     Head
 }
 
+
 public abstract class Item : MonoBehaviour
 {
     public string itemID;
