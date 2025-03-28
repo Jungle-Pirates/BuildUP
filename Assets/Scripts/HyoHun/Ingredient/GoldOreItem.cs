@@ -6,7 +6,7 @@ public class GoldOreItem : Item
 {
     private void OnEnable()
     {
-        itemID = 3;
+        itemID = "3";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
         itemName = "±Ý±¤¼®";

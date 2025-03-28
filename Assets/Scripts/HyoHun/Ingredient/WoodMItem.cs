@@ -6,7 +6,7 @@ public class WoodMItem : Item
 {
     private void OnEnable()
     {
-        itemID = 7;
+        itemID = "7";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
         itemName = "∏Ò¿Á";

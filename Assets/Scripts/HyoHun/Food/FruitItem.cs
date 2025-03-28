@@ -6,7 +6,7 @@ public class FruitItem : FoodItem
 {
     private void OnEnable()
     {
-        itemID = 30;
+        itemID = "30";
         itemName = "°úÀÏ";
         healAmount = 10f;
     }

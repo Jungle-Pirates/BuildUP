@@ -10,16 +10,14 @@ using UnityEngine.UI;
 /// </summary>
 public class Slot : MonoBehaviour
 {
-    public InventoryItem inventoryItem;         // 이 슬롯에 들어있는 인벤토리 아이템 데이터
-
-    public UIInventory inventory;               // 소속된 UIInventory 참조
+    public Item inventoryItem;         // 이 슬롯에 들어있는 인벤토리 아이템 데이터
+    public InventoryManager inventory;               // 소속된 Inventory 참조
     public Button button;                       // 슬롯 클릭을 위한 버튼 (옵션)
     public Image icon;                          // 아이템 이미지 아이콘
     public TextMeshProUGUI quantityText;        // 아이템 수량 텍스트
     private Outline outline;                    // 선택 시 강조 효과 (시각적 테두리)
 
     public int index;                           // 슬롯 번호 (UIInventory에서 인식용)
-    public int quantity;                        // 현재 수량 (현재는 inventoryItem.count와 중복)
 
     private void Awake()
     {

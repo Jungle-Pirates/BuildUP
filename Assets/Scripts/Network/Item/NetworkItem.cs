@@ -5,14 +5,13 @@ using Mirror;
 /// 개별 아이템 클래스
 /// 나무, 돌, 광석...
 /// </summary>
-/***
+
 public class NetworkItem : NetworkBehaviour
 {
     [Header("아이템 정보")]
     [Tooltip("아이템 코드")]
     public string itemID;
-    [Tooltip("아이템 이름")]
-    public string itemName;
+
     [SyncVar]
     private bool isPickedUp = false; // 아이템 획득 상태
     [SyncVar]
@@ -35,6 +34,12 @@ public class NetworkItem : NetworkBehaviour
     {
         isAbleToPickUp = true;
         itemCollider.enabled = true;
+    }
+
+    public void SetItemInfo(string id)
+    {
+        itemID = id;
+        GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Items/" + id);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -65,7 +70,7 @@ public class NetworkItem : NetworkBehaviour
         isPickedUp = true;
 
         // 아이템을 주운 플레이어에게 아이템 획득 알림 및 아이템 인벤토리에 추가
-        TargetOnItemPickedUp(player.connectionToClient, itemID, itemName, 1);
+        TargetOnItemPickedUp(player.connectionToClient, itemID, 1);
 
         // 아이템 획득 효과를 모든 클라이언트에 알림
         RpcOnItemPickedUp();
@@ -89,14 +94,14 @@ public class NetworkItem : NetworkBehaviour
     /// 아이템을 획득한 클라이언트에서만 실행됨
     /// </summary>
     [TargetRpc]
-    private void TargetOnItemPickedUp(NetworkConnection target, string id, string name, int count)
-    {
-        // 내가 조작하는 player에 달려있는 inventory에 접근
-        Inventory playerInventory = NetworkClient.localPlayer.GetComponent<Inventory>();
+    private void TargetOnItemPickedUp(NetworkConnection target, string id, int count)
+    {        
+        // 인벤토리 매니저를 통해 아이템 추가
+        InventoryManager playerInventory = InventoryManager.Instance;
         if (playerInventory != null)
         {
             // 인벤토리에 아이템 추가
-            playerInventory.AddItem(id, name, count);
+            playerInventory.AddItem(id, count);
         }
         else
         {
@@ -112,4 +117,3 @@ public class NetworkItem : NetworkBehaviour
         NetworkServer.Destroy(gameObject);
     }
 }
-**********/

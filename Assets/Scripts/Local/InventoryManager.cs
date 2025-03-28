@@ -3,7 +3,10 @@ using UnityEngine;
 using UnityEngine.Events;
 using System;
 
-public class UIInventory : MonoBehaviour
+/// <summary>
+/// 인벤토리 관리 클래스
+/// </summary>
+public class InventoryManager : Singleton<InventoryManager>
 {
     [Header("슬롯 구성")]
     public Slot[] slots; // 슬롯 배열
@@ -21,18 +24,15 @@ public class UIInventory : MonoBehaviour
     public GameObject useButton; // 사용 버튼
     public GameObject dropButton; // 버리기 버튼
 
-    private PlayerController_Hh controller; // 플레이어 컨트롤러 참조
-
     void Start()
     {
         // 플레이어 연결 및 이벤트 등록
-        controller = GameObject.Find("Player").GetComponent<PlayerController_Hh>();
-        dropPosition = controller.transform;
-        controller.inventory += Toggle;
-        controller.addItem += AddItem;
+        // controller = GameObject.Find("Player").GetComponent<PlayerController_Hh>();
+        // dropPosition = controller.transform;
+        // controller.inventory += Toggle;
+        // controller.addItem += AddItem;
 
         // 초기화
-        inventoryWindow.SetActive(false);
         slots = new Slot[slotPanel.childCount];
 
         for (int i = 0; i < slots.Length; i++)
@@ -44,38 +44,40 @@ public class UIInventory : MonoBehaviour
         }
 
         ClearSelectedItemWindow();
+        inventoryWindow.SetActive(false);
+    }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            Toggle(); // 인벤토리 열기/닫기
+        }
     }
 
-    // 인벤토리 열고 닫기
+    /// <summary>
+    /// 인벤토리 열고 닫기
+    /// </summary>
     public void Toggle()
     {
         inventoryWindow.SetActive(!inventoryWindow.activeInHierarchy);
     }
 
     // 아이템 추가 (중첩 또는 새 슬롯에 배치)
-    public void AddItem()
+    public void AddItem(string id, int count)
     {
-        Item item = controller.itemData;
-        if (item == null) return;
-
-        // Item >> InventoryItem 데이터 변환
-        InventoryItem newItem = new InventoryItem
+        Item newItem = ItemPool.Instance.GetItemInstance(id);
+        if (newItem == null)
         {
-            itemID = item.itemID,
-            itemName = item.itemName,
-            itemType = item.itemType,
-            icon = item.icon,
-            maxStackAmount = item.maxStackAmount,
-            count = 1
-        };
+            Debug.LogError("<color=red>[에러 발생]</color> 아이템 인스턴스 생성 실패: " + id);
+            return; // 아이템 인스턴스가 없으면 종료
+        }
 
         // 중첩 가능한 슬롯 먼저 탐색
-        Slot stackSlot = GetItemStack(newItem);
+        Slot stackSlot = GetItemStack(id);
         if (stackSlot != null)
         {
-            stackSlot.inventoryItem.AddCount(1);
+            stackSlot.inventoryItem.count += count; // 수량 증가
             UpdateUI();
-            controller.itemData = null;
             return;
         }
 
@@ -84,42 +86,51 @@ public class UIInventory : MonoBehaviour
         if (emptySlot != null)
         {
             emptySlot.inventoryItem = newItem;
+            emptySlot.inventoryItem.count = count; // 수량 설정
             UpdateUI();
-            controller.itemData = null;
             return;
         }
 
         // 슬롯 없음 >> 바닥에 드롭
-        ThrowItem(item);
-        controller.itemData = null;
+        ThrowItem(newItem);
     }
 
-    // 아이템 버리기 (미구현)
+    /// <summary>
+    /// 아이템 버리기
+    /// </summary>
     public void ThrowItem(Item item)
     {
         // TODO: 아이템 드롭 프리팹 Instantiate 처리
     }
 
-    // UI 전체 갱신
+    /// <summary>
+    /// UI 전체 갱신
+    /// </summary>
     public void UpdateUI()
     {
         foreach (Slot slot in slots)
         {
             if (slot.inventoryItem != null)
+            {
                 slot.Set();
+            }
             else
+            {
                 slot.Clear();
+            }
         }
     }
 
-    // 같은 종류의 아이템이 있는 슬롯 반환 (중첩 목적)
-    Slot GetItemStack(InventoryItem item)
+    /// <summary>
+    /// 같은 종류의 아이템이 있는 슬롯 반환 (중첩 목적)
+    /// </summary>
+    Slot GetItemStack(string id)
     {
         foreach (Slot slot in slots)
         {
             if (slot.inventoryItem != null &&
-                slot.inventoryItem.itemID == item.itemID &&
-                slot.inventoryItem.CanStack)
+                slot.inventoryItem.itemID == id &&
+                slot.inventoryItem.canStack)
             {
                 return slot;
             }
@@ -127,7 +138,9 @@ public class UIInventory : MonoBehaviour
         return null;
     }
 
-    // 비어있는 슬롯 찾기
+    /// <summary>
+    /// 비어있는 슬롯 찾기
+    /// </summary>
     Slot GetEmptySlot()
     {
         foreach (Slot slot in slots)
@@ -138,7 +151,9 @@ public class UIInventory : MonoBehaviour
         return null;
     }
 
-    // 아이템 클릭 시 상세정보 표시
+    /// <summary>
+    /// 아이템 클릭 시 상세정보 표시
+    /// </summary>
     public void SelectItem(int index)
     {
         if (slots[index].inventoryItem == null) return;
@@ -155,7 +170,9 @@ public class UIInventory : MonoBehaviour
         dropButton.SetActive(true);
     }
 
-    // 상세 정보 초기화
+    /// <summary>
+    /// 상세 정보 초기화
+    /// </summary>
     void ClearSelectedItemWindow()
     {
         selectedItem = null;
@@ -168,7 +185,9 @@ public class UIInventory : MonoBehaviour
         dropButton.SetActive(false);
     }
 
-    // 사용 버튼 클릭 시 호출
+    /// <summary>
+    /// 사용 버튼 클릭 시 호출
+    /// </summary>
     public void OnUseButton()
     {
         if (selectedItem.inventoryItem.itemType == ItemType.Food)
@@ -178,14 +197,18 @@ public class UIInventory : MonoBehaviour
         }
     }
 
-    // 버리기 버튼 클릭 시 호출
+    /// <summary>
+    /// 버리기 버튼 클릭 시 호출
+    /// </summary>
     public void OnDropButton()
     {
         ThrowItem(null); // TODO: 실제 드롭 구현 시 selectedItem 사용
         RemoveSelectedItem();
     }
 
-    // 아이템 수량 1개 감소 및 제거 처리
+    /// <summary>
+    /// 아이템 수량 1개 감소 및 제거 처리
+    /// </summary>
     void RemoveSelectedItem()
     {
         selectedItem.inventoryItem.count--;
@@ -197,33 +220,20 @@ public class UIInventory : MonoBehaviour
         UpdateUI();
     }
 
-    // 특정 아이템 존재 여부 확인
-    public bool HasItem(int itemID, int quantity)
-    {
-        foreach (Slot slot in slots)
-        {
-            if (slot.inventoryItem != null &&
-                slot.inventoryItem.itemID == itemID &&
-                slot.inventoryItem.count >= quantity)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-}
-
-// 인벤토리 내 아이템 데이터 클래스
-[Serializable]
-public class InventoryItem
-{
-    public int itemID;
-    public string itemName;
-    public ItemType itemType;
-    public int count;
-    public int maxStackAmount;
-    public Sprite icon;
-
-    public void AddCount(int value) => count += value;
-    public bool CanStack => count < maxStackAmount;
+    /// <summary>
+    /// 특정 아이템 존재 여부 확인
+    /// </summary>
+    // public bool HasItem(int itemID, int quantity)
+    // {
+    //     foreach (Slot slot in slots)
+    //     {
+    //         if (slot.inventoryItem != null &&
+    //             slot.inventoryItem.itemID == itemID &&
+    //             slot.inventoryItem.count >= quantity)
+    //         {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
 }

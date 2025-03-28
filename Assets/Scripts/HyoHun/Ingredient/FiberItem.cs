@@ -6,7 +6,7 @@ public class FiberItem : Item
 {
     private void OnEnable()
     {
-        itemID = 8;
+        itemID = "8";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
         itemName = "¼¶À¯";

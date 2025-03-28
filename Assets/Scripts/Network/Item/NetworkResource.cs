@@ -1,6 +1,8 @@
 using UnityEngine;
 using Mirror;
 using UnityEngine.UI;
+using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// 자원 클래스 (나무, 바위...)
@@ -11,9 +13,10 @@ public class NetworkResource : NetworkBehaviour
     [Tooltip("드롭할 아이템 프리팹")]
     [SerializeField]
     private GameObject dropItemPrefab;
-    [Tooltip("드롭할 아이템 개수")]
+    [Tooltip("드롭할 아이템 정보")]
     [SerializeField]
-    private int dropItemCount = 5;
+    private List<DropItemSet> dropItemSets = new List<DropItemSet>();
+
     [Tooltip("자원 체력")]
     [SerializeField]
     private int resourceHealth = 5;
@@ -95,18 +98,27 @@ public class NetworkResource : NetworkBehaviour
         {
             return;
         }
-        // 아이템 여러개 생성
-        for (int i = 0; i < dropItemCount; i++)
+        foreach (var dropItemSet in dropItemSets)
         {
-            // 아이템 생성
-            GameObject dropItem = Instantiate(dropItemPrefab, transform.position, Quaternion.identity);
-            // 아이템을 클라이언트모두에게 생성
-            NetworkServer.Spawn(dropItem);
-            // 아이템 드롭 효과 적용
-            ItemDropMovement dropMovement = dropItem.GetComponent<ItemDropMovement>();
-            if (dropMovement != null)
+            // 아이템 여러개 생성
+            for (int i = 0; i < dropItemSet.itemCount; i++)
             {
-                dropMovement.InitializePosition(transform.position);
+                // 아이템 생성
+                GameObject dropItem = Instantiate(dropItemPrefab, transform.position, Quaternion.identity);
+                // 아이템 값 설정
+                NetworkItem item = dropItem.GetComponent<NetworkItem>();
+                if (item != null)
+                {
+                    item.SetItemInfo(dropItemSet.itemID); // 아이템 코드 설정
+                }
+                // 아이템을 클라이언트모두에게 생성
+                NetworkServer.Spawn(dropItem);
+                // 아이템 드롭 효과 적용
+                ItemDropMovement dropMovement = dropItem.GetComponent<ItemDropMovement>();
+                if (dropMovement != null)
+                {
+                    dropMovement.InitializePosition(transform.position);
+                }
             }
         }
     }
@@ -119,5 +131,15 @@ public class NetworkResource : NetworkBehaviour
         {
             CmdHitResource();
         }
+    }
+
+    /// <summary>
+    /// 드롭할 아이템 세트 클래스
+    /// </summary>
+    [Serializable]
+    public class DropItemSet
+    {
+        public string itemID; // 아이템 코드
+        public int itemCount; // 드롭할 아이템 개수
     }
 }

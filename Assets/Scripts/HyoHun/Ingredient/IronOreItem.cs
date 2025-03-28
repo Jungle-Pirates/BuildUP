@@ -6,7 +6,7 @@ public class IronOreItem : Item
 {
     private void OnEnable()
     {
-        itemID = 2;
+        itemID = "2";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
         itemName = "Ã¶±¤¼®";

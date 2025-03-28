@@ -6,7 +6,7 @@ public class Meat : FoodItem
 {
     private void OnEnable()
     {
-        itemID = 31;
+        itemID = "31";
         itemName = "°í±â";
         healAmount = 25f;
     }

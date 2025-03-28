@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -2550920458885841942}
   - component: {fileID: 2518856736968486608}
   m_Layer: 0
-  m_Name: Wood
+  m_Name: NetworkItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -170,7 +170,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  itemID: 001
+  itemID: 0
   itemName: "\uB098\uBB34"
 --- !u!114 &2518856736968486608
 MonoBehaviour:

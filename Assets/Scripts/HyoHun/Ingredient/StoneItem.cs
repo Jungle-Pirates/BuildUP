@@ -6,7 +6,7 @@ public class StoneItem : Item
 {
     private void OnEnable()
     {
-        itemID = 1;
+        itemID = "1";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
         itemName = "µ¹";

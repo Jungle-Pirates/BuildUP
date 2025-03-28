@@ -6,7 +6,7 @@ public class AlloyItem : Item
 {
     private void OnEnable()
     {
-        itemID = 11;
+        itemID = "11";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
         itemName = "гу╠щ";
