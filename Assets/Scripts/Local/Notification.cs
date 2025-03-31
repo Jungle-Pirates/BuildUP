@@ -3,7 +3,7 @@ using TMPro;
 using System.Collections.Generic;
 using System.Collections;
 
-public class Notification : Singleton<Notification>
+public class NotificationManager : Singleton<NotificationManager>
 {
     [SerializeField]
     private GameObject notificationPrefab; // 알림 텍스트 프리팹

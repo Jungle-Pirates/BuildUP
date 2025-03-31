@@ -103,22 +103,7 @@ public class NetworkResource : NetworkBehaviour
             // 아이템 여러개 생성
             for (int i = 0; i < dropItemSet.itemCount; i++)
             {
-                // 아이템 생성
-                GameObject dropItem = Instantiate(dropItemPrefab, transform.position, Quaternion.identity);
-                // 아이템 값 설정
-                NetworkItem item = dropItem.GetComponent<NetworkItem>();
-                if (item != null)
-                {
-                    item.SetItemInfo(dropItemSet.itemID); // 아이템 코드 설정
-                }
-                // 아이템을 클라이언트모두에게 생성
-                NetworkServer.Spawn(dropItem);
-                // 아이템 드롭 효과 적용
-                ItemDropMovement dropMovement = dropItem.GetComponent<ItemDropMovement>();
-                if (dropMovement != null)
-                {
-                    dropMovement.InitializePosition(transform.position);
-                }
+                NetworkItemManager.Instance.SpawnItem(dropItemSet.itemID, transform.position, true);
             }
         }
     }

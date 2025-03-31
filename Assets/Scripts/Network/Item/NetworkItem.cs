@@ -85,8 +85,8 @@ public class NetworkItem : NetworkBehaviour
         // 아이템 획득 효과 표시
         // ...
 
-        //아이템 제거
-        DestroyItem();
+        //아이템 매니져를 사용하여 아이템 제거
+        NetworkItemManager.Instance.DestroyItem(gameObject);
     }
 
     /// <summary>
@@ -105,15 +105,7 @@ public class NetworkItem : NetworkBehaviour
         }
         else
         {
-            Debug.LogError("인벤토리 접근 불가");
+            Debug.LogError("<color=red>[에러 발생]</color>인벤토리 접근 불가");
         }
-    }
-
-    // 아이템 제거
-    [Server]
-    private void DestroyItem()
-    {
-        // 서버에서 아이템 제거 (모든 클라이언트에 동기화됨)
-        NetworkServer.Destroy(gameObject);
     }
 }
