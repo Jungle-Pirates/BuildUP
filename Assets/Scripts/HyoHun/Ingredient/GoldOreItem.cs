@@ -1,0 +1,22 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GoldOreItem : Item
+{
+    private void OnEnable()
+    {
+        itemID = "3";
+        itemType = ItemType.Ingredient;
+        equipable = Equipable.None;
+        itemName = "금광석";
+
+        canStack = true;
+        maxStackAmount = 64;
+    }
+
+    public override void Use(PlayerController user)
+    {
+        Debug.Log("금광석은 사용할 수 없습니다.");
+    }
+}

@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - AXE
+  - Item
+  - PICK
+  - BAT
   layers:
   - Default
   - TransparentFX
