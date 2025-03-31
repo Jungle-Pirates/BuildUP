@@ -58,7 +58,7 @@ public class PlayerController : NetworkBehaviour
             GetComponent<SpriteRenderer>().sortingOrder += 1;
         }
 
-        transform.position = new Vector3(Random.Range(-10, 10), Random.Range(-10, 10), 0);
+        transform.position = new Vector3(Random.Range(-10, 10), 1, 0);
 
         m_animator = GetComponent<Animator>();
         m_body2d = GetComponent<Rigidbody2D>();
