@@ -32,5 +32,5 @@ public abstract class Item : MonoBehaviour
     public int maxStackAmount;
     public int count;
     //생성자에서 초기화 해주는 함수 생성
-    public abstract void Use();
+    public abstract void Use(PlayerController user);
 }

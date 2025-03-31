@@ -27,7 +27,7 @@ public class InventoryManager : Singleton<InventoryManager>
     void Start()
     {
         // 플레이어 연결 및 이벤트 등록
-        // controller = GameObject.Find("Player").GetComponent<PlayerController_Hh>();
+        // controller = GameObject.Find("Player").GetComponent<PlayerController>();
         // dropPosition = controller.transform;
         // controller.inventory += Toggle;
         // controller.addItem += AddItem;

@@ -12,7 +12,7 @@ public class AlloyItem : Item
         itemName = "합금";
     }
 
-    public override void Use()
+    public override void Use(PlayerController user)
     {
         Debug.Log("합금은 사용할 수 없습니다.");
     }

@@ -27,7 +27,6 @@ public class PlayerController : NetworkBehaviour
     private Sensor_HeroKnight m_wallSensorR2;
     private Sensor_HeroKnight m_wallSensorL1;
     private Sensor_HeroKnight m_wallSensorL2;
-    private GameObject attackPoint;
     private bool m_isWallSliding = false;
     private bool m_grounded = false;
     private bool m_rolling = false;
@@ -38,6 +37,11 @@ public class PlayerController : NetworkBehaviour
     private float m_delayToIdle = 0.0f;
     private float m_rollDuration = 8.0f / 14.0f;
     private float m_rollCurrentTime;
+
+    [Header("도구 사용")]
+    public GameObject attackPoint;  //공격 범위 판정용 오브젝트 
+    //인벤토리 접근용 InventoryManager
+    //private bool isEquipped = false; //손에 장비 장착 여부
 
 
     // Use this for initialization
@@ -64,7 +68,7 @@ public class PlayerController : NetworkBehaviour
         m_wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
         attackPoint = transform.Find("AttackPoint").gameObject;
-        attackPoint.SetActive(false);
+        //attackPoint.SetActive(false); //아이템 Use()에서 Collider2D 컴포넌트를 끄고 키는중 
     }
 
     /// <summary>
@@ -181,24 +185,29 @@ public class PlayerController : NetworkBehaviour
             m_animator.SetTrigger("Hurt");
 
         //Attack
+        //장비 장착중인지 검사 > 장비 아이템이라면 장비 아이템의 Use호출
         else if (Input.GetMouseButtonDown(0) && m_timeSinceAttack > 0.25f && !m_rolling)
         {
-            m_currentAttack++;
-            StartCoroutine(AttackPointEnable());
+            if (IsHandEquipped())  // 손에 장비 장착 여부 확인
+            {
+                InventoryManager.Instance.slots[0].inventoryItem?.Use(this);  // 장비의 Use() 호출
 
-            // Loop back to one after third attack
-            if (m_currentAttack > 3)
-                m_currentAttack = 1;
 
-            // Reset Attack combo if time since last attack is too large
-            if (m_timeSinceAttack > 1.0f)
-                m_currentAttack = 1;
+                m_currentAttack++;
+                // Loop back to one after third attack
+                if (m_currentAttack > 3)
+                    m_currentAttack = 1;
 
-            // Call one of three attack animations "Attack1", "Attack2", "Attack3"
-            m_animator.SetTrigger("Attack" + m_currentAttack);
+                // Reset Attack combo if time since last attack is too large
+                if (m_timeSinceAttack > 1.0f)
+                    m_currentAttack = 1;
 
-            // Reset timer
-            m_timeSinceAttack = 0.0f;
+                // Call one of three attack animations "Attack1", "Attack2", "Attack3"
+                m_animator.SetTrigger("Attack" + m_currentAttack);
+
+                // Reset timer
+                m_timeSinceAttack = 0.0f;
+            }
         }
 
         // Block
@@ -248,6 +257,16 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    /// <summary>
+    /// 장착된 장비 확인
+    /// </summary>
+    private bool IsHandEquipped()
+    {
+        var item = InventoryManager.Instance.slots[0].inventoryItem;
+        return item != null && item.equipable == Equipable.Hand;
+    }
+
+
     // Animation Events
     // Called in slide animation.
     void AE_SlideDust()
@@ -270,10 +289,12 @@ public class PlayerController : NetworkBehaviour
     /// <summary>
     /// 임시 공격 판정
     /// </summary>
+    /*
     private IEnumerator AttackPointEnable()
     {
         attackPoint.SetActive(true);
         yield return new WaitForSeconds(0.1f);
         attackPoint.SetActive(false);
     }
+    */
 }

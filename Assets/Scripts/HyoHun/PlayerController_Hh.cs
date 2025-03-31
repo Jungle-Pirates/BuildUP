@@ -21,7 +21,7 @@ public class PlayerController_Hh : MonoBehaviour
 
     [Header("도구 사용")]
     public GameObject attackPoint; // 공격 범위 판정용 오브젝트
-    public UIInventory uiInventory; // 인벤토리 참조 (0번 슬롯 아이템 접근용)
+    /*public UIInventory uiInventory;*/ // 인벤토리 참조 (0번 슬롯 아이템 접근용)
     private bool isEquipped = false; // 손에 장비 착용 여부
 
     private Rigidbody2D rb;
@@ -40,7 +40,7 @@ public class PlayerController_Hh : MonoBehaviour
         HandleMovement();
         HandleJump();
         HandleInventoryKey();
-        HandleAttack();
+        //HandleAttack();
     }
 
     private void HandleMovement()
@@ -82,32 +82,32 @@ public class PlayerController_Hh : MonoBehaviour
     }
 
     // 좌클릭 입력으로 도구 사용
-    private void HandleAttack()
-    {
-        HandCheck();
+    //private void HandleAttack()
+    //{
+    //    HandCheck();
 
-        if (Input.GetMouseButtonDown(0) && isEquipped && uiInventory != null)
-        {
-            Slot handSlot = uiInventory.slots[0];
-            if (handSlot != null && handSlot.item != null)
-            {
-                handSlot.item.Use();
-            }
-        }
-    }
+    //    if (Input.GetMouseButtonDown(0) && isEquipped && uiInventory != null)
+    //    {
+    //        Slot handSlot = uiInventory.slots[0];
+    //        if (handSlot != null && handSlot.item != null)
+    //        {
+    //            handSlot.item.Use();
+    //        }
+    //    }
+    //}
 
-    // 0번 슬롯 아이템이 Equipable.Hand인지 확인
-    private void HandCheck()
-    {
-        if (uiInventory == null || uiInventory.slots.Length == 0)
-        {
-            isEquipped = false;
-            return;
-        }
+    //// 0번 슬롯 아이템이 Equipable.Hand인지 확인
+    //private void HandCheck()
+    //{
+    //    if (uiInventory == null || uiInventory.slots.Length == 0)
+    //    {
+    //        isEquipped = false;
+    //        return;
+    //    }
 
-        Slot handSlot = uiInventory.slots[0];
-        isEquipped = (handSlot != null && handSlot.item != null && handSlot.item.equipable == Equipable.Hand);
-    }
+    //    Slot handSlot = uiInventory.slots[0];
+    //    isEquipped = (handSlot != null && handSlot.item != null && handSlot.item.equipable == Equipable.Hand);
+    //}
 
     private void OnTriggerEnter2D(Collider2D other)
     {

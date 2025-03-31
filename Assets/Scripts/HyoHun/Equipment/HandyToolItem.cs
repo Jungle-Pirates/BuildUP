@@ -31,7 +31,7 @@ public abstract class HandyToolItem : Item
     /// <summary>
     /// 도구 사용: 일정 시간 동안 AttackPoint 콜라이더를 켜고 끄는 ActivateAttackPoint 코루틴 호출
     /// </summary>
-    public override void Use(PlayerController_Hh user)
+    public override void Use(PlayerController user)
     {
         if (isUsing || user == null) return;
 
@@ -43,7 +43,6 @@ public abstract class HandyToolItem : Item
             Debug.LogWarning("AttackCollider가 없습니다.");
             return;
         }
-
         user.StartCoroutine(ActivateAttackPoint()); // Coroutine 실행
     }
 

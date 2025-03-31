@@ -11,7 +11,7 @@ public class Meat : FoodItem
         healAmount = 25f;
     }
 
-    public override void Use()
+    public override void Use(PlayerController user)
     {
         Debug.Log($"{itemName}을 먹고 체력을 {healAmount}만큼 회복했다.");
         //회복 처리 

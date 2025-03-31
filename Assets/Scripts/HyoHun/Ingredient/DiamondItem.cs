@@ -15,7 +15,7 @@ public class DiamondItem : Item
         maxStackAmount = 64;
     }
 
-    public override void Use()
+    public override void Use(PlayerController user)
     {
         Debug.Log("다이아몬드는 사용할 수 없습니다.");
     }

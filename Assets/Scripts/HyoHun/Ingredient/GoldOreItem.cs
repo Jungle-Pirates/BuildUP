@@ -15,7 +15,7 @@ public class GoldOreItem : Item
         maxStackAmount = 64;
     }
 
-    public override void Use()
+    public override void Use(PlayerController user)
     {
         Debug.Log("금광석은 사용할 수 없습니다.");
     }

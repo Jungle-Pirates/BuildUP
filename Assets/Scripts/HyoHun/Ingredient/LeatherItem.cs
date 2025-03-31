@@ -15,7 +15,7 @@ public class LeatherItem : Item
         maxStackAmount = 64;
     }
 
-    public override void Use()
+    public override void Use(PlayerController user)
     {
         Debug.Log("가죽은 사용할 수 없습니다.");
     }

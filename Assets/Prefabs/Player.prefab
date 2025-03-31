@@ -188,6 +188,7 @@ MonoBehaviour:
   m_rollForce: 6
   m_noBlood: 0
   m_slideDust: {fileID: 1038168246061390451, guid: 8b8c8cc6774fb074cb9139cc631b108e, type: 3}
+  attackPoint: {fileID: 7523769605810076268}
 --- !u!95 &4929757309884420595
 Animator:
   serializedVersion: 5
@@ -727,7 +728,7 @@ GameObject:
   - component: {fileID: 3451610830231866551}
   m_Layer: 3
   m_Name: AttackPoint
-  m_TagString: AXE
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

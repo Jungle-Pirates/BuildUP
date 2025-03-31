@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 
-public class IronAxeItem : AxeItem
+public class StonePickItem : PickItem
 {
     protected override void Awake()
     {
         base.Awake();
 
-        itemID = "23";
-        itemName = "Ã¶ µµ³¢";
-        damage = 8f; 
-        delay = 0.2f; 
-        size = 1f;
+        itemID = "21";
+        itemName = "µ¹ °î±ªÀÌ";
+        damage = 5f;
+        delay = 0.2f;  
+        size = 1f;    
     }
 
     public override void Use(PlayerController user)

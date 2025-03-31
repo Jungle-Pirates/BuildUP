@@ -15,5 +15,5 @@ public abstract class FoodItem : Item
         maxStackAmount = 64;
     }
 
-    public override abstract void Use();
+    public override abstract void Use(PlayerController user);
 }
