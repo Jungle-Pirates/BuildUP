@@ -29,7 +29,6 @@ public class ItemDropMovement : NetworkBehaviour
     {
         if (isPositionSet)
         {
-            Debug.Log("<color=green>아이템 위치 설정됨</color>: " + newPos);
             PlayDropAnimation();
         }
     }
@@ -45,19 +44,29 @@ public class ItemDropMovement : NetworkBehaviour
         }
     }
 
-    // 서버에서 아이템 위치 초기화
+    /// <summary>
+    /// 서버에서 아이템 위치 초기화
+    /// </summary>
+    /// <param name="sourcePosition">아이템 스폰되는 위치</param>
+    /// <param name="isDrop">랜덤으로 흩뿌려져야 하면 true, 지정된 장소에 떨어져야 하면 false </param>
     [Server]
-    public void InitializePosition(Vector2 sourcePosition)
+    public void InitializePosition(Vector2 sourcePosition, bool isDrop)
     {
-        // X축으로만 랜덤 오프셋 (사이드뷰이므로)
-        float randomX = Random.Range(-spreadRadius, spreadRadius);
+        Vector2 targetPos = sourcePosition;
+        // 드롭 위치를 랜덤으로 흩뿌려지게 설정할지 여부에 따라 다르게 처리
+        if (isDrop)
+        {
+            // X축으로만 랜덤 오프셋 (사이드뷰이므로)
+            float randomX = Random.Range(-spreadRadius, spreadRadius);
 
-        // 타겟 위치 계산 (X 오프셋만 적용)
-        Vector2 targetPos = new Vector2(sourcePosition.x + randomX, sourcePosition.y);
+            // 타겟 위치 계산 (X 오프셋만 적용)
+            targetPos = new Vector2(sourcePosition.x + randomX, sourcePosition.y);
+        }
 
         // 바닥 높이 찾기 (2D 레이캐스트 사용)
         float groundY = FindGroundHeight(targetPos);
-        targetPos.y = groundY + heightOffset;
+        // 바닥 높이 + 물건콜라이더길이/2 + 오프셋 적용
+        targetPos.y = groundY + (GetComponent<Collider2D>().bounds.size.y / 2) + heightOffset;
 
         // 목표 위치 설정
         targetPosition = targetPos;

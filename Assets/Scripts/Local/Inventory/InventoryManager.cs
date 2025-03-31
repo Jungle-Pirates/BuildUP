@@ -2,6 +2,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using System;
+using Mirror;
+using UnityEngine.UI;
 
 /// <summary>
 /// 인벤토리 관리 클래스
@@ -12,7 +14,6 @@ public class InventoryManager : Singleton<InventoryManager>
     public Slot[] slots; // 슬롯 배열
     public GameObject inventoryWindow; // 인벤토리 창
     public Transform slotPanel; // 슬롯 부모
-    public Transform dropPosition; // 아이템 드롭 위치
 
     [Header("선택된 아이템 정보 UI")]
     private Slot selectedItem; // 현재 선택한 슬롯
@@ -21,8 +22,8 @@ public class InventoryManager : Singleton<InventoryManager>
     public TextMeshProUGUI selectedItemType; // 타입 표시
     public TextMeshProUGUI selectedItemStatName; // 스탯명 (미사용)
     public TextMeshProUGUI selectedItemStatValue; // 스탯값 (미사용)
-    public GameObject useButton; // 사용 버튼
-    public GameObject dropButton; // 버리기 버튼
+    public Button useButton; // 사용 버튼
+    public Button dropButton; // 버리기 버튼
 
     void Start()
     {
@@ -31,6 +32,7 @@ public class InventoryManager : Singleton<InventoryManager>
         // dropPosition = controller.transform;
         // controller.inventory += Toggle;
         // controller.addItem += AddItem;
+        dropButton.onClick.AddListener(OnDropButton);
 
         // 초기화
         slots = new Slot[slotPanel.childCount];
@@ -65,7 +67,7 @@ public class InventoryManager : Singleton<InventoryManager>
     // 아이템 추가 (중첩 또는 새 슬롯에 배치)
     public void AddItem(string id, int count)
     {
-        Item newItem = ItemPool.Instance.GetItemInstance(id);
+        Item newItem = ItemDataPool.Instance.GetItemInstance(id);
         if (newItem == null)
         {
             Debug.LogError("<color=red>[에러 발생]</color> 아이템 인스턴스 생성 실패: " + id);
@@ -100,7 +102,9 @@ public class InventoryManager : Singleton<InventoryManager>
     /// </summary>
     public void ThrowItem(Item item)
     {
-        // TODO: 아이템 드롭 프리팹 Instantiate 처리
+        //플레이어 위치에 드롭
+        //위치는 NetworkManager에서 client를 찾아 설정
+        NetworkItemManager.Instance.SpawnItem(item.itemID, NetworkClient.localPlayer.transform.position, false);
     }
 
     /// <summary>
@@ -166,8 +170,8 @@ public class InventoryManager : Singleton<InventoryManager>
         selectedItemStatName.text = string.Empty; // 향후 확장
         selectedItemStatValue.text = string.Empty;
 
-        useButton.SetActive(selectedItem.inventoryItem.itemType == ItemType.Food);
-        dropButton.SetActive(true);
+        useButton.gameObject.SetActive(selectedItem.inventoryItem.itemType == ItemType.Food);
+        dropButton.gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -181,8 +185,8 @@ public class InventoryManager : Singleton<InventoryManager>
         selectedItemStatName.text = string.Empty;
         selectedItemStatValue.text = string.Empty;
 
-        useButton.SetActive(false);
-        dropButton.SetActive(false);
+        useButton.gameObject.SetActive(false);
+        dropButton.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -202,7 +206,7 @@ public class InventoryManager : Singleton<InventoryManager>
     /// </summary>
     public void OnDropButton()
     {
-        ThrowItem(null); // TODO: 실제 드롭 구현 시 selectedItem 사용
+        ThrowItem(selectedItem.inventoryItem); // TODO: 실제 드롭 구현 시 selectedItem 사용
         RemoveSelectedItem();
     }
 

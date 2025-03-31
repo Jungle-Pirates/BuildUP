@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class ItemPool : Singleton<ItemPool>
+/// <summary>
+/// 아이템 데이터 풀 클래스
+/// 아이템 데이터를 관리하고, 아이템 인스턴스를 생성 후 캐싱하는 역할을 합니다.
+/// </summary>
+public class ItemDataPool : Singleton<ItemDataPool>
 {
     /// <summary>
     /// 아이템 코드 + 프리팹 사전 (프리팹을 Inspector에서 설정)

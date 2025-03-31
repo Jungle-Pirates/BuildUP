@@ -3310,8 +3310,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1054727745}
   - component: {fileID: 1054727746}
+  - component: {fileID: 1054727747}
   m_Layer: 0
-  m_Name: ItemPoolManager
+  m_Name: ItemManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3355,6 +3356,19 @@ MonoBehaviour:
     itemPrefab: {fileID: 9050712519032557110, guid: a1807153aed725943944a66d827ed56c, type: 3}
   - itemCode: 30
     itemPrefab: {fileID: 7363160457919382477, guid: 8b87dede44f789042854f60bad0575a9, type: 3}
+--- !u!114 &1054727747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1054727744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e5491aae7402b3429d811fe5ec566a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemPrefab: {fileID: -2550920458885841942, guid: a64739c261b43b94b91f5404049e9d90, type: 3}
 --- !u!1 &1064134581
 GameObject:
   m_ObjectHideFlags: 0
@@ -4110,13 +4124,12 @@ MonoBehaviour:
   slots: []
   inventoryWindow: {fileID: 1064134581}
   slotPanel: {fileID: 641789725}
-  dropPosition: {fileID: 0}
   selectedItemName: {fileID: 1073420939}
   selectedItemType: {fileID: 950870025}
   selectedItemStatName: {fileID: 1328613643}
   selectedItemStatValue: {fileID: 1656200578}
-  useButton: {fileID: 301122663}
-  dropButton: {fileID: 791692156}
+  useButton: {fileID: 301122665}
+  dropButton: {fileID: 791692158}
 --- !u!4 &1206266857
 Transform:
   m_ObjectHideFlags: 0
@@ -6303,8 +6316,8 @@ SceneRoots:
   - {fileID: 1065333764}
   - {fileID: 1064134586}
   - {fileID: 1827960193}
-  - {fileID: 939124873}
   - {fileID: 183790309}
+  - {fileID: 939124873}
   - {fileID: 1658348809}
   - {fileID: 1054727745}
   - {fileID: 1206266857}
