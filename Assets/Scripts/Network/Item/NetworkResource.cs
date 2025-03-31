@@ -5,29 +5,33 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// ìì› í´ë˜ìŠ¤ (ë‚˜ë¬´, ë°”ìœ„...)
+/// ÀÚ¿ø Å¬·¡½º (³ª¹«, ¹ÙÀ§...)
 /// </summary>
 public class NetworkResource : NetworkBehaviour
 {
-    [Header("ìì› ì„¤ì •")]
-    [Tooltip("ë“œë¡­í•  ì•„ì´í…œ í”„ë¦¬íŒ¹")]
+    [Header("ÀÚ¿ø ¼³Á¤")]
+    [Tooltip("µå·ÓÇÒ ¾ÆÀÌÅÛ ÇÁ¸®ÆÕ")]
     [SerializeField]
     private GameObject dropItemPrefab;
-    [Tooltip("ë“œë¡­í•  ì•„ì´í…œ ì •ë³´")]
+    [Tooltip("µå·ÓÇÒ ¾ÆÀÌÅÛ Á¤º¸")]
     [SerializeField]
     private List<DropItemSet> dropItemSets = new List<DropItemSet>();
 
-    [Tooltip("ìì› ì²´ë ¥")]
+    [Tooltip("ÀÚ¿ø Ã¼·Â")]
     [SerializeField]
     private int resourceHealth = 5;
     [SerializeField]
-    private Image healthBar;    //ì²´ë ¥ ê²Œì´ì§€
-    private GameObject healthBarBG; //ì²´ë ¥ ê²Œì´ì§€ ë°°ê²½
+    private Image healthBar;    //Ã¼·Â °ÔÀÌÁö
+    private GameObject healthBarBG; //Ã¼·Â °ÔÀÌÁö ¹è°æ
 
     [SerializeField]
     [Range(0, 5)]
     [SyncVar(hook = nameof(OnHealthChanged))]
-    private int currentHealth; // í˜„ì¬ ì²´ë ¥
+    private int currentHealth; // ÇöÀç Ã¼·Â
+
+    [Header("µµ±¸ ÅÂ±×")]
+    [Tooltip("ÀÌ ÀÚ¿ø¿¡ ÇÇÇØ¸¦ ÁÙ ¼ö ÀÖ´Â µµ±¸ ÅÂ±× (¿¹: AXE, PICK)")]
+    [SerializeField] private string toolTag = "AXE";
 
     void Start()
     {
@@ -36,7 +40,7 @@ public class NetworkResource : NetworkBehaviour
         healthBarBG.SetActive(false);
     }
     /// <summary>
-    /// ì‹œì‘í•  ë•Œ ì²´ë ¥ ì´ˆê¸°í™”
+    /// ½ÃÀÛÇÒ ¶§ Ã¼·Â ÃÊ±âÈ­
     /// </summary>
     public override void OnStartServer()
     {
@@ -45,42 +49,42 @@ public class NetworkResource : NetworkBehaviour
     }
 
     /// <summary>
-    /// í´ë¼ì´ì–¸íŠ¸ê°€ ìì›ì„ ë•Œë ¸ì„ ë•Œ í˜¸ì¶œ (í”Œë ˆì´ì–´ ìŠ¤í¬ë¦½íŠ¸ì—ì„œ í˜¸ì¶œ)
+    /// Å¬¶óÀÌ¾ğÆ®°¡ ÀÚ¿øÀ» ¶§·ÈÀ» ¶§ È£Ãâ (ÇÃ·¹ÀÌ¾î ½ºÅ©¸³Æ®¿¡¼­ È£Ãâ)
     /// </summary>
-    [Command(requiresAuthority = false)] // ì•„ë¬´ í´ë¼ì´ì–¸íŠ¸ë‚˜ í˜¸ì¶œ ê°€ëŠ¥
-    public void CmdHitResource()
+    [Command(requiresAuthority = false)] // ¾Æ¹« Å¬¶óÀÌ¾ğÆ®³ª È£Ãâ °¡´É
+    public void CmdHitResource(float damage)
     {
-        // ì´ë¯¸ íŒŒê´´ëœ ìì›ì´ë©´ ë¬´ì‹œ
+        // ÀÌ¹Ì ÆÄ±«µÈ ÀÚ¿øÀÌ¸é ¹«½Ã
         if (currentHealth <= 0)
         {
             return;
         }
 
-        // ì²´ë ¥ ê°ì†Œ
-        currentHealth--;
+        // ÇÇÇØ Àû¿ë (¹İ¿Ã¸² ¶Ç´Â °­Á¦ Á¤¼ö Ã³¸®)
+        currentHealth -= Mathf.CeilToInt(damage);
 
-        // íŒŒê´´ëëŠ”ì§€ í™•ì¸
+        // ÆÄ±«µÆ´ÂÁö È®ÀÎ
         if (currentHealth <= 0)
         {
-            // ì•„ì´í…œ ë“œë¡­
+            // ¾ÆÀÌÅÛ µå·Ó
             DropItem();
 
-            // ìì› ì˜¤ë¸Œì íŠ¸ íŒŒê´´
+            // ÀÚ¿ø ¿ÀºêÁ§Æ® ÆÄ±«
             NetworkServer.Destroy(gameObject);
         }
     }
 
     /// <summary>
-    /// ì²´ë ¥ ë³€ê²½ ì‹œ í˜¸ì¶œë˜ëŠ” Hook í•¨ìˆ˜
+    /// Ã¼·Â º¯°æ ½Ã È£ÃâµÇ´Â Hook ÇÔ¼ö
     /// </summary>
     private void OnHealthChanged(int oldHealth, int newHealth)
     {
-        // ì²´ë ¥ì— ë”°ë¥¸ ì‹œê°ì  ë³€í™” ì ìš©
+        // Ã¼·Â¿¡ µû¸¥ ½Ã°¢Àû º¯È­ Àû¿ë
         UpdateHealthState(newHealth);
     }
 
     /// <summary>
-    /// ì²´ë ¥ë°” ê°ì†Œ
+    /// Ã¼·Â¹Ù °¨¼Ò
     /// </summary>
     private void UpdateHealthState(int health)
     {
@@ -89,7 +93,7 @@ public class NetworkResource : NetworkBehaviour
     }
 
     /// <summary>
-    /// ì„œë²„ì—ì„œ ì•„ì´í…œ ë“œë¡­
+    /// ¼­¹ö¿¡¼­ ¾ÆÀÌÅÛ µå·Ó
     /// </summary>
     [Server]
     private void DropItem()
@@ -100,7 +104,7 @@ public class NetworkResource : NetworkBehaviour
         }
         foreach (var dropItemSet in dropItemSets)
         {
-            // ì•„ì´í…œ ì—¬ëŸ¬ê°œ ìƒì„±
+            // ¾ÆÀÌÅÛ ¿©·¯°³ »ı¼º
             for (int i = 0; i < dropItemSet.itemCount; i++)
             {
                 NetworkItemManager.Instance.SpawnItem(dropItemSet.itemID, transform.position, true);
@@ -108,23 +112,39 @@ public class NetworkResource : NetworkBehaviour
         }
     }
     /// <summary>
-    /// í”Œë ˆì´ì–´ê°€ ìì›ì„ ë•Œë ¸ì„ë•Œ, Axe íƒœê·¸ ë¹„êµ
+    /// ÇÃ·¹ÀÌ¾î°¡ ÀÚ¿øÀ» ¶§·ÈÀ» ¶§, µµ±¸ ÅÂ±× ºñ±³ ¹× ÇÇÇØ·® Àü´Ş
     /// </summary>
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("AXE"))
+        // Ãæµ¹ÇÑ °´Ã¼ÀÇ ·çÆ®°¡ PlayerÀÎÁö È®ÀÎ
+        Transform root = collision.transform.root;
+        PlayerController player = root.GetComponent<PlayerController>();
+
+        if (player == null)
+            return;
+
+        // ÇÃ·¹ÀÌ¾î Àåºñ Á¤º¸ °¡Á®¿À±â
+        Item equipped = player.GetEquippedItem();
+
+        // null Ã¼Å© + ÅÂ±× ÀÏÄ¡ È®ÀÎ
+        if (equipped != null && collision.CompareTag(toolTag))
         {
-            CmdHitResource();
+            // HandyToolItemÀÎÁö È®ÀÎ ÈÄ damage °ª °¡Á®¿À±â
+            HandyToolItem tool = equipped as HandyToolItem;
+            if (tool != null)
+            {
+                CmdHitResource(tool.damage); // ÇÇÇØ·® Àü´Ş
+            }
         }
     }
 
     /// <summary>
-    /// ë“œë¡­í•  ì•„ì´í…œ ì„¸íŠ¸ í´ë˜ìŠ¤
+    /// µå·ÓÇÒ ¾ÆÀÌÅÛ ¼¼Æ® Å¬·¡½º
     /// </summary>
     [Serializable]
     public class DropItemSet
     {
-        public string itemID; // ì•„ì´í…œ ì½”ë“œ
-        public int itemCount; // ë“œë¡­í•  ì•„ì´í…œ ê°œìˆ˜
+        public string itemID; // ¾ÆÀÌÅÛ ÄÚµå
+        public int itemCount; // µå·ÓÇÒ ¾ÆÀÌÅÛ °³¼ö
     }
 }

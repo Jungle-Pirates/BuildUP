@@ -286,6 +286,22 @@ public class PlayerController : NetworkBehaviour
             dust.transform.localScale = new Vector3(m_facingDirection, 1, 1);
         }
     }
+
+    /// <summary>
+    /// ÀåÂø ÁßÀÎ µµ±¸ Á¤º¸¸¦ ¹İÈ¯ : ÀÚ¿ø ¿ÀºêÁ§Æ®°¡ È£Ãâ
+    /// </summary>
+    public Item GetEquippedItem()
+    {
+        Slot handSlot = InventoryManager.Instance.slots[0];
+        if (handSlot != null && handSlot.inventoryItem != null &&
+            handSlot.inventoryItem.equipable == Equipable.Hand)
+        {
+            return handSlot.inventoryItem;
+        }
+
+        return null;
+    }
+
     /// <summary>
     /// ì„ì‹œ ê³µê²© íŒì •
     /// </summary>

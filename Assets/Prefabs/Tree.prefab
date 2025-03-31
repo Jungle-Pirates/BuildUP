@@ -256,7 +256,7 @@ MonoBehaviour:
     itemCount: 5
   - itemID: 30
     itemCount: 1
-  resourceHealth: 5
+  resourceHealth: 25
   healthBar: {fileID: 8569545313152200010}
   currentHealth: 0
 --- !u!114 &4274934107788710882
