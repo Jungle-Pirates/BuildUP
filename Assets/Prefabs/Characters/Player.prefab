@@ -741,7 +741,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1991432749103157228}
   - component: {fileID: 3451610830231866551}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: AttackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
