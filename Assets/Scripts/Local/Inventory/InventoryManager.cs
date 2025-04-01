@@ -190,15 +190,15 @@ public class InventoryManager : Singleton<InventoryManager>
     }
 
     /// <summary>
-    /// 사용 버튼 클릭 시 호출
+    /// 사용 버튼 클릭 시 호출 (일단 Food만 뜸)
     /// </summary>
     public void OnUseButton()
     {
-        if (selectedItem.inventoryItem.itemType == ItemType.Food)
-        {
-            // TODO: Heal 또는 회복 효과 연결 필요
-            RemoveSelectedItem();
-        }
+        if (selectedItem == null || selectedItem.inventoryItem == null)
+            return;
+
+        // 아이템 내부의 Use(PlayerController user) 호출
+        selectedItem.inventoryItem.Use(NetworkClient.localPlayer.GetComponent<PlayerController>());
     }
 
     /// <summary>
