@@ -29,6 +29,10 @@ public class NetworkResource : NetworkBehaviour
     [SyncVar(hook = nameof(OnHealthChanged))]
     private int currentHealth; // 현재 체력
 
+    [Header("도구 태그")]
+    [Tooltip("이 자원에 피해를 줄 수 있는 도구 태그 (예: AXE, PICK)")]
+    [SerializeField] private string toolTag = "AXE";
+
     void Start()
     {
         healthBar.fillAmount = 1;
@@ -48,7 +52,7 @@ public class NetworkResource : NetworkBehaviour
     /// 클라이언트가 자원을 때렸을 때 호출 (플레이어 스크립트에서 호출)
     /// </summary>
     [Command(requiresAuthority = false)] // 아무 클라이언트나 호출 가능
-    public void CmdHitResource()
+    public void CmdHitResource(float damage)
     {
         // 이미 파괴된 자원이면 무시
         if (currentHealth <= 0)
@@ -56,8 +60,8 @@ public class NetworkResource : NetworkBehaviour
             return;
         }
 
-        // 체력 감소
-        currentHealth--;
+        // 피해 적용 (반올림 또는 강제 정수 처리)
+        currentHealth -= Mathf.CeilToInt(damage);
 
         // 파괴됐는지 확인
         if (currentHealth <= 0)
@@ -108,13 +112,29 @@ public class NetworkResource : NetworkBehaviour
         }
     }
     /// <summary>
-    /// 플레이어가 자원을 때렸을때, Axe 태그 비교
+    /// 플레이어가 자원을 때렸을 때, 도구 태그 비교 및 피해량 전달
     /// </summary>
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("AXE"))
+        // 충돌한 객체의 루트가 Player인지 확인
+        Transform root = collision.transform.root;
+        PlayerController player = root.GetComponent<PlayerController>();
+
+        if (player == null)
+            return;
+
+        // 플레이어 장비 정보 가져오기
+        Item equipped = player.GetEquippedItem();
+
+        // null 체크 + 태그 일치 확인
+        if (equipped != null && collision.CompareTag(toolTag))
         {
-            CmdHitResource();
+            // HandyToolItem인지 확인 후 damage 값 가져오기
+            HandyToolItem tool = equipped as HandyToolItem;
+            if (tool != null)
+            {
+                CmdHitResource(tool.damage); // 피해량 전달
+            }
         }
     }
 

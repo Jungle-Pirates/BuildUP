@@ -41,6 +41,14 @@ public class Slot : MonoBehaviour
         quantityText.text = inventoryItem.count > 1
             ? inventoryItem.count.ToString()
             : string.Empty;
+
+        // 드래그 상태 초기화
+        CanvasGroup canvasGroup = icon.GetComponent<CanvasGroup>();
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 1f;
+            canvasGroup.blocksRaycasts = true;
+        }
     }
 
     /// <summary>
