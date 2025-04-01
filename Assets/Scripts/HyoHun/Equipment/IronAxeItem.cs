@@ -9,7 +9,7 @@ public class IronAxeItem : AxeItem
         base.Awake();
 
         itemID = "23";
-        itemName = "√∂ µµ≥¢";
+        itemName = "Ï≤† ÎèÑÎÅº";
         damage = 8f; 
         delay = 0.2f; 
         size = 1f;
@@ -17,6 +17,6 @@ public class IronAxeItem : AxeItem
 
     public override void Use(PlayerController user)
     {
-        base.Use(user); // AxeItem¿« Use »£√‚
+        base.Use(user); // AxeItemÏùò Use Ìò∏Ï∂ú
     }
 }

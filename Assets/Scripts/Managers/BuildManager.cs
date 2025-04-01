@@ -45,7 +45,7 @@ public class BuildManager : NetworkBehaviour
     }
 
     /// <summary>
-    /// ¹æÀÇ À¯´Ö »çÀÌÁî º¯°æ ½Ã È£ÃâµÇ´Â ÇÔ¼ö
+    /// ë°©ì˜ ìœ ë‹› ì‚¬ì´ì¦ˆ ë³€ê²½ ì‹œ í˜¸ì¶œë˜ëŠ” í•¨ìˆ˜
     /// </summary>
     private void OnUnitSizeChanged(Vector2 oldSize, Vector2 newSize)
     {
@@ -139,26 +139,26 @@ public class BuildManager : NetworkBehaviour
         }
         else
         {
-            Debug.Log("°Ç¹°À» ÁöÀ» ¼ö ¾ø½À´Ï´Ù.");
+            Debug.Log("ê±´ë¬¼ì„ ì§€ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
         }
     }
 
     /// <summary>
-    /// ÇÃ·¹ÀÌ¾î°¡ Ä¿¸Çµå·Î ¹æ °Ç¼³À» ¿äÃ»ÇÏ¸é ¼­¹ö¿¡¼­ ¹æÀ» °Ç¼³
+    /// í”Œë ˆì´ì–´ê°€ ì»¤ë§¨ë“œë¡œ ë°© ê±´ì„¤ì„ ìš”ì²­í•˜ë©´ ì„œë²„ì—ì„œ ë°©ì„ ê±´ì„¤
     /// </summary>
-    /// <param name="roomType">ÀÏ´ÜÀº ÀÓ½Ã·Î int °ª¿¡ ÀÇÇØ¼­ ¹æ Á¾·ù °áÁ¤(0=ºó¹æ, 1=Åä´ë)</param>
+    /// <param name="roomType">ì¼ë‹¨ì€ ì„ì‹œë¡œ int ê°’ì— ì˜í•´ì„œ ë°© ì¢…ë¥˜ ê²°ì •(0=ë¹ˆë°©, 1=í† ëŒ€)</param>
     [Server]
     private void BuildRoom(int roomType, Vector2Int coordinate)
     {
-        // ¹æ ÄÚµå¸¦ ÅëÇØ¼­ ¹æ ÇÁ¸®ÆÕ ¼±ÅÃ ÈÄ ¹æ ¿ÀºêÁ§Æ® »ı¼º
+        // ë°© ì½”ë“œë¥¼ í†µí•´ì„œ ë°© í”„ë¦¬íŒ¹ ì„ íƒ í›„ ë°© ì˜¤ë¸Œì íŠ¸ ìƒì„±
         GameObject roomObject;
         switch (roomType) {
             case 0:
-                Debug.Log("Åä´ë °Ç¼³");
+                Debug.Log("í† ëŒ€ ê±´ì„¤");
                 roomObject = Instantiate(testFoundationObject, FromBasisIntCoordinates(coordinate), Quaternion.identity);
                 break;
             case 1:
-                Debug.Log("ÀÏ¹İ ¹æ °Ç¼³");
+                Debug.Log("ì¼ë°˜ ë°© ê±´ì„¤");
                 roomObject = Instantiate(testRoomObject, FromBasisIntCoordinates(coordinate), Quaternion.identity);
                 break;
             default:
@@ -168,23 +168,23 @@ public class BuildManager : NetworkBehaviour
         NetworkServer.Spawn(roomObject);
         //roomObject.transform.position = FromBasisIntCoordinates(coordinate);
 
-        // »ı¼º ÈÄ ¹æ µ¥ÀÌÅÍ °øÀ¯
+        // ìƒì„± í›„ ë°© ë°ì´í„° ê³µìœ 
         RpcOnBuildNewRoom(coordinate, roomObject);
     }
 
     /// <summary>
-    /// ¹æ ¿ÀºêÁ§Æ® »ı¼º ÈÄ ¸ğµç Å¬¶óÀÌ¾ğÆ®¿¡ ¹æ °ü·Ã µ¥ÀÌÅÍ °øÀ¯
+    /// ë°© ì˜¤ë¸Œì íŠ¸ ìƒì„± í›„ ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ì— ë°© ê´€ë ¨ ë°ì´í„° ê³µìœ 
     /// </summary>
     [ClientRpc]
     private void RpcOnBuildNewRoom(Vector2Int coordinate, GameObject roomObject)
     {
-        // ÃßÈÄ ÃÖÀûÈ­¸¦ À§ÇØ¼­ Ç®¸µÀ» »ç¿ëÇÏ´Â °ÍÀÌ ÁÁÀ» °Í °°À½. ÀÏ´ÜÀº ÀÓ½Ã´Ï±î ±øÀ¸·Î °´Ã¼ »ı¼º
+        // ì¶”í›„ ìµœì í™”ë¥¼ ìœ„í•´ì„œ í’€ë§ì„ ì‚¬ìš©í•˜ëŠ” ê²ƒì´ ì¢‹ì„ ê²ƒ ê°™ìŒ. ì¼ë‹¨ì€ ì„ì‹œë‹ˆê¹Œ ê¹¡ìœ¼ë¡œ ê°ì²´ ìƒì„±
         AddRoomData(coordinate, new Room(new RoomData(), roomObject.GetComponent<RoomEntity>()));
     }
 
     public void AddRoomData(Vector2Int coordinate, Room room)
     {
-        // ÃßÈÄ ÁöÁö´ë°¡ Ãß°¡µÇ¸é Á¶°ÇÀ» ´õ Ãß°¡ÇØÁà¾ß ÇÔ
+        // ì¶”í›„ ì§€ì§€ëŒ€ê°€ ì¶”ê°€ë˜ë©´ ì¡°ê±´ì„ ë” ì¶”ê°€í•´ì¤˜ì•¼ í•¨
         room.Data.SetRoomData(Vector2Int.one, true);
 
         if (!worldRoomData.TryAdd(coordinate, room))
@@ -202,7 +202,7 @@ public class BuildManager : NetworkBehaviour
     #region Delete Room
 
     /// <summary>
-    /// Å¬¶óÀÌ¾ğÆ® Ãø¿¡¼­ ¼­¹ö·Î °Ç¹° »èÁ¦ ¿äÃ» Ä¿¸Çµå
+    /// í´ë¼ì´ì–¸íŠ¸ ì¸¡ì—ì„œ ì„œë²„ë¡œ ê±´ë¬¼ ì‚­ì œ ìš”ì²­ ì»¤ë§¨ë“œ
     /// </summary>
     [Command(requiresAuthority = false)]
     public void CmdDeleteRoom(Vector2Int coordinate)
@@ -219,18 +219,18 @@ public class BuildManager : NetworkBehaviour
     }
 
     /// <summary>
-    /// ¹æ Á¦°Å Ä¿¸ÇµåÀÔ·Â ½Ã Å¬¶óÀÌ¾ğÆ®¿¡ ¹æ Á¦°Å ¸í·ÉÀ» RPC·Î »Ñ¸²
+    /// ë°© ì œê±° ì»¤ë§¨ë“œì…ë ¥ ì‹œ í´ë¼ì´ì–¸íŠ¸ì— ë°© ì œê±° ëª…ë ¹ì„ RPCë¡œ ë¿Œë¦¼
     /// </summary>
     [Server]
     private void DeleteRoom(Vector2Int coordinate)
     {
         //DestroyRoomObject(deleteRoom.Entity.gameObject);
-        // Á¦°Å ÈÄ ¹æ µ¥ÀÌÅÍ °øÀ¯
+        // ì œê±° í›„ ë°© ë°ì´í„° ê³µìœ 
         RpcOnDeleteRoom(coordinate);
     }
 
     /// <summary>
-    /// ÇØ´ç ÁÂÇ¥¿¡ ¹æÀÌ ÀÖ´ÂÁö È®ÀÎ ÈÄ ¸ğµç Å¬¶óÀÌ¾ğÆ®¿¡¼­ ¹æÀ» »èÁ¦
+    /// í•´ë‹¹ ì¢Œí‘œì— ë°©ì´ ìˆëŠ”ì§€ í™•ì¸ í›„ ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ì—ì„œ ë°©ì„ ì‚­ì œ
     /// </summary>
     [ClientRpc]
     private void RpcOnDeleteRoom(Vector2Int coordinate)
@@ -259,7 +259,7 @@ public class BuildManager : NetworkBehaviour
     {
         if (room == null)
         {
-            Debug.LogError("<color=red>[¿¡·¯ ¹ß»ı]</color>ÆÄ±«ÇÒ ¹æÀÌ nullÀÔ´Ï´Ù.");
+            Debug.LogError("<color=red>[ì—ëŸ¬ ë°œìƒ]</color>íŒŒê´´í•  ë°©ì´ nullì…ë‹ˆë‹¤.");
             return;
         }
         NetworkServer.Destroy(room);

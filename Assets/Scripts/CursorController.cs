@@ -15,7 +15,7 @@ public class CursorController : MonoBehaviour
 
     private void Update()
     {
-        //юс╫ц╥н 'B'╦╕ ╢╘╦ё╦И ╟г╪Ё╦П╣Е╥н ╣И╬Н╟║╣╣╥о
+        //Л·└Л▀°К║° 'B'К╔╪ К┬└К╔╢К╘╢ Й╠╢Л└╓К╙╗К⌠°К║° К⌠╓Л√╢Й╟─К▐└К║²
         if (Input.GetKeyDown(KeyCode.B))
         {
             isBuildMode = !isBuildMode;

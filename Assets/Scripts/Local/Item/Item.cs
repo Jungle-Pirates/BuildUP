@@ -31,6 +31,6 @@ public abstract class Item : MonoBehaviour
     public bool canStack;
     public int maxStackAmount;
     public int count;
-    //»ı¼ºÀÚ¿¡¼­ ÃÊ±âÈ­ ÇØÁÖ´Â ÇÔ¼ö »ı¼º
+    //ìƒì„±ìì—ì„œ ì´ˆê¸°í™” í•´ì£¼ëŠ” í•¨ìˆ˜ ìƒì„±
     public abstract void Use(PlayerController user);
 }

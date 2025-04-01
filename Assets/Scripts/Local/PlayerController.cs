@@ -38,10 +38,10 @@ public class PlayerController : NetworkBehaviour
     private float m_rollDuration = 8.0f / 14.0f;
     private float m_rollCurrentTime;
 
-    [Header("µµ±¸ »ç¿ë")]
-    public GameObject attackPoint;  //°ø°İ ¹üÀ§ ÆÇÁ¤¿ë ¿ÀºêÁ§Æ® 
-    //ÀÎº¥Åä¸® Á¢±Ù¿ë InventoryManager
-    //private bool isEquipped = false; //¼Õ¿¡ Àåºñ ÀåÂø ¿©ºÎ
+    [Header("ë„êµ¬ ì‚¬ìš©")]
+    public GameObject attackPoint;  //ê³µê²© ë²”ìœ„ íŒì •ìš© ì˜¤ë¸Œì íŠ¸ 
+    //ì¸ë²¤í† ë¦¬ ì ‘ê·¼ìš© InventoryManager
+    //private bool isEquipped = false; //ì†ì— ì¥ë¹„ ì¥ì°© ì—¬ë¶€
 
 
     // Use this for initialization
@@ -49,12 +49,12 @@ public class PlayerController : NetworkBehaviour
     {
         if (isLocalPlayer && SteamManager.Initialized)
         {
-            // ³» ÀÌ¸§À» °¡Á®¿Í¼­ ¼­¹ö¿¡ ¼³Á¤
+            // ë‚´ ì´ë¦„ì„ ê°€ì ¸ì™€ì„œ ì„œë²„ì— ì„¤ì •
             string myName = SteamFriends.GetPersonaName();
             CmdSetDisplayName(myName);
-            // ³» Ä«¸Ş¶ó¸¸ ²¨ÁÖ±â
+            // ë‚´ ì¹´ë©”ë¼ë§Œ êº¼ì£¼ê¸°
             virtualCamera.gameObject.SetActive(true);
-            //·»´õ·¯ ¿ì¼±¼øÀ§ +1
+            //ë Œë”ëŸ¬ ìš°ì„ ìˆœìœ„ +1
             GetComponent<SpriteRenderer>().sortingOrder += 1;
         }
 
@@ -68,21 +68,21 @@ public class PlayerController : NetworkBehaviour
         m_wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
         attackPoint = transform.Find("AttackPoint").gameObject;
-        //attackPoint.SetActive(false); //¾ÆÀÌÅÛ Use()¿¡¼­ Collider2D ÄÄÆ÷³ÍÆ®¸¦ ²ô°í Å°´ÂÁß 
+        //attackPoint.SetActive(false); //ì•„ì´í…œ Use()ì—ì„œ Collider2D ì»´í¬ë„ŒíŠ¸ë¥¼ ë„ê³  í‚¤ëŠ”ì¤‘ 
     }
 
     /// <summary>
-    /// ¼­¹ö¿¡ ÀÌ¸§À» ¼³Á¤ÇÏµµ·Ï ¿äÃ»ÇÏ´Â Command
+    /// ì„œë²„ì— ì´ë¦„ì„ ì„¤ì •í•˜ë„ë¡ ìš”ì²­í•˜ëŠ” Command
     /// </summary>
     [Command]
     private void CmdSetDisplayName(string myName)
     {
-        // ¼­¹ö¿¡¼­ ÀÌ¸§ ¼³Á¤ (SyncVar¸¦ ÅëÇØ ¸ğµç Å¬¶óÀÌ¾ğÆ®¿¡ ÀüÆÄµÊ)
+        // ì„œë²„ì—ì„œ ì´ë¦„ ì„¤ì • (SyncVarë¥¼ í†µí•´ ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ì— ì „íŒŒë¨)
         displayName = myName;
     }
 
     /// <summary>
-    /// ÀÌ¸§ÀÌ º¯°æµÉ ¶§ È£ÃâµÇ´Â Hook ÇÔ¼ö
+    /// ì´ë¦„ì´ ë³€ê²½ë  ë•Œ í˜¸ì¶œë˜ëŠ” Hook í•¨ìˆ˜
     /// </summary>
     private void OnDisplayNameChanged(string oldName, string newName)
     {
@@ -90,7 +90,7 @@ public class PlayerController : NetworkBehaviour
     }
 
     /// <summary>
-    /// ¼­¹ö¿¡ ÇÃ·¹ÀÌ¾î°¡ ¹Ù¶óº¸´Â ¹æÇâÀ» ¼³Á¤ÇÏµµ·Ï ¿äÃ»ÇÏ´Â Command
+    /// ì„œë²„ì— í”Œë ˆì´ì–´ê°€ ë°”ë¼ë³´ëŠ” ë°©í–¥ì„ ì„¤ì •í•˜ë„ë¡ ìš”ì²­í•˜ëŠ” Command
     /// </summary>
     /// <param name="direction"></param>
     [Command]
@@ -100,7 +100,7 @@ public class PlayerController : NetworkBehaviour
     }
 
     /// <summary>
-    /// ¹æÇâÀÌ º¯°æµÉ ¶§ È£ÃâµÇ´Â Hook ÇÔ¼ö
+    /// ë°©í–¥ì´ ë³€ê²½ë  ë•Œ í˜¸ì¶œë˜ëŠ” Hook í•¨ìˆ˜
     /// </summary>
     private void OnFacingDirectionChanged(int oldDirection, int newDirection)
     {
@@ -185,12 +185,12 @@ public class PlayerController : NetworkBehaviour
             m_animator.SetTrigger("Hurt");
 
         //Attack
-        //Àåºñ ÀåÂøÁßÀÎÁö °Ë»ç > Àåºñ ¾ÆÀÌÅÛÀÌ¶ó¸é Àåºñ ¾ÆÀÌÅÛÀÇ UseÈ£Ãâ
+        //ì¥ë¹„ ì¥ì°©ì¤‘ì¸ì§€ ê²€ì‚¬ > ì¥ë¹„ ì•„ì´í…œì´ë¼ë©´ ì¥ë¹„ ì•„ì´í…œì˜ Useí˜¸ì¶œ
         else if (Input.GetMouseButtonDown(0) && m_timeSinceAttack > 0.25f && !m_rolling)
         {
-            if (IsHandEquipped())  // ¼Õ¿¡ Àåºñ ÀåÂø ¿©ºÎ È®ÀÎ
+            if (IsHandEquipped())  // ì†ì— ì¥ë¹„ ì¥ì°© ì—¬ë¶€ í™•ì¸
             {
-                InventoryManager.Instance.slots[0].inventoryItem?.Use(this);  // ÀåºñÀÇ Use() È£Ãâ
+                InventoryManager.Instance.slots[0].inventoryItem?.Use(this);  // ì¥ë¹„ì˜ Use() í˜¸ì¶œ
 
 
                 m_currentAttack++;
@@ -258,7 +258,7 @@ public class PlayerController : NetworkBehaviour
     }
 
     /// <summary>
-    /// ÀåÂøµÈ Àåºñ È®ÀÎ
+    /// ì¥ì°©ëœ ì¥ë¹„ í™•ì¸
     /// </summary>
     private bool IsHandEquipped()
     {
@@ -287,7 +287,7 @@ public class PlayerController : NetworkBehaviour
         }
     }
     /// <summary>
-    /// ÀÓ½Ã °ø°İ ÆÇÁ¤
+    /// ì„ì‹œ ê³µê²© íŒì •
     /// </summary>
     /*
     private IEnumerator AttackPointEnable()

@@ -9,11 +9,11 @@ public class AlloyItem : Item
         itemID = "11";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
-        itemName = "ÇÕ±İ";
+        itemName = "í•©ê¸ˆ";
     }
 
     public override void Use(PlayerController user)
     {
-        Debug.Log("ÇÕ±İÀº »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.");
+        Debug.Log("í•©ê¸ˆì€ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
     }
 }

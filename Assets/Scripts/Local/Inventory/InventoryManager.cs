@@ -6,35 +6,35 @@ using Mirror;
 using UnityEngine.UI;
 
 /// <summary>
-/// ÀÎº¥Åä¸® °ü¸® Å¬·¡½º
+/// ì¸ë²¤í† ë¦¬ ê´€ë¦¬ í´ë˜ìŠ¤
 /// </summary>
 public class InventoryManager : Singleton<InventoryManager>
 {
-    [Header("½½·Ô ±¸¼º")]
-    public Slot[] slots; // ½½·Ô ¹è¿­
-    public GameObject inventoryWindow; // ÀÎº¥Åä¸® Ã¢
-    public Transform slotPanel; // ½½·Ô ºÎ¸ğ
+    [Header("ìŠ¬ë¡¯ êµ¬ì„±")]
+    public Slot[] slots; // ìŠ¬ë¡¯ ë°°ì—´
+    public GameObject inventoryWindow; // ì¸ë²¤í† ë¦¬ ì°½
+    public Transform slotPanel; // ìŠ¬ë¡¯ ë¶€ëª¨
 
-    [Header("¼±ÅÃµÈ ¾ÆÀÌÅÛ Á¤º¸ UI")]
-    private Slot selectedItem; // ÇöÀç ¼±ÅÃÇÑ ½½·Ô
-    private int selectedItemIndex; // ¼±ÅÃµÈ ½½·ÔÀÇ ÀÎµ¦½º
-    public TextMeshProUGUI selectedItemName; // ÀÌ¸§ Ç¥½Ã
-    public TextMeshProUGUI selectedItemType; // Å¸ÀÔ Ç¥½Ã
-    public TextMeshProUGUI selectedItemStatName; // ½ºÅÈ¸í (¹Ì»ç¿ë)
-    public TextMeshProUGUI selectedItemStatValue; // ½ºÅÈ°ª (¹Ì»ç¿ë)
-    public Button useButton; // »ç¿ë ¹öÆ°
-    public Button dropButton; // ¹ö¸®±â ¹öÆ°
+    [Header("ì„ íƒëœ ì•„ì´í…œ ì •ë³´ UI")]
+    private Slot selectedItem; // í˜„ì¬ ì„ íƒí•œ ìŠ¬ë¡¯
+    private int selectedItemIndex; // ì„ íƒëœ ìŠ¬ë¡¯ì˜ ì¸ë±ìŠ¤
+    public TextMeshProUGUI selectedItemName; // ì´ë¦„ í‘œì‹œ
+    public TextMeshProUGUI selectedItemType; // íƒ€ì… í‘œì‹œ
+    public TextMeshProUGUI selectedItemStatName; // ìŠ¤íƒ¯ëª… (ë¯¸ì‚¬ìš©)
+    public TextMeshProUGUI selectedItemStatValue; // ìŠ¤íƒ¯ê°’ (ë¯¸ì‚¬ìš©)
+    public Button useButton; // ì‚¬ìš© ë²„íŠ¼
+    public Button dropButton; // ë²„ë¦¬ê¸° ë²„íŠ¼
 
     void Start()
     {
-        // ÇÃ·¹ÀÌ¾î ¿¬°á ¹× ÀÌº¥Æ® µî·Ï
+        // í”Œë ˆì´ì–´ ì—°ê²° ë° ì´ë²¤íŠ¸ ë“±ë¡
         // controller = GameObject.Find("Player").GetComponent<PlayerController>();
         // dropPosition = controller.transform;
         // controller.inventory += Toggle;
         // controller.addItem += AddItem;
         dropButton.onClick.AddListener(OnDropButton);
 
-        // ÃÊ±âÈ­
+        // ì´ˆê¸°í™”
         slots = new Slot[slotPanel.childCount];
 
         for (int i = 0; i < slots.Length; i++)
@@ -52,63 +52,63 @@ public class InventoryManager : Singleton<InventoryManager>
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            Toggle(); // ÀÎº¥Åä¸® ¿­±â/´İ±â
+            Toggle(); // ì¸ë²¤í† ë¦¬ ì—´ê¸°/ë‹«ê¸°
         }
     }
 
     /// <summary>
-    /// ÀÎº¥Åä¸® ¿­°í ´İ±â
+    /// ì¸ë²¤í† ë¦¬ ì—´ê³  ë‹«ê¸°
     /// </summary>
     public void Toggle()
     {
         inventoryWindow.SetActive(!inventoryWindow.activeInHierarchy);
     }
 
-    // ¾ÆÀÌÅÛ Ãß°¡ (ÁßÃ¸ ¶Ç´Â »õ ½½·Ô¿¡ ¹èÄ¡)
+    // ì•„ì´í…œ ì¶”ê°€ (ì¤‘ì²© ë˜ëŠ” ìƒˆ ìŠ¬ë¡¯ì— ë°°ì¹˜)
     public void AddItem(string id, int count)
     {
         Item newItem = ItemDataPool.Instance.GetItemInstance(id);
         if (newItem == null)
         {
-            Debug.LogError("<color=red>[¿¡·¯ ¹ß»ı]</color> ¾ÆÀÌÅÛ ÀÎ½ºÅÏ½º »ı¼º ½ÇÆĞ: " + id);
-            return; // ¾ÆÀÌÅÛ ÀÎ½ºÅÏ½º°¡ ¾øÀ¸¸é Á¾·á
+            Debug.LogError("<color=red>[ì—ëŸ¬ ë°œìƒ]</color> ì•„ì´í…œ ì¸ìŠ¤í„´ìŠ¤ ìƒì„± ì‹¤íŒ¨: " + id);
+            return; // ì•„ì´í…œ ì¸ìŠ¤í„´ìŠ¤ê°€ ì—†ìœ¼ë©´ ì¢…ë£Œ
         }
 
-        // ÁßÃ¸ °¡´ÉÇÑ ½½·Ô ¸ÕÀú Å½»ö
+        // ì¤‘ì²© ê°€ëŠ¥í•œ ìŠ¬ë¡¯ ë¨¼ì € íƒìƒ‰
         Slot stackSlot = GetItemStack(id);
         if (stackSlot != null)
         {
-            stackSlot.inventoryItem.count += count; // ¼ö·® Áõ°¡
+            stackSlot.inventoryItem.count += count; // ìˆ˜ëŸ‰ ì¦ê°€
             UpdateUI();
             return;
         }
 
-        // ºñ¾îÀÖ´Â ½½·Ô¿¡ ¹èÄ¡
+        // ë¹„ì–´ìˆëŠ” ìŠ¬ë¡¯ì— ë°°ì¹˜
         Slot emptySlot = GetEmptySlot();
         if (emptySlot != null)
         {
             emptySlot.inventoryItem = newItem;
-            emptySlot.inventoryItem.count = count; // ¼ö·® ¼³Á¤
+            emptySlot.inventoryItem.count = count; // ìˆ˜ëŸ‰ ì„¤ì •
             UpdateUI();
             return;
         }
 
-        // ½½·Ô ¾øÀ½ >> ¹Ù´Ú¿¡ µå·Ó
+        // ìŠ¬ë¡¯ ì—†ìŒ >> ë°”ë‹¥ì— ë“œë¡­
         ThrowItem(newItem);
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛ ¹ö¸®±â
+    /// ì•„ì´í…œ ë²„ë¦¬ê¸°
     /// </summary>
     public void ThrowItem(Item item)
     {
-        //ÇÃ·¹ÀÌ¾î À§Ä¡¿¡ µå·Ó
-        //À§Ä¡´Â NetworkManager¿¡¼­ client¸¦ Ã£¾Æ ¼³Á¤
+        //í”Œë ˆì´ì–´ ìœ„ì¹˜ì— ë“œë¡­
+        //ìœ„ì¹˜ëŠ” NetworkManagerì—ì„œ clientë¥¼ ì°¾ì•„ ì„¤ì •
         NetworkItemManager.Instance.SpawnItem(item.itemID, NetworkClient.localPlayer.transform.position, false);
     }
 
     /// <summary>
-    /// UI ÀüÃ¼ °»½Å
+    /// UI ì „ì²´ ê°±ì‹ 
     /// </summary>
     public void UpdateUI()
     {
@@ -126,7 +126,7 @@ public class InventoryManager : Singleton<InventoryManager>
     }
 
     /// <summary>
-    /// °°Àº Á¾·ùÀÇ ¾ÆÀÌÅÛÀÌ ÀÖ´Â ½½·Ô ¹İÈ¯ (ÁßÃ¸ ¸ñÀû)
+    /// ê°™ì€ ì¢…ë¥˜ì˜ ì•„ì´í…œì´ ìˆëŠ” ìŠ¬ë¡¯ ë°˜í™˜ (ì¤‘ì²© ëª©ì )
     /// </summary>
     Slot GetItemStack(string id)
     {
@@ -143,7 +143,7 @@ public class InventoryManager : Singleton<InventoryManager>
     }
 
     /// <summary>
-    /// ºñ¾îÀÖ´Â ½½·Ô Ã£±â
+    /// ë¹„ì–´ìˆëŠ” ìŠ¬ë¡¯ ì°¾ê¸°
     /// </summary>
     Slot GetEmptySlot()
     {
@@ -156,7 +156,7 @@ public class InventoryManager : Singleton<InventoryManager>
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛ Å¬¸¯ ½Ã »ó¼¼Á¤º¸ Ç¥½Ã
+    /// ì•„ì´í…œ í´ë¦­ ì‹œ ìƒì„¸ì •ë³´ í‘œì‹œ
     /// </summary>
     public void SelectItem(int index)
     {
@@ -167,7 +167,7 @@ public class InventoryManager : Singleton<InventoryManager>
 
         selectedItemName.text = selectedItem.inventoryItem.itemName;
         selectedItemType.text = selectedItem.inventoryItem.itemType.ToString();
-        selectedItemStatName.text = string.Empty; // ÇâÈÄ È®Àå
+        selectedItemStatName.text = string.Empty; // í–¥í›„ í™•ì¥
         selectedItemStatValue.text = string.Empty;
 
         useButton.gameObject.SetActive(selectedItem.inventoryItem.itemType == ItemType.Food);
@@ -175,7 +175,7 @@ public class InventoryManager : Singleton<InventoryManager>
     }
 
     /// <summary>
-    /// »ó¼¼ Á¤º¸ ÃÊ±âÈ­
+    /// ìƒì„¸ ì •ë³´ ì´ˆê¸°í™”
     /// </summary>
     void ClearSelectedItemWindow()
     {
@@ -190,28 +190,28 @@ public class InventoryManager : Singleton<InventoryManager>
     }
 
     /// <summary>
-    /// »ç¿ë ¹öÆ° Å¬¸¯ ½Ã È£Ãâ
+    /// ì‚¬ìš© ë²„íŠ¼ í´ë¦­ ì‹œ í˜¸ì¶œ
     /// </summary>
     public void OnUseButton()
     {
         if (selectedItem.inventoryItem.itemType == ItemType.Food)
         {
-            // TODO: Heal ¶Ç´Â È¸º¹ È¿°ú ¿¬°á ÇÊ¿ä
+            // TODO: Heal ë˜ëŠ” íšŒë³µ íš¨ê³¼ ì—°ê²° í•„ìš”
             RemoveSelectedItem();
         }
     }
 
     /// <summary>
-    /// ¹ö¸®±â ¹öÆ° Å¬¸¯ ½Ã È£Ãâ
+    /// ë²„ë¦¬ê¸° ë²„íŠ¼ í´ë¦­ ì‹œ í˜¸ì¶œ
     /// </summary>
     public void OnDropButton()
     {
-        ThrowItem(selectedItem.inventoryItem); // TODO: ½ÇÁ¦ µå·Ó ±¸Çö ½Ã selectedItem »ç¿ë
+        ThrowItem(selectedItem.inventoryItem); // TODO: ì‹¤ì œ ë“œë¡­ êµ¬í˜„ ì‹œ selectedItem ì‚¬ìš©
         RemoveSelectedItem();
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛ ¼ö·® 1°³ °¨¼Ò ¹× Á¦°Å Ã³¸®
+    /// ì•„ì´í…œ ìˆ˜ëŸ‰ 1ê°œ ê°ì†Œ ë° ì œê±° ì²˜ë¦¬
     /// </summary>
     void RemoveSelectedItem()
     {
@@ -225,7 +225,7 @@ public class InventoryManager : Singleton<InventoryManager>
     }
 
     /// <summary>
-    /// Æ¯Á¤ ¾ÆÀÌÅÛ Á¸Àç ¿©ºÎ È®ÀÎ
+    /// íŠ¹ì • ì•„ì´í…œ ì¡´ì¬ ì—¬ë¶€ í™•ì¸
     /// </summary>
     // public bool HasItem(int itemID, int quantity)
     // {

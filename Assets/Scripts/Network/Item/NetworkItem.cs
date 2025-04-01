@@ -2,21 +2,21 @@ using UnityEngine;
 using Mirror;
 
 /// <summary>
-/// °³º° ¾ÆÀÌÅÛ Å¬·¡½º
-/// ³ª¹«, µ¹, ±¤¼®...
+/// ê°œë³„ ì•„ì´í…œ í´ë˜ìŠ¤
+/// ë‚˜ë¬´, ëŒ, ê´‘ì„...
 /// </summary>
 
 public class NetworkItem : NetworkBehaviour
 {
-    [Header("¾ÆÀÌÅÛ Á¤º¸")]
-    [Tooltip("¾ÆÀÌÅÛ ÄÚµå")]
+    [Header("ì•„ì´í…œ ì •ë³´")]
+    [Tooltip("ì•„ì´í…œ ì½”ë“œ")]
     public string itemID;
 
     [SyncVar]
-    private bool isPickedUp = false; // ¾ÆÀÌÅÛ È¹µæ »óÅÂ
+    private bool isPickedUp = false; // ì•„ì´í…œ íšë“ ìƒíƒœ
     [SyncVar]
-    private bool isAbleToPickUp = false; // ¾ÆÀÌÅÛ È¹µæ °¡´É »óÅÂ
-    private Collider2D itemCollider; // ¾ÆÀÌÅÛ Äİ¶óÀÌ´õ
+    private bool isAbleToPickUp = false; // ì•„ì´í…œ íšë“ ê°€ëŠ¥ ìƒíƒœ
+    private Collider2D itemCollider; // ì•„ì´í…œ ì½œë¼ì´ë”
 
     void Start()
     {
@@ -44,68 +44,68 @@ public class NetworkItem : NetworkBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // ¼­¹ö¿¡¼­¸¸ Ã³¸® & ÀÌ¹Ì È¹µæµÈ ¾ÆÀÌÅÛÀº ¹«½Ã
+        // ì„œë²„ì—ì„œë§Œ ì²˜ë¦¬ & ì´ë¯¸ íšë“ëœ ì•„ì´í…œì€ ë¬´ì‹œ
         if (!isServer || isPickedUp || !isAbleToPickUp) return;
 
-        // ÇÃ·¹ÀÌ¾î¿Í Ãæµ¹Çß´ÂÁö È®ÀÎ
+        // í”Œë ˆì´ì–´ì™€ ì¶©ëŒí–ˆëŠ”ì§€ í™•ì¸
         PlayerController player = other.GetComponent<PlayerController>();
         if (player != null)
         {
-            // ÇÃ·¹ÀÌ¾î°¡ ¾ÆÀÌÅÛ È¹µæ
-            Debug.Log("ÇÃ·¹ÀÌ¾î°¡ ¾ÆÀÌÅÛÀ» È¹µæÇß½À´Ï´Ù: " + player.name);
+            // í”Œë ˆì´ì–´ê°€ ì•„ì´í…œ íšë“
+            Debug.Log("í”Œë ˆì´ì–´ê°€ ì•„ì´í…œì„ íšë“í–ˆìŠµë‹ˆë‹¤: " + player.name);
 
-            // ¾ÆÀÌÅÛ È¹µæ Ã³¸®
+            // ì•„ì´í…œ íšë“ ì²˜ë¦¬
             PlayerPickedUpItem(player);
         }
     }
 
     /// <summary>
-    /// ¼­¹ö¿¡¼­ ¾ÆÀÌÅÛ È¹µæ Ã³¸®
+    /// ì„œë²„ì—ì„œ ì•„ì´í…œ íšë“ ì²˜ë¦¬
     /// </summary>
-    /// <param name="player">¾ÆÀÌÅÛÀ» È¹µæÇÑ ÇÃ·¹ÀÌ¾î</param>
+    /// <param name="player">ì•„ì´í…œì„ íšë“í•œ í”Œë ˆì´ì–´</param>
     [Server]
     private void PlayerPickedUpItem(PlayerController player)
     {
-        // È¹µæ »óÅÂ·Î º¯°æ
+        // íšë“ ìƒíƒœë¡œ ë³€ê²½
         isPickedUp = true;
 
-        // ¾ÆÀÌÅÛÀ» ÁÖ¿î ÇÃ·¹ÀÌ¾î¿¡°Ô ¾ÆÀÌÅÛ È¹µæ ¾Ë¸² ¹× ¾ÆÀÌÅÛ ÀÎº¥Åä¸®¿¡ Ãß°¡
+        // ì•„ì´í…œì„ ì£¼ìš´ í”Œë ˆì´ì–´ì—ê²Œ ì•„ì´í…œ íšë“ ì•Œë¦¼ ë° ì•„ì´í…œ ì¸ë²¤í† ë¦¬ì— ì¶”ê°€
         TargetOnItemPickedUp(player.connectionToClient, itemID, 1);
 
-        // ¾ÆÀÌÅÛ È¹µæ È¿°ú¸¦ ¸ğµç Å¬¶óÀÌ¾ğÆ®¿¡ ¾Ë¸²
+        // ì•„ì´í…œ íšë“ íš¨ê³¼ë¥¼ ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ì— ì•Œë¦¼
         RpcOnItemPickedUp();
     }
 
     /// <summary>
-    /// ¸ğµç Å¬¶óÀÌ¾ğÆ®¿¡¼­ ¾ÆÀÌÅÛ È¹µæ È¿°ú Ç¥½Ã ¹× Á¦°Å
+    /// ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ì—ì„œ ì•„ì´í…œ íšë“ íš¨ê³¼ í‘œì‹œ ë° ì œê±°
     /// </summary>
     [ClientRpc]
     private void RpcOnItemPickedUp()
     {
-        // ¾ÆÀÌÅÛ È¹µæ È¿°ú Ç¥½Ã
+        // ì•„ì´í…œ íšë“ íš¨ê³¼ í‘œì‹œ
         // ...
 
-        //¾ÆÀÌÅÛ ¸Å´ÏÁ®¸¦ »ç¿ëÇÏ¿© ¾ÆÀÌÅÛ Á¦°Å
+        //ì•„ì´í…œ ë§¤ë‹ˆì ¸ë¥¼ ì‚¬ìš©í•˜ì—¬ ì•„ì´í…œ ì œê±°
         NetworkItemManager.Instance.DestroyItem(gameObject);
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀ» ÁÖ¿î ÇÃ·¹ÀÌ¾î¿¡°Ô ¾ÆÀÌÅÛ È¹µæ ¾Ë¸² ¹× ¾ÆÀÌÅÛ ÀÎº¥Åä¸®¿¡ Ãß°¡
-    /// ¾ÆÀÌÅÛÀ» È¹µæÇÑ Å¬¶óÀÌ¾ğÆ®¿¡¼­¸¸ ½ÇÇàµÊ
+    /// ì•„ì´í…œì„ ì£¼ìš´ í”Œë ˆì´ì–´ì—ê²Œ ì•„ì´í…œ íšë“ ì•Œë¦¼ ë° ì•„ì´í…œ ì¸ë²¤í† ë¦¬ì— ì¶”ê°€
+    /// ì•„ì´í…œì„ íšë“í•œ í´ë¼ì´ì–¸íŠ¸ì—ì„œë§Œ ì‹¤í–‰ë¨
     /// </summary>
     [TargetRpc]
     private void TargetOnItemPickedUp(NetworkConnection target, string id, int count)
     {        
-        // ÀÎº¥Åä¸® ¸Å´ÏÀú¸¦ ÅëÇØ ¾ÆÀÌÅÛ Ãß°¡
+        // ì¸ë²¤í† ë¦¬ ë§¤ë‹ˆì €ë¥¼ í†µí•´ ì•„ì´í…œ ì¶”ê°€
         InventoryManager playerInventory = InventoryManager.Instance;
         if (playerInventory != null)
         {
-            // ÀÎº¥Åä¸®¿¡ ¾ÆÀÌÅÛ Ãß°¡
+            // ì¸ë²¤í† ë¦¬ì— ì•„ì´í…œ ì¶”ê°€
             playerInventory.AddItem(id, count);
         }
         else
         {
-            Debug.LogError("<color=red>[¿¡·¯ ¹ß»ı]</color>ÀÎº¥Åä¸® Á¢±Ù ºÒ°¡");
+            Debug.LogError("<color=red>[ì—ëŸ¬ ë°œìƒ]</color>ì¸ë²¤í† ë¦¬ ì ‘ê·¼ ë¶ˆê°€");
         }
     }
 }

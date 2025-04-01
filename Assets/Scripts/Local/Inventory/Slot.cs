@@ -3,48 +3,48 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// ÀÎº¥Åä¸® ³» °³º° ½½·ÔÀ» ´ã´çÇÏ´Â Å¬·¡½º
-/// - ½½·Ô¿¡ Ç¥½ÃÇÒ ¾ÆÀÌÅÛ Á¤º¸
-/// - Å¬¸¯ ½Ã ¾ÆÀÌÅÛ ¼±ÅÃ Ã³¸®
-/// - ¾ÆÀÌÄÜ/¼ö·® UI Ç¥½Ã Ã³¸® Æ÷ÇÔ
+/// ì¸ë²¤í† ë¦¬ ë‚´ ê°œë³„ ìŠ¬ë¡¯ì„ ë‹´ë‹¹í•˜ëŠ” í´ë˜ìŠ¤
+/// - ìŠ¬ë¡¯ì— í‘œì‹œí•  ì•„ì´í…œ ì •ë³´
+/// - í´ë¦­ ì‹œ ì•„ì´í…œ ì„ íƒ ì²˜ë¦¬
+/// - ì•„ì´ì½˜/ìˆ˜ëŸ‰ UI í‘œì‹œ ì²˜ë¦¬ í¬í•¨
 /// </summary>
 public class Slot : MonoBehaviour
 {
-    public Item inventoryItem;         // ÀÌ ½½·Ô¿¡ µé¾îÀÖ´Â ÀÎº¥Åä¸® ¾ÆÀÌÅÛ µ¥ÀÌÅÍ
-    public InventoryManager inventory;               // ¼Ò¼ÓµÈ Inventory ÂüÁ¶
-    public Button button;                       // ½½·Ô Å¬¸¯À» À§ÇÑ ¹öÆ° (¿É¼Ç)
-    public Image icon;                          // ¾ÆÀÌÅÛ ÀÌ¹ÌÁö ¾ÆÀÌÄÜ
-    public TextMeshProUGUI quantityText;        // ¾ÆÀÌÅÛ ¼ö·® ÅØ½ºÆ®
-    private Outline outline;                    // ¼±ÅÃ ½Ã °­Á¶ È¿°ú (½Ã°¢Àû Å×µÎ¸®)
+    public Item inventoryItem;         // ì´ ìŠ¬ë¡¯ì— ë“¤ì–´ìˆëŠ” ì¸ë²¤í† ë¦¬ ì•„ì´í…œ ë°ì´í„°
+    public InventoryManager inventory;               // ì†Œì†ëœ Inventory ì°¸ì¡°
+    public Button button;                       // ìŠ¬ë¡¯ í´ë¦­ì„ ìœ„í•œ ë²„íŠ¼ (ì˜µì…˜)
+    public Image icon;                          // ì•„ì´í…œ ì´ë¯¸ì§€ ì•„ì´ì½˜
+    public TextMeshProUGUI quantityText;        // ì•„ì´í…œ ìˆ˜ëŸ‰ í…ìŠ¤íŠ¸
+    private Outline outline;                    // ì„ íƒ ì‹œ ê°•ì¡° íš¨ê³¼ (ì‹œê°ì  í…Œë‘ë¦¬)
 
-    public int index;                           // ½½·Ô ¹øÈ£ (UIInventory¿¡¼­ ÀÎ½Ä¿ë)
+    public int index;                           // ìŠ¬ë¡¯ ë²ˆí˜¸ (UIInventoryì—ì„œ ì¸ì‹ìš©)
 
     private void Awake()
     {
-        outline = GetComponent<Outline>();      // Outline ÄÄÆ÷³ÍÆ® ÃÊ±âÈ­
+        outline = GetComponent<Outline>();      // Outline ì»´í¬ë„ŒíŠ¸ ì´ˆê¸°í™”
     }
 
     private void OnEnable()
     {
-        //Âü°í Çß´ø ÀÚ·á¿¡ Àåºñ ÀåÂø °ü·Ã ÄÚµå°¡ ÀÖ¾úÀ½
+        //ì°¸ê³  í–ˆë˜ ìë£Œì— ì¥ë¹„ ì¥ì°© ê´€ë ¨ ì½”ë“œê°€ ìˆì—ˆìŒ
     }
 
     /// <summary>
-    /// ½½·Ô¿¡ ¾ÆÀÌÅÛ UI Á¤º¸¸¦ Ç¥½ÃÇÏ´Â ÇÔ¼ö
+    /// ìŠ¬ë¡¯ì— ì•„ì´í…œ UI ì •ë³´ë¥¼ í‘œì‹œí•˜ëŠ” í•¨ìˆ˜
     /// </summary>
     public void Set()
     {
-        icon.gameObject.SetActive(true);                    // ¾ÆÀÌÄÜ Ç¥½Ã
-        icon.sprite = inventoryItem.icon;                   // ¾ÆÀÌÅÛ ÀÌ¹ÌÁö Àû¿ë
+        icon.gameObject.SetActive(true);                    // ì•„ì´ì½˜ í‘œì‹œ
+        icon.sprite = inventoryItem.icon;                   // ì•„ì´í…œ ì´ë¯¸ì§€ ì ìš©
 
-        // ¼ö·®ÀÌ 2°³ ÀÌ»óÀÏ °æ¿ì¿¡¸¸ ¼ö·® Ç¥½Ã
+        // ìˆ˜ëŸ‰ì´ 2ê°œ ì´ìƒì¼ ê²½ìš°ì—ë§Œ ìˆ˜ëŸ‰ í‘œì‹œ
         quantityText.text = inventoryItem.count > 1
             ? inventoryItem.count.ToString()
             : string.Empty;
     }
 
     /// <summary>
-    /// ½½·Ô ºñ¿ì±â - UI ºñÈ°¼ºÈ­ ¹× µ¥ÀÌÅÍ Á¦°Å
+    /// ìŠ¬ë¡¯ ë¹„ìš°ê¸° - UI ë¹„í™œì„±í™” ë° ë°ì´í„° ì œê±°
     /// </summary>
     public void Clear()
     {
@@ -54,8 +54,8 @@ public class Slot : MonoBehaviour
     }
 
     /// <summary>
-    /// ½½·Ô ¹öÆ°ÀÌ ´­·ÈÀ» ¶§ È£ÃâµÊ
-    /// UIInventory¿¡ ÇöÀç ¼±ÅÃµÈ ½½·ÔÀ¸·Î ¾Ë¸²
+    /// ìŠ¬ë¡¯ ë²„íŠ¼ì´ ëˆŒë ¸ì„ ë•Œ í˜¸ì¶œë¨
+    /// UIInventoryì— í˜„ì¬ ì„ íƒëœ ìŠ¬ë¡¯ìœ¼ë¡œ ì•Œë¦¼
     /// </summary>
     public void OnClickButton()
     {
