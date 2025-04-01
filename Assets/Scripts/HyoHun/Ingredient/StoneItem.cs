@@ -9,7 +9,7 @@ public class StoneItem : Item
         itemID = "1";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
-        itemName = "µ¹";
+        itemName = "ëŒ";
 
         canStack = true;
         maxStackAmount = 64;
@@ -17,6 +17,6 @@ public class StoneItem : Item
 
     public override void Use(PlayerController user)
     {
-        Debug.Log("µ¹Àº »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.");
+        Debug.Log("ëŒì€ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
     }
 }

@@ -9,7 +9,7 @@ public class FiberItem : Item
         itemID = "8";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
-        itemName = "¼¶À¯";
+        itemName = "ì„¬ìœ ";
 
         canStack = true;
         maxStackAmount = 64;
@@ -17,6 +17,6 @@ public class FiberItem : Item
 
     public override void Use(PlayerController user)
     {
-        Debug.Log("¼¶À¯´Â »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.");
+        Debug.Log("ì„¬ìœ ëŠ” ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
     }
 }

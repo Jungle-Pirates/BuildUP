@@ -7,15 +7,15 @@ public class FruitItem : FoodItem
     private void OnEnable()
     {
         itemID = "30";
-        itemName = "°úÀÏ";
+        itemName = "ê³¼ì¼";
         healAmount = 10f;
     }
 
     public override void Use(PlayerController user)
     {
-        Debug.Log($"{itemName}À» ¸Ô°í Ã¼·ÂÀ» {healAmount}¸¸Å­ È¸º¹Çß´Ù.");
-        //È¸º¹ Ã³¸® 
-        //ÀÌ ¾ÆÀÌÅÛ ¼Òºñ Ã³¸®
+        Debug.Log($"{itemName}ì„ ë¨¹ê³  ì²´ë ¥ì„ {healAmount}ë§Œí¼ íšŒë³µí–ˆë‹¤.");
+        //íšŒë³µ ì²˜ë¦¬ 
+        //ì´ ì•„ì´í…œ ì†Œë¹„ ì²˜ë¦¬
         //PlayerHealth.Instance.Heal(healAmount);
     }
 }

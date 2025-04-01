@@ -1,6 +1,6 @@
 using UnityEngine;
 /// <summary>
-/// ½Ì±ÛÅÏ ºÎ¸ğ Å¬·¡½º
+/// ì‹±ê¸€í„´ ë¶€ëª¨ í´ë˜ìŠ¤
 /// </summary>
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
@@ -26,7 +26,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
     protected virtual void Awake()
     {
-        // ½Ì±ÛÅæ ¼³Á¤ (¿É¼Ç)
+        // ì‹±ê¸€í†¤ ì„¤ì • (ì˜µì…˜)
         if (_instance != null && _instance != this)
         {
             Destroy(gameObject);
@@ -34,6 +34,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
 
         _instance = this as T;
-        DontDestroyOnLoad(gameObject);  // ¾À ÀüÈ¯ ½Ã¿¡µµ À¯Áö
+        DontDestroyOnLoad(gameObject);  // ì”¬ ì „í™˜ ì‹œì—ë„ ìœ ì§€
     }
 }

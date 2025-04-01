@@ -1,7 +1,7 @@
 using UnityEngine;
 using Mirror;
 /// <summary>
-/// ¾ÆÀÌÅÛ »ý¼º, »èÁ¦¸¦ °ü¸®ÇÏ´Â Å¬·¡½º
+/// ì•„ì´í…œ ìƒì„±, ì‚­ì œë¥¼ ê´€ë¦¬í•˜ëŠ” í´ëž˜ìŠ¤
 /// </summary>
 public class NetworkItemManager : Singleton<NetworkItemManager>
 {
@@ -9,11 +9,11 @@ public class NetworkItemManager : Singleton<NetworkItemManager>
     private NetworkItem itemPrefab;
 
     /// <summary>
-    /// ¿ùµå¿¡ ¾ÆÀÌÅÛÀ» »ý¼ºÇÏ°í, ¸ðµç Å¬¶óÀÌ¾ðÆ®¿¡°Ôµµ »ý¼ºÇÕ´Ï´Ù.
+    /// ì›”ë“œì— ì•„ì´í…œì„ ìƒì„±í•˜ê³ , ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ì—ê²Œë„ ìƒì„±í•©ë‹ˆë‹¤.
     /// </summary>
-    /// <param name="itemCode">»ý¼ºÇÒ ¾ÆÀÌÅÛ ÄÚµå</param>
-    /// <param name="position">»ý¼ºÇÒ À§Ä¡</param>
-    /// <param name="isDrop">·£´ýÀ¸·Î Èð»Ñ·ÁÁ®¾ß ÇÏ¸é true, ÁöÁ¤µÈ Àå¼Ò¿¡ ¶³¾îÁ®¾ß ÇÏ¸é false </param>
+    /// <param name="itemCode">ìƒì„±í•  ì•„ì´í…œ ì½”ë“œ</param>
+    /// <param name="position">ìƒì„±í•  ìœ„ì¹˜</param>
+    /// <param name="isDrop">ëžœë¤ìœ¼ë¡œ í©ë¿Œë ¤ì ¸ì•¼ í•˜ë©´ true, ì§€ì •ëœ ìž¥ì†Œì— ë–¨ì–´ì ¸ì•¼ í•˜ë©´ false </param>
     [Server]
     public void SpawnItem(string itemCode, Vector3 position, bool isDrop)
     {
@@ -22,37 +22,37 @@ public class NetworkItemManager : Singleton<NetworkItemManager>
         NetworkItem item = dropItem.GetComponent<NetworkItem>();
         if (item == null)
         {
-            Debug.LogError("<color=red>[¿¡·¯ ¹ß»ý]</color>(±×·²ÀÏÀº ¾ø°ÚÁö¸¸)»ý¼ºÇÒ ¾ÆÀÌÅÛ¿¡ newtworkItem ÄÄÆ÷³ÍÆ®°¡ ¾ø½À´Ï´Ù.");
+            Debug.LogError("<color=red>[ì—ëŸ¬ ë°œìƒ]</color>(ê·¸ëŸ´ì¼ì€ ì—†ê² ì§€ë§Œ)ìƒì„±í•  ì•„ì´í…œì— newtworkItem ì»´í¬ë„ŒíŠ¸ê°€ ì—†ìŠµë‹ˆë‹¤.");
             Destroy(dropItem);
             return;
         }
-        // ¾ÆÀÌÅÛÀÌ nullÀÌ ¾Æ´Ï¸é ¾ÆÀÌÅÛ Á¤º¸¸¦ ¼³Á¤ÇÕ´Ï´Ù.
+        // ì•„ì´í…œì´ nullì´ ì•„ë‹ˆë©´ ì•„ì´í…œ ì •ë³´ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.
         item.SetItemInfo(itemCode);
-        // ¾ÆÀÌÅÛÀ» Å¬¶óÀÌ¾ðÆ®¸ðµÎ¿¡°Ô »ý¼º
+        // ì•„ì´í…œì„ í´ë¼ì´ì–¸íŠ¸ëª¨ë‘ì—ê²Œ ìƒì„±
         NetworkServer.Spawn(dropItem);
 
-        // ¾ÆÀÌÅÛÀ» »ý¼ºÇÑ ÈÄ, ¾ÆÀÌÅÛÀÇ À§Ä¡¸¦ ¼³Á¤ÇÕ´Ï´Ù.
+        // ì•„ì´í…œì„ ìƒì„±í•œ í›„, ì•„ì´í…œì˜ ìœ„ì¹˜ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.
         ItemDropMovement dropMovement = dropItem.GetComponent<ItemDropMovement>();
-        // ¸¸¾à ¾ÆÀÌÅÛ µå·Ó È¿°ú°¡ ¾ø´Ù¸é, ¾ÆÀÌÅÛ µå·Ó È¿°ú ÄÄÆ÷³ÍÆ®¸¦ Ãß°¡ÇÕ´Ï´Ù.
+        // ë§Œì•½ ì•„ì´í…œ ë“œë¡­ íš¨ê³¼ê°€ ì—†ë‹¤ë©´, ì•„ì´í…œ ë“œë¡­ íš¨ê³¼ ì»´í¬ë„ŒíŠ¸ë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
         if (dropMovement == null)
         {
             dropItem.AddComponent<ItemDropMovement>();
             dropMovement = dropItem.GetComponent<ItemDropMovement>();
         }
-        // ¾ÆÀÌÅÛ µå·Ó È¿°ú¸¦ ¼³Á¤ÇÕ´Ï´Ù.
-        // ÇØ´ç ¸Þ¼Òµå´Â ·£´ýÀ¸·Î Èð»Ñ·ÁÁÖ´Â ±â´ÉÀÌ ¼¯¿©¼­ ¹ö¸±¶§¿Í µå·ÓµÉ¶§ ±¸ºÐÇØÁà¾ßÇÔ
+        // ì•„ì´í…œ ë“œë¡­ íš¨ê³¼ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.
+        // í•´ë‹¹ ë©”ì†Œë“œëŠ” ëžœë¤ìœ¼ë¡œ í©ë¿Œë ¤ì£¼ëŠ” ê¸°ëŠ¥ì´ ì„žì—¬ì„œ ë²„ë¦´ë•Œì™€ ë“œë¡­ë ë•Œ êµ¬ë¶„í•´ì¤˜ì•¼í•¨
         dropMovement.InitializePosition(position, isDrop);
     }
     /// <summary>
-    /// ¾ÆÀÌÅÛÀ» ÆÄ±«ÇÕ´Ï´Ù. °¢ Å¬¶óÀÌ¾ðÆ®µé¿¡°Ôµµ ¾ÆÀÌÅÛÀ» ÆÄ±«½ÃÄÑÁÝ´Ï´Ù.
+    /// ì•„ì´í…œì„ íŒŒê´´í•©ë‹ˆë‹¤. ê° í´ë¼ì´ì–¸íŠ¸ë“¤ì—ê²Œë„ ì•„ì´í…œì„ íŒŒê´´ì‹œì¼œì¤ë‹ˆë‹¤.
     /// </summary>
-    /// <param name="item">ÆÄ±«ÇÒ ¾ÆÀÌÅÛ ¿ÀºêÁ§Æ®</param>
+    /// <param name="item">íŒŒê´´í•  ì•„ì´í…œ ì˜¤ë¸Œì íŠ¸</param>
     [Server]
     public void DestroyItem(GameObject item)
     {
         if (item == null)
         {
-            Debug.LogError("<color=red>[¿¡·¯ ¹ß»ý]</color>ÆÄ±«ÇÒ ¾ÆÀÌÅÛÀÌ nullÀÔ´Ï´Ù.");
+            Debug.LogError("<color=red>[ì—ëŸ¬ ë°œìƒ]</color>íŒŒê´´í•  ì•„ì´í…œì´ nullìž…ë‹ˆë‹¤.");
             return;
         }
         NetworkServer.Destroy(item);

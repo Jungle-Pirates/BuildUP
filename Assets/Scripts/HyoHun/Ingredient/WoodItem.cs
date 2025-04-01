@@ -9,7 +9,7 @@ public class WoodItem : Item
         itemID = "0";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
-        itemName = "³ª¹«";
+        itemName = "ë‚˜ë¬´";
 
         canStack = true;
         maxStackAmount = 64;
@@ -17,6 +17,6 @@ public class WoodItem : Item
 
     public override void Use(PlayerController user)
     {
-        Debug.Log("³ª¹«´Â »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.");
+        Debug.Log("ë‚˜ë¬´ëŠ” ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
     }
 }

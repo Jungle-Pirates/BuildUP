@@ -10,7 +10,7 @@ public class StonePickItem : PickItem
         base.Awake();
 
         itemID = "21";
-        itemName = "µ¹ °î±ªÀÌ";
+        itemName = "ëŒ ê³¡ê´­ì´";
         damage = 5f;
         delay = 0.2f;  
         size = 1f;    
@@ -18,6 +18,6 @@ public class StonePickItem : PickItem
 
     public override void Use(PlayerController user)
     {
-        base.Use(user); // AxeItemÀÇ Use È£Ãâ
+        base.Use(user); // AxeItemì˜ Use í˜¸ì¶œ
     }
 }

@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// ¾ÆÀÌÅÛ µ¥ÀÌÅÍ Ç® Å¬·¡½º
-/// ¾ÆÀÌÅÛ µ¥ÀÌÅÍ¸¦ °ü¸®ÇÏ°í, ¾ÆÀÌÅÛ ÀÎ½ºÅÏ½º¸¦ »ı¼º ÈÄ Ä³½ÌÇÏ´Â ¿ªÇÒÀ» ÇÕ´Ï´Ù.
+/// ì•„ì´í…œ ë°ì´í„° í’€ í´ë˜ìŠ¤
+/// ì•„ì´í…œ ë°ì´í„°ë¥¼ ê´€ë¦¬í•˜ê³ , ì•„ì´í…œ ì¸ìŠ¤í„´ìŠ¤ë¥¼ ìƒì„± í›„ ìºì‹±í•˜ëŠ” ì—­í• ì„ í•©ë‹ˆë‹¤.
 /// </summary>
 public class ItemDataPool : Singleton<ItemDataPool>
 {
     /// <summary>
-    /// ¾ÆÀÌÅÛ ÄÚµå + ÇÁ¸®ÆÕ »çÀü (ÇÁ¸®ÆÕÀ» Inspector¿¡¼­ ¼³Á¤)
+    /// ì•„ì´í…œ ì½”ë“œ + í”„ë¦¬íŒ¹ ì‚¬ì „ (í”„ë¦¬íŒ¹ì„ Inspectorì—ì„œ ì„¤ì •)
     /// </summary>
     [Serializable]
     public class ItemPrefabDictionary
@@ -19,21 +19,21 @@ public class ItemDataPool : Singleton<ItemDataPool>
     public List<ItemPrefabDictionary> itemPrefabs = new List<ItemPrefabDictionary>();
     private Dictionary<string, GameObject> itemPrefabDict = new Dictionary<string, GameObject>();
 
-    // ¾ÆÀÌÅÛ ÀÎ½ºÅÏ½º Ä³½Ì (°¢ ¾ÆÀÌÅÛ Å¸ÀÔ´ç ÇÏ³ªÀÇ ÀÎ½ºÅÏ½º¸¸ À¯Áö)
+    // ì•„ì´í…œ ì¸ìŠ¤í„´ìŠ¤ ìºì‹± (ê° ì•„ì´í…œ íƒ€ì…ë‹¹ í•˜ë‚˜ì˜ ì¸ìŠ¤í„´ìŠ¤ë§Œ ìœ ì§€)
     private Dictionary<string, Item> itemInstances = new Dictionary<string, Item>();
 
-    // Ç® ÀúÀå¿ë Transform
+    // í’€ ì €ì¥ìš© Transform
     private Transform poolContainer;
 
     protected override void Awake()
     {
         base.Awake();
 
-        // Ç® ÄÁÅ×ÀÌ³Ê »ı¼º
+        // í’€ ì»¨í…Œì´ë„ˆ ìƒì„±
         poolContainer = new GameObject("ItemPool").transform;
         poolContainer.SetParent(transform);
 
-        // ÇÁ¸®ÆÕ »çÀü ÃÊ±âÈ­
+        // í”„ë¦¬íŒ¹ ì‚¬ì „ ì´ˆê¸°í™”
         foreach (var item in itemPrefabs)
         {
             if (item.itemPrefab != null)
@@ -43,44 +43,44 @@ public class ItemDataPool : Singleton<ItemDataPool>
         }
     }
 
-    // ¾ÆÀÌÅÛ ÀÎ½ºÅÏ½º ¾ò±â (Ä³½Ã¿¡ ÀÖÀ¸¸é °¡Á®¿À°í, ¾øÀ¸¸é »ı¼º)
+    // ì•„ì´í…œ ì¸ìŠ¤í„´ìŠ¤ ì–»ê¸° (ìºì‹œì— ìˆìœ¼ë©´ ê°€ì ¸ì˜¤ê³ , ì—†ìœ¼ë©´ ìƒì„±)
     public Item GetItemInstance(string itemCode)
     {
-        // ÀÌ¹Ì »ı¼ºµÈ ÀÎ½ºÅÏ½º°¡ ÀÖÀ¸¸é »ç¿ë
+        // ì´ë¯¸ ìƒì„±ëœ ì¸ìŠ¤í„´ìŠ¤ê°€ ìˆìœ¼ë©´ ì‚¬ìš©
         if (itemInstances.ContainsKey(itemCode))
         {
             return itemInstances[itemCode];
         }
 
-        // ¾øÀ¸¸é »õ·Î »ı¼ºÇÏ°í Ä³½Ã¿¡ ÀúÀå
+        // ì—†ìœ¼ë©´ ìƒˆë¡œ ìƒì„±í•˜ê³  ìºì‹œì— ì €ì¥
         Item newItem = CreateNewItem(itemCode);
         if (newItem != null)
         {
             itemInstances[itemCode] = newItem;
-            newItem.gameObject.SetActive(false); // ºñÈ°¼ºÈ­ »óÅÂ·Î º¸°ü
+            newItem.gameObject.SetActive(false); // ë¹„í™œì„±í™” ìƒíƒœë¡œ ë³´ê´€
             newItem.transform.SetParent(poolContainer);
         }
 
         return newItem;
     }
 
-    // »õ ¾ÆÀÌÅÛ »ı¼º
+    // ìƒˆ ì•„ì´í…œ ìƒì„±
     private Item CreateNewItem(string itemCode)
     {
-        // ÄÚµå¿¡ ÇØ´çÇÏ´Â ÇÁ¸®ÆÕÀÌ ¾øÀ¸¸é null ¹İÈ¯
+        // ì½”ë“œì— í•´ë‹¹í•˜ëŠ” í”„ë¦¬íŒ¹ì´ ì—†ìœ¼ë©´ null ë°˜í™˜
         if (!itemPrefabDict.ContainsKey(itemCode))
         {
-            Debug.LogError($"<color=red>[¿¡·¯ ¹ß»ı]</color> ¾ÆÀÌÅÛ ÄÚµå {itemCode}¿¡ ÇØ´çÇÏ´Â ÇÁ¸®ÆÕÀÌ ¾ø½À´Ï´Ù.");
+            Debug.LogError($"<color=red>[ì—ëŸ¬ ë°œìƒ]</color> ì•„ì´í…œ ì½”ë“œ {itemCode}ì— í•´ë‹¹í•˜ëŠ” í”„ë¦¬íŒ¹ì´ ì—†ìŠµë‹ˆë‹¤.");
             return null;
         }
 
-        // »õ ¾ÆÀÌÅÛ ÀÎ½ºÅÏ½º »ı¼º
+        // ìƒˆ ì•„ì´í…œ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
         GameObject newItemObj = Instantiate(itemPrefabDict[itemCode], poolContainer);
         Item newItem = newItemObj.GetComponent<Item>();
 
         if (newItem == null)
         {
-            Debug.LogError($"<color=red>[¿¡·¯ ¹ß»ı]</color> »ı¼ºµÈ ÇÁ¸®ÆÕ {itemCode}¿¡ Item ÄÄÆ÷³ÍÆ®°¡ ¾ø½À´Ï´Ù.");
+            Debug.LogError($"<color=red>[ì—ëŸ¬ ë°œìƒ]</color> ìƒì„±ëœ í”„ë¦¬íŒ¹ {itemCode}ì— Item ì»´í¬ë„ŒíŠ¸ê°€ ì—†ìŠµë‹ˆë‹¤.");
             Destroy(newItemObj);
             return null;
         }

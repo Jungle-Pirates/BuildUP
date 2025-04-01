@@ -9,7 +9,7 @@ public class LeatherItem : Item
         itemID = "5";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
-        itemName = "°¡Á×";
+        itemName = "ê°€ì£½";
 
         canStack = true;
         maxStackAmount = 64;
@@ -17,6 +17,6 @@ public class LeatherItem : Item
 
     public override void Use(PlayerController user)
     {
-        Debug.Log("°¡Á×Àº »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.");
+        Debug.Log("ê°€ì£½ì€ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
     }
 }

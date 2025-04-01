@@ -14,7 +14,7 @@ public class SteamLobby : MonoBehaviour
     protected Callback<GameLobbyJoinRequested_t> lobbyJoinRequested;
     protected Callback<LobbyEnter_t> lobbyEntered;
 
-    //ÀÓ½Ã °ø¿ë È£½ºÆ® ÁÖ¼Ò
+    //ì„ì‹œ ê³µìš© í˜¸ìŠ¤íŠ¸ ì£¼ì†Œ
     private const string HostAddress = "HostAddress";
 
     void Start()
@@ -37,7 +37,7 @@ public class SteamLobby : MonoBehaviour
         lobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
     }
     /// <summary>
-    /// È£½ºÆ® ¹öÆ° Å¬¸¯½Ã ½ºÆÀ ·Îºñ È£½ºÆ®
+    /// í˜¸ìŠ¤íŠ¸ ë²„íŠ¼ í´ë¦­ì‹œ ìŠ¤íŒ€ ë¡œë¹„ í˜¸ìŠ¤íŠ¸
     /// </summary>
     public void Host()
     {
@@ -45,7 +45,7 @@ public class SteamLobby : MonoBehaviour
         SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, 4);
     }
     /// <summary>
-    /// ·Îºñ »ı¼º Äİ¹éÇÔ¼ö
+    /// ë¡œë¹„ ìƒì„± ì½œë°±í•¨ìˆ˜
     /// </summary>
     private void OnLobbyCreated(LobbyCreated_t callback)
     {
@@ -60,7 +60,7 @@ public class SteamLobby : MonoBehaviour
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAddress, SteamUser.GetSteamID().ToString());
     }
     // /// <summary>
-    // /// ·Îºñ Âü°¡ ¿äÃ»¹ŞÀ»¶§ Äİ¹éÇÔ¼ö
+    // /// ë¡œë¹„ ì°¸ê°€ ìš”ì²­ë°›ì„ë•Œ ì½œë°±í•¨ìˆ˜
     // /// </summary>
     // private void OnLobbyJoinRequested(LobbyMatchList_t callback)
     // {
@@ -82,14 +82,14 @@ public class SteamLobby : MonoBehaviour
     // }
 
     /// <summary>
-    /// ·Îºñ Âü°¡ ¿äÃ» Äİ¹éÇÔ¼ö
+    /// ë¡œë¹„ ì°¸ê°€ ìš”ì²­ ì½œë°±í•¨ìˆ˜
     /// </summary>
     private void OnLobbyJoinRequested(GameLobbyJoinRequested_t callback)
     {
         SteamMatchmaking.JoinLobby(callback.m_steamIDLobby);
     }
     /// <summary>
-    /// ·Îºñ Âü°¡ Äİ¹éÇÔ¼ö
+    /// ë¡œë¹„ ì°¸ê°€ ì½œë°±í•¨ìˆ˜
     /// </summary>
     private void OnLobbyEntered(LobbyEnter_t callback)
     {

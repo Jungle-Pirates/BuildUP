@@ -4,13 +4,13 @@ using UnityEngine;
 
 public abstract class AxeItem : HandyToolItem
 {
-    [Header("Axe Æ¯È­ °¡ÁßÄ¡")]
+    [Header("Axe íŠ¹í™” ê°€ì¤‘ì¹˜")]
     [SerializeField] protected float treeDamageMultiplier = 1.5f;
 
     public override void Use(PlayerController user)
     {
         if (attackPoint != null)
-            attackPoint.tag = "AXE"; // µµ±¸ Å¸ÀÔ ½Äº°¿ë ÅÂ±×
+            attackPoint.tag = "AXE"; // ë„êµ¬ íƒ€ì… ì‹ë³„ìš© íƒœê·¸
 
         base.Use(user);
     }

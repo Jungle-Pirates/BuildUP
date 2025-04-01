@@ -6,31 +6,31 @@ using System.Collections;
 public class NotificationManager : Singleton<NotificationManager>
 {
     [SerializeField]
-    private GameObject notificationPrefab; // ¾Ë¸² ÅØ½ºÆ® ÇÁ¸®ÆÕ
+    private GameObject notificationPrefab; // ì•Œë¦¼ í…ìŠ¤íŠ¸ í”„ë¦¬íŒ¹
     [SerializeField]
-    private Transform notificationParent; // ¾Ë¸² ÅØ½ºÆ® ºÎ¸ğ
+    private Transform notificationParent; // ì•Œë¦¼ í…ìŠ¤íŠ¸ ë¶€ëª¨
     [SerializeField]
-    [Header("¾Ë¸² ¼³Á¤")]
-    [Tooltip("¾Ë¸² Ç¥½Ã ½Ã°£")]
+    [Header("ì•Œë¦¼ ì„¤ì •")]
+    [Tooltip("ì•Œë¦¼ í‘œì‹œ ì‹œê°„")]
     private float notificationDuration = 3.0f;
-    [Tooltip("ÃÖ´ë ¾Ë¸² °³¼ö")]
+    [Tooltip("ìµœëŒ€ ì•Œë¦¼ ê°œìˆ˜")]
     [SerializeField]
     private int maxNotifications = 5;
-    private List<GameObject> activeNotifications = new List<GameObject>(); // ÇöÀç È°¼ºÈ­µÈ ¾Ë¸² ¸ñ·Ï
+    private List<GameObject> activeNotifications = new List<GameObject>(); // í˜„ì¬ í™œì„±í™”ëœ ì•Œë¦¼ ëª©ë¡
 
     /// <summary>
-    /// ¾Ë¸² ¸Ş½ÃÁö »ı¼º
+    /// ì•Œë¦¼ ë©”ì‹œì§€ ìƒì„±
     /// </summary>
-    /// <param name="message">¾Ë¸² ¸Ş½ÃÁö</param>
+    /// <param name="message">ì•Œë¦¼ ë©”ì‹œì§€</param>
     public void CreateNotification(string message)
     {
-        // ÃÖ´ë ¾Ë¸² °³¼ö È®ÀÎ ¹× °ü¸®
+        // ìµœëŒ€ ì•Œë¦¼ ê°œìˆ˜ í™•ì¸ ë° ê´€ë¦¬
         if (activeNotifications.Count >= maxNotifications)
         {
-            // °¡Àå ¿À·¡µÈ ¾Ë¸²(¸®½ºÆ®ÀÇ Ã¹ ¹øÂ° Ç×¸ñ) Á¦°Å
+            // ê°€ì¥ ì˜¤ë˜ëœ ì•Œë¦¼(ë¦¬ìŠ¤íŠ¸ì˜ ì²« ë²ˆì§¸ í•­ëª©) ì œê±°
             RemoveOldestNotification();
         }
-        // ¾Ë¸² ÇÁ¸®ÆÕÀ» º¹Á¦ÇÏ¿© ¾Ë¸² ¸Ş½ÃÁö »ı¼º
+        // ì•Œë¦¼ í”„ë¦¬íŒ¹ì„ ë³µì œí•˜ì—¬ ì•Œë¦¼ ë©”ì‹œì§€ ìƒì„±
         GameObject notification = Instantiate(notificationPrefab, notificationParent);
         var textComponent = notification.GetComponent<TextMeshProUGUI>();
 
@@ -39,21 +39,21 @@ public class NotificationManager : Singleton<NotificationManager>
             textComponent.text = message;
         }
 
-        // È°¼º ¾Ë¸² ¸ñ·Ï¿¡ Ãß°¡
+        // í™œì„± ì•Œë¦¼ ëª©ë¡ì— ì¶”ê°€
         activeNotifications.Add(notification);
 
-        // ÀÏÁ¤ ½Ã°£ ÈÄ ¾Ë¸² Á¦°Å
+        // ì¼ì • ì‹œê°„ í›„ ì•Œë¦¼ ì œê±°
         StartCoroutine(RemoveNotificationAfterDelay(notification, notificationDuration));
     }
 
     /// <summary>
-    /// ÀÏÁ¤ ½Ã°£ ÈÄ ¾Ë¸² Á¦°Å
+    /// ì¼ì • ì‹œê°„ í›„ ì•Œë¦¼ ì œê±°
     /// </summary>
     private IEnumerator RemoveNotificationAfterDelay(GameObject notification, float delay)
     {
         yield return new WaitForSeconds(delay);
 
-        // ¾Ë¸²ÀÌ ¾ÆÁ÷ È°¼º »óÅÂÀÎÁö È®ÀÎ
+        // ì•Œë¦¼ì´ ì•„ì§ í™œì„± ìƒíƒœì¸ì§€ í™•ì¸
         if (notification != null && activeNotifications.Contains(notification))
         {
             activeNotifications.Remove(notification);
@@ -62,7 +62,7 @@ public class NotificationManager : Singleton<NotificationManager>
     }
 
     /// <summary>
-    /// °¡Àå ¿À·¡µÈ ¾Ë¸² Á¦°Å
+    /// ê°€ì¥ ì˜¤ë˜ëœ ì•Œë¦¼ ì œê±°
     /// </summary>
     private void RemoveOldestNotification()
     {

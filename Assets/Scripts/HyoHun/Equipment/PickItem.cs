@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class PickItem : HandyToolItem
 {
-    [Header("Pick Æ¯È­ °¡ÁßÄ¡")]
+    [Header("Pick íŠ¹í™” ê°€ì¤‘ì¹˜")]
     [SerializeField] protected float rockDamageMultiplier = 1.5f;
 
     public override void Use(PlayerController user)
     {
         if (attackPoint != null)
-            attackPoint.tag = "PICK"; // µµ±¸ Å¸ÀÔ ½Äº°¿ë ÅÂ±×
+            attackPoint.tag = "PICK"; // ë„êµ¬ íƒ€ì… ì‹ë³„ìš© íƒœê·¸
 
         base.Use(user);
     }

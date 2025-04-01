@@ -24,7 +24,7 @@ public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IS
         this.Clear();
         for (int i = 0; i < keys.Count; i++)
         {
-            if (!this.ContainsKey(keys[i])) // Áßº¹ ¹æÁö
+            if (!this.ContainsKey(keys[i])) // ì¤‘ë³µ ë°©ì§€
             {
                 this.Add(keys[i], values[i]);
             }

@@ -4,25 +4,25 @@ using UnityEngine;
 
 public class PlayerController_Hh : MonoBehaviour
 {
-    [Header("ÀÌµ¿ ¼³Á¤")]
+    [Header("ì´ë™ ì„¤ì •")]
     public float moveSpeed = 5f;
     public float jumpForce = 5f;
 
-    [Header("Áö¸é Ã¼Å©")]
+    [Header("ì§€ë©´ ì²´í¬")]
     public Transform groundCheck;
     public float groundCheckRadius = 0.1f;
     public LayerMask groundLayer;
 
-    [Header("ÀÎº¥Åä¸®")]
+    [Header("ì¸ë²¤í† ë¦¬")]
     public Action inventory;
     public GameObject inventoryWindow;
     public Item itemData;
     public Action addItem;
 
-    [Header("µµ±¸ »ç¿ë")]
-    public GameObject attackPoint; // °ø°İ ¹üÀ§ ÆÇÁ¤¿ë ¿ÀºêÁ§Æ®
-    /*public UIInventory uiInventory;*/ // ÀÎº¥Åä¸® ÂüÁ¶ (0¹ø ½½·Ô ¾ÆÀÌÅÛ Á¢±Ù¿ë)
-    private bool isEquipped = false; // ¼Õ¿¡ Àåºñ Âø¿ë ¿©ºÎ
+    [Header("ë„êµ¬ ì‚¬ìš©")]
+    public GameObject attackPoint; // ê³µê²© ë²”ìœ„ íŒì •ìš© ì˜¤ë¸Œì íŠ¸
+    /*public UIInventory uiInventory;*/ // ì¸ë²¤í† ë¦¬ ì°¸ì¡° (0ë²ˆ ìŠ¬ë¡¯ ì•„ì´í…œ ì ‘ê·¼ìš©)
+    private bool isEquipped = false; // ì†ì— ì¥ë¹„ ì°©ìš© ì—¬ë¶€
 
     private Rigidbody2D rb;
     private bool isGrounded;
@@ -48,7 +48,7 @@ public class PlayerController_Hh : MonoBehaviour
         float moveInput = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
 
-        // ¹æÇâ ÀüÈ¯ + attackPoint À§Ä¡ Á¶Á¤
+        // ë°©í–¥ ì „í™˜ + attackPoint ìœ„ì¹˜ ì¡°ì •
         if (moveInput > 0)
         {
             transform.localScale = new Vector3(1, 1, 1);
@@ -81,7 +81,7 @@ public class PlayerController_Hh : MonoBehaviour
         }
     }
 
-    // ÁÂÅ¬¸¯ ÀÔ·ÂÀ¸·Î µµ±¸ »ç¿ë
+    // ì¢Œí´ë¦­ ì…ë ¥ìœ¼ë¡œ ë„êµ¬ ì‚¬ìš©
     //private void HandleAttack()
     //{
     //    HandCheck();
@@ -96,7 +96,7 @@ public class PlayerController_Hh : MonoBehaviour
     //    }
     //}
 
-    //// 0¹ø ½½·Ô ¾ÆÀÌÅÛÀÌ Equipable.HandÀÎÁö È®ÀÎ
+    //// 0ë²ˆ ìŠ¬ë¡¯ ì•„ì´í…œì´ Equipable.Handì¸ì§€ í™•ì¸
     //private void HandCheck()
     //{
     //    if (uiInventory == null || uiInventory.slots.Length == 0)

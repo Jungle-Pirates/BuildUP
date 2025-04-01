@@ -9,7 +9,7 @@ public class DiamondItem : Item
         itemID = "4";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
-        itemName = "´ÙÀÌ¾Æ¸óµå";
+        itemName = "ë‹¤ì´ì•„ëª¬ë“œ";
 
         canStack = true;
         maxStackAmount = 64;
@@ -17,6 +17,6 @@ public class DiamondItem : Item
 
     public override void Use(PlayerController user)
     {
-        Debug.Log("´ÙÀÌ¾Æ¸óµå´Â »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.");
+        Debug.Log("ë‹¤ì´ì•„ëª¬ë“œëŠ” ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
     }
 }

@@ -9,7 +9,7 @@ public class IronOreItem : Item
         itemID = "2";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
-        itemName = "Ã¶±¤¼®";
+        itemName = "ì² ê´‘ì„";
 
         canStack = true;
         maxStackAmount = 64;
@@ -17,6 +17,6 @@ public class IronOreItem : Item
 
     public override void Use(PlayerController user)
     {
-        Debug.Log("Ã¶±¤¼®Àº »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.");
+        Debug.Log("ì² ê´‘ì„ì€ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
     }
 }

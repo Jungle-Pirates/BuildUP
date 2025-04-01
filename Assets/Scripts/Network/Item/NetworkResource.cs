@@ -5,29 +5,29 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// ÀÚ¿ø Å¬·¡½º (³ª¹«, ¹ÙÀ§...)
+/// ìì› í´ë˜ìŠ¤ (ë‚˜ë¬´, ë°”ìœ„...)
 /// </summary>
 public class NetworkResource : NetworkBehaviour
 {
-    [Header("ÀÚ¿ø ¼³Á¤")]
-    [Tooltip("µå·ÓÇÒ ¾ÆÀÌÅÛ ÇÁ¸®ÆÕ")]
+    [Header("ìì› ì„¤ì •")]
+    [Tooltip("ë“œë¡­í•  ì•„ì´í…œ í”„ë¦¬íŒ¹")]
     [SerializeField]
     private GameObject dropItemPrefab;
-    [Tooltip("µå·ÓÇÒ ¾ÆÀÌÅÛ Á¤º¸")]
+    [Tooltip("ë“œë¡­í•  ì•„ì´í…œ ì •ë³´")]
     [SerializeField]
     private List<DropItemSet> dropItemSets = new List<DropItemSet>();
 
-    [Tooltip("ÀÚ¿ø Ã¼·Â")]
+    [Tooltip("ìì› ì²´ë ¥")]
     [SerializeField]
     private int resourceHealth = 5;
     [SerializeField]
-    private Image healthBar;    //Ã¼·Â °ÔÀÌÁö
-    private GameObject healthBarBG; //Ã¼·Â °ÔÀÌÁö ¹è°æ
+    private Image healthBar;    //ì²´ë ¥ ê²Œì´ì§€
+    private GameObject healthBarBG; //ì²´ë ¥ ê²Œì´ì§€ ë°°ê²½
 
     [SerializeField]
     [Range(0, 5)]
     [SyncVar(hook = nameof(OnHealthChanged))]
-    private int currentHealth; // ÇöÀç Ã¼·Â
+    private int currentHealth; // í˜„ì¬ ì²´ë ¥
 
     void Start()
     {
@@ -36,7 +36,7 @@ public class NetworkResource : NetworkBehaviour
         healthBarBG.SetActive(false);
     }
     /// <summary>
-    /// ½ÃÀÛÇÒ ¶§ Ã¼·Â ÃÊ±âÈ­
+    /// ì‹œì‘í•  ë•Œ ì²´ë ¥ ì´ˆê¸°í™”
     /// </summary>
     public override void OnStartServer()
     {
@@ -45,42 +45,42 @@ public class NetworkResource : NetworkBehaviour
     }
 
     /// <summary>
-    /// Å¬¶óÀÌ¾ğÆ®°¡ ÀÚ¿øÀ» ¶§·ÈÀ» ¶§ È£Ãâ (ÇÃ·¹ÀÌ¾î ½ºÅ©¸³Æ®¿¡¼­ È£Ãâ)
+    /// í´ë¼ì´ì–¸íŠ¸ê°€ ìì›ì„ ë•Œë ¸ì„ ë•Œ í˜¸ì¶œ (í”Œë ˆì´ì–´ ìŠ¤í¬ë¦½íŠ¸ì—ì„œ í˜¸ì¶œ)
     /// </summary>
-    [Command(requiresAuthority = false)] // ¾Æ¹« Å¬¶óÀÌ¾ğÆ®³ª È£Ãâ °¡´É
+    [Command(requiresAuthority = false)] // ì•„ë¬´ í´ë¼ì´ì–¸íŠ¸ë‚˜ í˜¸ì¶œ ê°€ëŠ¥
     public void CmdHitResource()
     {
-        // ÀÌ¹Ì ÆÄ±«µÈ ÀÚ¿øÀÌ¸é ¹«½Ã
+        // ì´ë¯¸ íŒŒê´´ëœ ìì›ì´ë©´ ë¬´ì‹œ
         if (currentHealth <= 0)
         {
             return;
         }
 
-        // Ã¼·Â °¨¼Ò
+        // ì²´ë ¥ ê°ì†Œ
         currentHealth--;
 
-        // ÆÄ±«µÆ´ÂÁö È®ÀÎ
+        // íŒŒê´´ëëŠ”ì§€ í™•ì¸
         if (currentHealth <= 0)
         {
-            // ¾ÆÀÌÅÛ µå·Ó
+            // ì•„ì´í…œ ë“œë¡­
             DropItem();
 
-            // ÀÚ¿ø ¿ÀºêÁ§Æ® ÆÄ±«
+            // ìì› ì˜¤ë¸Œì íŠ¸ íŒŒê´´
             NetworkServer.Destroy(gameObject);
         }
     }
 
     /// <summary>
-    /// Ã¼·Â º¯°æ ½Ã È£ÃâµÇ´Â Hook ÇÔ¼ö
+    /// ì²´ë ¥ ë³€ê²½ ì‹œ í˜¸ì¶œë˜ëŠ” Hook í•¨ìˆ˜
     /// </summary>
     private void OnHealthChanged(int oldHealth, int newHealth)
     {
-        // Ã¼·Â¿¡ µû¸¥ ½Ã°¢Àû º¯È­ Àû¿ë
+        // ì²´ë ¥ì— ë”°ë¥¸ ì‹œê°ì  ë³€í™” ì ìš©
         UpdateHealthState(newHealth);
     }
 
     /// <summary>
-    /// Ã¼·Â¹Ù °¨¼Ò
+    /// ì²´ë ¥ë°” ê°ì†Œ
     /// </summary>
     private void UpdateHealthState(int health)
     {
@@ -89,7 +89,7 @@ public class NetworkResource : NetworkBehaviour
     }
 
     /// <summary>
-    /// ¼­¹ö¿¡¼­ ¾ÆÀÌÅÛ µå·Ó
+    /// ì„œë²„ì—ì„œ ì•„ì´í…œ ë“œë¡­
     /// </summary>
     [Server]
     private void DropItem()
@@ -100,7 +100,7 @@ public class NetworkResource : NetworkBehaviour
         }
         foreach (var dropItemSet in dropItemSets)
         {
-            // ¾ÆÀÌÅÛ ¿©·¯°³ »ı¼º
+            // ì•„ì´í…œ ì—¬ëŸ¬ê°œ ìƒì„±
             for (int i = 0; i < dropItemSet.itemCount; i++)
             {
                 NetworkItemManager.Instance.SpawnItem(dropItemSet.itemID, transform.position, true);
@@ -108,7 +108,7 @@ public class NetworkResource : NetworkBehaviour
         }
     }
     /// <summary>
-    /// ÇÃ·¹ÀÌ¾î°¡ ÀÚ¿øÀ» ¶§·ÈÀ»¶§, Axe ÅÂ±× ºñ±³
+    /// í”Œë ˆì´ì–´ê°€ ìì›ì„ ë•Œë ¸ì„ë•Œ, Axe íƒœê·¸ ë¹„êµ
     /// </summary>
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -119,12 +119,12 @@ public class NetworkResource : NetworkBehaviour
     }
 
     /// <summary>
-    /// µå·ÓÇÒ ¾ÆÀÌÅÛ ¼¼Æ® Å¬·¡½º
+    /// ë“œë¡­í•  ì•„ì´í…œ ì„¸íŠ¸ í´ë˜ìŠ¤
     /// </summary>
     [Serializable]
     public class DropItemSet
     {
-        public string itemID; // ¾ÆÀÌÅÛ ÄÚµå
-        public int itemCount; // µå·ÓÇÒ ¾ÆÀÌÅÛ °³¼ö
+        public string itemID; // ì•„ì´í…œ ì½”ë“œ
+        public int itemCount; // ë“œë¡­í•  ì•„ì´í…œ ê°œìˆ˜
     }
 }

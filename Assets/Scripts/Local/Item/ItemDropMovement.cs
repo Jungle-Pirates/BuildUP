@@ -4,16 +4,16 @@ using DG.Tweening;
 
 public class ItemDropMovement : NetworkBehaviour
 {
-    [Header("¾ÆÀÌÅÛ µå·Ó ¼³Á¤")]
-    [Tooltip("¾ÆÀÌÅÛÀÌ ÆÛÁö´Â ¹İ°æ")]
+    [Header("ì•„ì´í…œ ë“œë¡­ ì„¤ì •")]
+    [Tooltip("ì•„ì´í…œì´ í¼ì§€ëŠ” ë°˜ê²½")]
     [SerializeField] private float spreadRadius = 1.0f;
-    [Tooltip("¹Ù´Ú À§ ³ôÀÌ ¿ÀÇÁ¼Â")]
+    [Tooltip("ë°”ë‹¥ ìœ„ ë†’ì´ ì˜¤í”„ì…‹")]
     [SerializeField] private float heightOffset = 0.1f;
-    [Tooltip("µå·Ó ½ÃÀÛ ³ôÀÌ")]
+    [Tooltip("ë“œë¡­ ì‹œì‘ ë†’ì´")]
     [SerializeField] private float dropHeight = 1.0f;
-    [Tooltip("¶³¾îÁö´Â ½Ã°£")]
+    [Tooltip("ë–¨ì–´ì§€ëŠ” ì‹œê°„")]
     [SerializeField] private float dropDuration = 0.5f;
-    [Tooltip("ÁöÇü ·¹ÀÌ¾î")]
+    [Tooltip("ì§€í˜• ë ˆì´ì–´")]
     [SerializeField] private LayerMask groundLayer;
 
     [SyncVar]
@@ -23,7 +23,7 @@ public class ItemDropMovement : NetworkBehaviour
     private bool isPositionSet = false;
 
     /// <summary>
-    /// Æ÷Áö¼ÇÀÌ ¼³Á¤µÆÀ» ¶§ È£ÃâµÇ´Â Äİ¹é
+    /// í¬ì§€ì…˜ì´ ì„¤ì •ëì„ ë•Œ í˜¸ì¶œë˜ëŠ” ì½œë°±
     /// </summary>
     private void OnPositionSet(bool oldPos, bool newPos)
     {
@@ -37,7 +37,7 @@ public class ItemDropMovement : NetworkBehaviour
     {
         base.OnStartClient();
 
-        // Å¬¶óÀÌ¾ğÆ® ½ÃÀÛ ½Ã ¾ÆÀÌÅÛÀÌ ´Ê°Ô »ı¼ºµÇ¾î Æ÷Áö¼ÇÀÌ ÀÌ¹Ì ¼³Á¤µÇ¾î ÀÖ´Ù¸é ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı
+        // í´ë¼ì´ì–¸íŠ¸ ì‹œì‘ ì‹œ ì•„ì´í…œì´ ëŠ¦ê²Œ ìƒì„±ë˜ì–´ í¬ì§€ì…˜ì´ ì´ë¯¸ ì„¤ì •ë˜ì–´ ìˆë‹¤ë©´ ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ
         if (isPositionSet)
         {
             PlayDropAnimation();
@@ -45,73 +45,73 @@ public class ItemDropMovement : NetworkBehaviour
     }
 
     /// <summary>
-    /// ¼­¹ö¿¡¼­ ¾ÆÀÌÅÛ À§Ä¡ ÃÊ±âÈ­
+    /// ì„œë²„ì—ì„œ ì•„ì´í…œ ìœ„ì¹˜ ì´ˆê¸°í™”
     /// </summary>
-    /// <param name="sourcePosition">¾ÆÀÌÅÛ ½ºÆùµÇ´Â À§Ä¡</param>
-    /// <param name="isDrop">·£´ıÀ¸·Î Èğ»Ñ·ÁÁ®¾ß ÇÏ¸é true, ÁöÁ¤µÈ Àå¼Ò¿¡ ¶³¾îÁ®¾ß ÇÏ¸é false </param>
+    /// <param name="sourcePosition">ì•„ì´í…œ ìŠ¤í°ë˜ëŠ” ìœ„ì¹˜</param>
+    /// <param name="isDrop">ëœë¤ìœ¼ë¡œ í©ë¿Œë ¤ì ¸ì•¼ í•˜ë©´ true, ì§€ì •ëœ ì¥ì†Œì— ë–¨ì–´ì ¸ì•¼ í•˜ë©´ false </param>
     [Server]
     public void InitializePosition(Vector2 sourcePosition, bool isDrop)
     {
         Vector2 targetPos = sourcePosition;
-        // µå·Ó À§Ä¡¸¦ ·£´ıÀ¸·Î Èğ»Ñ·ÁÁö°Ô ¼³Á¤ÇÒÁö ¿©ºÎ¿¡ µû¶ó ´Ù¸£°Ô Ã³¸®
+        // ë“œë¡­ ìœ„ì¹˜ë¥¼ ëœë¤ìœ¼ë¡œ í©ë¿Œë ¤ì§€ê²Œ ì„¤ì •í• ì§€ ì—¬ë¶€ì— ë”°ë¼ ë‹¤ë¥´ê²Œ ì²˜ë¦¬
         if (isDrop)
         {
-            // XÃàÀ¸·Î¸¸ ·£´ı ¿ÀÇÁ¼Â (»çÀÌµåºäÀÌ¹Ç·Î)
+            // Xì¶•ìœ¼ë¡œë§Œ ëœë¤ ì˜¤í”„ì…‹ (ì‚¬ì´ë“œë·°ì´ë¯€ë¡œ)
             float randomX = Random.Range(-spreadRadius, spreadRadius);
 
-            // Å¸°Ù À§Ä¡ °è»ê (X ¿ÀÇÁ¼Â¸¸ Àû¿ë)
+            // íƒ€ê²Ÿ ìœ„ì¹˜ ê³„ì‚° (X ì˜¤í”„ì…‹ë§Œ ì ìš©)
             targetPos = new Vector2(sourcePosition.x + randomX, sourcePosition.y);
         }
 
-        // ¹Ù´Ú ³ôÀÌ Ã£±â (2D ·¹ÀÌÄ³½ºÆ® »ç¿ë)
+        // ë°”ë‹¥ ë†’ì´ ì°¾ê¸° (2D ë ˆì´ìºìŠ¤íŠ¸ ì‚¬ìš©)
         float groundY = FindGroundHeight(targetPos);
-        // ¹Ù´Ú ³ôÀÌ + ¹°°ÇÄİ¶óÀÌ´õ±æÀÌ/2 + ¿ÀÇÁ¼Â Àû¿ë
+        // ë°”ë‹¥ ë†’ì´ + ë¬¼ê±´ì½œë¼ì´ë”ê¸¸ì´/2 + ì˜¤í”„ì…‹ ì ìš©
         targetPos.y = groundY + (GetComponent<Collider2D>().bounds.size.y / 2) + heightOffset;
 
-        // ¸ñÇ¥ À§Ä¡ ¼³Á¤
+        // ëª©í‘œ ìœ„ì¹˜ ì„¤ì •
         targetPosition = targetPos;
         isPositionSet = true;
     }
 
     /// <summary>
-    /// ¹Ù´Ú ³ôÀÌ °è»ê (·¹ÀÌÄ³½ºÆ® »ç¿ë)
+    /// ë°”ë‹¥ ë†’ì´ ê³„ì‚° (ë ˆì´ìºìŠ¤íŠ¸ ì‚¬ìš©)
     /// </summary>
     private float FindGroundHeight(Vector2 position)
     {
-        // À§¿¡¼­ ¾Æ·¡·Î ·¹ÀÌÄ³½ºÆ®
+        // ìœ„ì—ì„œ ì•„ë˜ë¡œ ë ˆì´ìºìŠ¤íŠ¸
         RaycastHit2D hit = Physics2D.Raycast(
-            new Vector2(position.x, position.y), // ½ÃÀÛ À§Ä¡
-            Vector2.down, // ¾Æ·¡ ¹æÇâ
-            20f, // ÃÖ´ë °Å¸®
-            groundLayer // ÁöÇü ·¹ÀÌ¾î
+            new Vector2(position.x, position.y), // ì‹œì‘ ìœ„ì¹˜
+            Vector2.down, // ì•„ë˜ ë°©í–¥
+            20f, // ìµœëŒ€ ê±°ë¦¬
+            groundLayer // ì§€í˜• ë ˆì´ì–´
         );
 
         if (hit.collider != null)
         {
-            // ÁöÇü ³ôÀÌ ¹İÈ¯
+            // ì§€í˜• ë†’ì´ ë°˜í™˜
             return hit.point.y;
         }
 
-        // ÁöÇüÀ» Ã£Áö ¸øÇÏ¸é ÇöÀç Y°ª À¯Áö
+        // ì§€í˜•ì„ ì°¾ì§€ ëª»í•˜ë©´ í˜„ì¬ Yê°’ ìœ ì§€
         return position.y;
     }
 
     /// <summary>
-    /// µå·Ó ¾Ö´Ï¸ŞÀÌ¼Ç
+    /// ë“œë¡­ ì• ë‹ˆë©”ì´ì…˜
     /// </summary>
     private void PlayDropAnimation()
     {
-        // ½ÃÀÛ À§Ä¡°¡ Å¸°Ù À§Ä¡º¸´Ù ³ôµµ·Ï ¼³Á¤
+        // ì‹œì‘ ìœ„ì¹˜ê°€ íƒ€ê²Ÿ ìœ„ì¹˜ë³´ë‹¤ ë†’ë„ë¡ ì„¤ì •
         Vector3 startPos = targetPosition + Vector3.up * dropHeight;
         transform.position = startPos;
 
-        // DOTweenÀ¸·Î Å¸°Ù À§Ä¡±îÁö ÀÌµ¿
+        // DOTweenìœ¼ë¡œ íƒ€ê²Ÿ ìœ„ì¹˜ê¹Œì§€ ì´ë™
         transform.DOMove(targetPosition, dropDuration)
-            .SetEase(Ease.OutBounce); // ¹Ù¿î½º È¿°ú·Î ¶³¾îÁö´Â ´À³¦ Ãß°¡
+            .SetEase(Ease.OutBounce); // ë°”ìš´ìŠ¤ íš¨ê³¼ë¡œ ë–¨ì–´ì§€ëŠ” ëŠë‚Œ ì¶”ê°€
     }
 
     /// <summary>
-    /// ¿ÀºêÁ§Æ® ÆÄ±« ½Ã DOTween KILL Å³ µ© ¿Ã!!!!!!!!!!!
+    /// ì˜¤ë¸Œì íŠ¸ íŒŒê´´ ì‹œ DOTween KILL í‚¬ ë€ ì˜¬!!!!!!!!!!!
     /// </summary>
     private void OnDestroy()
     {

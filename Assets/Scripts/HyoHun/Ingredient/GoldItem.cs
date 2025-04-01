@@ -9,7 +9,7 @@ public class GoldItem : Item
         itemID = "10";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
-        itemName = "±Ý ÁÖ±«";
+        itemName = "ê¸ˆ ì£¼ê´´";
 
         canStack = true;
         maxStackAmount = 64;
@@ -17,6 +17,6 @@ public class GoldItem : Item
 
     public override void Use(PlayerController user)
     {
-        Debug.Log("±Ý ÁÖ±«´Â »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.");
+        Debug.Log("ê¸ˆ ì£¼ê´´ëŠ” ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
     }
 }
