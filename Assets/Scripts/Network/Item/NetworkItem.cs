@@ -10,7 +10,8 @@ public class NetworkItem : NetworkBehaviour
 {
     [Header("아이템 정보")]
     [Tooltip("아이템 코드")]
-    public string itemID;
+    [SyncVar(hook = nameof(OnItemIDChanged))]
+    public string itemID = "-1"; // 아이템 코드
 
     [SyncVar]
     private bool isPickedUp = false; // 아이템 획득 상태
@@ -35,11 +36,14 @@ public class NetworkItem : NetworkBehaviour
         isAbleToPickUp = true;
         itemCollider.enabled = true;
     }
-
+    public void OnItemIDChanged(string oldID, string newID)
+    {
+        GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Items/" + newID);
+    }
+    [Server]
     public void SetItemInfo(string id)
     {
         itemID = id;
-        GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Items/" + id);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -95,7 +99,7 @@ public class NetworkItem : NetworkBehaviour
     /// </summary>
     [TargetRpc]
     private void TargetOnItemPickedUp(NetworkConnection target, string id, int count)
-    {        
+    {
         // 인벤토리 매니저를 통해 아이템 추가
         InventoryManager playerInventory = InventoryManager.Instance;
         if (playerInventory != null)
