@@ -260,7 +260,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &3921770167131288663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,6 +366,8 @@ MonoBehaviour:
   boarChargeDuration: 2
   boarChargeCooldown: 5
   boarRestAfterChargeDuration: 3
+  stoneFleeTime: 4
+  stoneFleeSpeedMultiplier: 1.2
 --- !u!1 &4221145061261212377
 GameObject:
   m_ObjectHideFlags: 0
