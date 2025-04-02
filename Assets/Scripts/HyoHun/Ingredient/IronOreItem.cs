@@ -6,10 +6,10 @@ public class IronOreItem : Item
 {
     private void OnEnable()
     {
-        itemID = "2";
+        // itemID = "2";
+        // itemName = "철광석";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
-        itemName = "철광석";
 
         canStack = true;
         maxStackAmount = 64;

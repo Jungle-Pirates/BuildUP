@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1046505433472258905}
-  - component: {fileID: -8945935135616871262}
+  - component: {fileID: -8127348581977064876}
   m_Layer: 0
-  m_Name: 31_Meat
+  m_Name: 8_Fiber
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26,13 +26,13 @@ Transform:
   m_GameObject: {fileID: 7363160457919382477}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.9514139, y: 2.7793431, z: -0.07231887}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-8945935135616871262
+--- !u!114 &-8127348581977064876
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,14 +41,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7363160457919382477}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37bc52b83c423a240ba9104e0ca0576e, type: 3}
+  m_Script: {fileID: 11500000, guid: 1013095cce8c13e4aba6b3b0557ae6de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemID: 31
+  itemID: Ingredient_08
   itemType: 0
   equipable: 0
-  itemName: "\uACE0\uAE30"
-  icon: {fileID: 21300000, guid: a30341428cdd54c4294fefc9529ba94f, type: 3}
+  itemName: "\uC12C\uC720"
+  icon: {fileID: 21300000, guid: 5a4f7a94242282047ac5959bb29ca229, type: 3}
   canStack: 1
   maxStackAmount: 99
   count: 1

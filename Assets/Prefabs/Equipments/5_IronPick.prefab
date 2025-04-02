@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 515634333051688156}
   - component: {fileID: 8957999029683182603}
   m_Layer: 0
-  m_Name: 24_IronPick
+  m_Name: 5_IronPick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,10 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80e239d01db0efe41973252d26cad56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemID: 
-  itemType: 0
-  equipable: 0
-  itemName: 
+  itemID: Equipment_05
+  itemType: 1
+  equipable: 1
+  itemName: "\uCCA0\uACE1\uAD2D\uC774"
   icon: {fileID: 21300000, guid: ef006e3f285f860489dea1aa7f3e4943, type: 3}
   canStack: 0
   maxStackAmount: 0

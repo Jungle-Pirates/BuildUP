@@ -6,10 +6,10 @@ public class FiberItem : Item
 {
     private void OnEnable()
     {
-        itemID = "8";
+        // itemID = "8";
+        // itemName = "섬유";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
-        itemName = "섬유";
 
         canStack = true;
         maxStackAmount = 64;

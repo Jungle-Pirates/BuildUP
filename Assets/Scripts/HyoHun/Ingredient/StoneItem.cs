@@ -6,10 +6,10 @@ public class StoneItem : Item
 {
     private void OnEnable()
     {
-        itemID = "1";
+        // itemID = "1";
+        // itemName = "돌";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
-        itemName = "돌";
 
         canStack = true;
         maxStackAmount = 64;

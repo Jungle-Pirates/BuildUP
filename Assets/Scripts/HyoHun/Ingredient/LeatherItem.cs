@@ -6,10 +6,10 @@ public class LeatherItem : Item
 {
     private void OnEnable()
     {
-        itemID = "5";
+        // itemID = "5";
+        // itemName = "가죽";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
-        itemName = "가죽";
 
         canStack = true;
         maxStackAmount = 64;

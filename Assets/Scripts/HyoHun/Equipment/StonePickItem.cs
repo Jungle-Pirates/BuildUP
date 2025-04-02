@@ -9,8 +9,8 @@ public class StonePickItem : PickItem
     {
         base.Awake();
 
-        itemID = "21";
-        itemName = "돌 곡괭이";
+        // itemID = "21";
+        // itemName = "돌 곡괭이";
         damage = 5f;
         delay = 0.2f;  
         size = 1f;    

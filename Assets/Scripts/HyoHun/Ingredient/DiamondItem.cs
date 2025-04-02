@@ -6,10 +6,10 @@ public class DiamondItem : Item
 {
     private void OnEnable()
     {
-        itemID = "4";
+        // itemID = "4";
+        // itemName = "다이아몬드";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
-        itemName = "다이아몬드";
 
         canStack = true;
         maxStackAmount = 64;

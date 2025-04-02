@@ -6,10 +6,10 @@ public class GoldItem : Item
 {
     private void OnEnable()
     {
-        itemID = "10";
+        // itemID = "10";
+        // itemName = "금 주괴";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
-        itemName = "금 주괴";
 
         canStack = true;
         maxStackAmount = 64;

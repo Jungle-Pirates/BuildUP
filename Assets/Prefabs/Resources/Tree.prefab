@@ -252,13 +252,14 @@ MonoBehaviour:
   syncInterval: 0
   dropItemPrefab: {fileID: 4328445041376920398, guid: a64739c261b43b94b91f5404049e9d90, type: 3}
   dropItemSets:
-  - itemID: 0
-    itemCount: 5
-  - itemID: 30
+  - itemID: Ingredient_00
+    itemCount: 3
+  - itemID: Food_01
     itemCount: 1
   resourceHealth: 25
   healthBar: {fileID: 8569545313152200010}
   currentHealth: 0
+  toolTag: AXE
 --- !u!114 &4274934107788710882
 MonoBehaviour:
   m_ObjectHideFlags: 0

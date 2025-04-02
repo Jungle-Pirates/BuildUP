@@ -6,8 +6,8 @@ public class Meat : FoodItem
 {
     private void OnEnable()
     {
-        itemID = "31";
-        itemName = "고기";
+        // itemID = "31";
+        // itemName = "고기";
         healAmount = 25f;
     }
 

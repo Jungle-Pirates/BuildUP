@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1046505433472258905}
-  - component: {fileID: 4773554349894036065}
+  - component: {fileID: -8667080282373266598}
   m_Layer: 0
-  m_Name: 3_GoldOre
+  m_Name: 9_Iron
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4773554349894036065
+--- !u!114 &-8667080282373266598
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,14 +41,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7363160457919382477}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 852a8436597b9ce45b793c1892667690, type: 3}
+  m_Script: {fileID: 11500000, guid: b52577ad18007fe4d951b98d15b7849b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemID: 
+  itemID: Ingredient_09
   itemType: 0
   equipable: 0
-  itemName: 
-  icon: {fileID: 21300000, guid: 264cf0e5dc3bb9948b78092c053251d8, type: 3}
-  canStack: 0
-  maxStackAmount: 0
-  count: 0
+  itemName: "\uCCA0\uC8FC\uAD34"
+  icon: {fileID: 21300000, guid: cc21aef0d9ff54a458de48afc2b68d86, type: 3}
+  canStack: 1
+  maxStackAmount: 99
+  count: 1

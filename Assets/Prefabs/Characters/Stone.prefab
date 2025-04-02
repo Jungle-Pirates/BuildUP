@@ -278,10 +278,8 @@ MonoBehaviour:
   healthBar: {fileID: 1655168924110579475}
   dropItemPrefab: {fileID: 4328445041376920398, guid: a64739c261b43b94b91f5404049e9d90, type: 3}
   dropItemSets:
-  - itemID: 1
+  - itemID: Ingredient_01
     itemCount: 2
-  - itemID: 31
-    itemCount: 1
   platformCheckDistance: 1
   idleTimeRange: {x: 1, y: 3}
   moveTimeRange: {x: 2, y: 5}

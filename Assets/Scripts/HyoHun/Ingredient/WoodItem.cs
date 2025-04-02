@@ -6,10 +6,10 @@ public class WoodItem : Item
 {
     private void OnEnable()
     {
-        itemID = "0";
+        // itemID = "0";
+        // itemName = "나무";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
-        itemName = "나무";
 
         canStack = true;
         maxStackAmount = 64;
