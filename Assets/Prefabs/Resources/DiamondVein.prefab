@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.9}
+  m_AnchoredPosition: {x: 0, y: 0.372}
   m_SizeDelta: {x: 2, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &5494314232845099143
@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 7976844359802070711}
   - component: {fileID: 4274934107788710882}
   m_Layer: 0
-  m_Name: Tree
+  m_Name: DiamondVein
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -132,7 +132,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 28.19, y: -12.8, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1363762238198343664}
@@ -179,7 +179,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 237635686, guid: 53f9653a28174c84dbf2d95e5360c749, type: 3}
+  m_Sprite: {fileID: 272052361, guid: c48e57cef2845e54d830d7d26fd721f8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -226,14 +226,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.88, y: 1.48}
+    oldSize: {x: 0.64, y: 0.64}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.3, y: 1.48}
+  m_Size: {x: 0.54, y: 0.47}
   m_EdgeRadius: 0
 --- !u!114 &7976844359802070711
 MonoBehaviour:
@@ -252,14 +252,12 @@ MonoBehaviour:
   syncInterval: 0
   dropItemPrefab: {fileID: 4328445041376920398, guid: a64739c261b43b94b91f5404049e9d90, type: 3}
   dropItemSets:
-  - itemID: Ingredient_00
-    itemCount: 3
-  - itemID: Food_01
+  - itemID: Ingredient_04
     itemCount: 1
-  resourceHealth: 25
+  resourceHealth: 100
   healthBar: {fileID: 8569545313152200010}
   currentHealth: 0
-  toolTag: AXE
+  toolTag: PICK
 --- !u!114 &4274934107788710882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,7 +271,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
-  _assetId: 3009598509
+  _assetId: 38902189
   serverOnly: 0
   visibility: 0
   hasSpawned: 0

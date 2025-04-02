@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1574555229489639189}
   - component: {fileID: 2202735988711928169}
   m_Layer: 0
-  m_Name: 20_StoneAxe
+  m_Name: 1_StoneAxe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,10 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b074da1514a8dc498ea072adf10ef4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemID: 
-  itemType: 0
-  equipable: 0
-  itemName: 
+  itemID: Equipment_01
+  itemType: 1
+  equipable: 1
+  itemName: "\uB3CC\uB3C4\uB07C"
   icon: {fileID: 21300000, guid: 26e96f1d78e0cc24e8509eb52dbc40b1, type: 3}
   canStack: 0
   maxStackAmount: 0

@@ -44,11 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16ba9a2b1efb48a40a525bead81a5e90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemID: 
+  itemID: Ingredient_11
   itemType: 0
   equipable: 0
-  itemName: 
+  itemName: "\uD569\uAE08"
   icon: {fileID: 21300000, guid: abc4ff160587b3945a8b25c75f824f41, type: 3}
-  canStack: 0
-  maxStackAmount: 0
-  count: 0
+  canStack: 1
+  maxStackAmount: 99
+  count: 1

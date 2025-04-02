@@ -8,8 +8,8 @@ public class StoneAxeItem : AxeItem
     {
         base.Awake();
 
-        itemID = "20";
-        itemName = "돌 도끼";
+        // itemID = "20";
+        // itemName = "돌 도끼";
         damage = 5f;         // 도끼의 기본 피해
         delay = 0.2f;         // 피해 간격 시간
         size = 1.0f;        // 콜라이더 크기 배율

@@ -6,8 +6,8 @@ public class FruitItem : FoodItem
 {
     private void OnEnable()
     {
-        itemID = "30";
-        itemName = "과일";
+        // itemID = "30";
+        // itemName = "과일";
         healAmount = 10f;
     }
 

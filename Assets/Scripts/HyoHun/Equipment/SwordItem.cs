@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class SwordItem : HandyToolItem
 {
-    [Header("Sword Æ¯È­ °¡ÁßÄ¡")]
+    [Header("Sword íŠ¹í™” ê°€ì¤‘ì¹˜")]
     [SerializeField] protected float animalDamageMultiplier = 1.5f;
 
     public override void Use(PlayerController user)
     {
         if (attackPoint != null)
-            attackPoint.tag = "SWORD"; // µµ±¸ Å¸ÀÔ ½Äº°¿ë ÅÂ±×
+            attackPoint.tag = "SWORD"; // ë„êµ¬ íƒ€ì… ì‹ë³„ìš© íƒœê·¸
 
         base.Use(user);
     }

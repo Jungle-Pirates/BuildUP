@@ -252,8 +252,8 @@ MonoBehaviour:
   syncInterval: 0
   dropItemPrefab: {fileID: 4328445041376920398, guid: a64739c261b43b94b91f5404049e9d90, type: 3}
   dropItemSets:
-  - itemID: 1
-    itemCount: 5
+  - itemID: Ingredient_01
+    itemCount: 3
   resourceHealth: 25
   healthBar: {fileID: 8569545313152200010}
   currentHealth: 0

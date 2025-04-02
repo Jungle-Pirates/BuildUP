@@ -4,19 +4,19 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
-/// ¼Õ¿¡ ÀåÂø °¡´ÉÇÑ ¾ÆÀÌÅÛ »óÀ§ Å¬·¡½º
+/// ì†ì— ì¥ì°© ê°€ëŠ¥í•œ ì•„ì´í…œ ìƒìœ„ í´ë˜ìŠ¤
 /// </summary>
 public abstract class HandyToolItem : Item
 {
     [Header("Handy Tool Stats")]
-    [SerializeField] public float damage;        // ±âº» ÇÇÇØ·®. ÀÚ¿ø ¿ÀºêÁ§Æ®¿¡¼­ È£Ãâ
+    [SerializeField] public float damage;        // ê¸°ë³¸ í”¼í•´ëŸ‰. ìì› ì˜¤ë¸Œì íŠ¸ì—ì„œ í˜¸ì¶œ
 
-    [SerializeField] protected float delay;          // µô·¹ÀÌ ½Ã°£
-    [SerializeField] protected float size;         // Äİ¶óÀÌ´õ Å©±â ¹èÀ²?
-    [SerializeField] protected bool isUsing;        // »ç¿ë Áß ¿©ºÎ
+    [SerializeField] protected float delay;          // ë”œë ˆì´ ì‹œê°„
+    [SerializeField] protected float size;         // ì½œë¼ì´ë” í¬ê¸° ë°°ìœ¨?
+    [SerializeField] protected bool isUsing;        // ì‚¬ìš© ì¤‘ ì—¬ë¶€
 
-    protected GameObject attackPoint;               // ÇÃ·¹ÀÌ¾îÀÇ AttackPoint Äİ¶óÀÌ´õ ÂüÁ¶
-    protected Collider2D attackCollider;            // ½ÇÁ¦ Äİ¶óÀÌ´õ Ä³½Ì
+    protected GameObject attackPoint;               // í”Œë ˆì´ì–´ì˜ AttackPoint ì½œë¼ì´ë” ì°¸ì¡°
+    protected Collider2D attackCollider;            // ì‹¤ì œ ì½œë¼ì´ë” ìºì‹±
 
     protected virtual void Awake()
     {
@@ -30,7 +30,7 @@ public abstract class HandyToolItem : Item
     }
 
     /// <summary>
-    /// µµ±¸ »ç¿ë: ÀÏÁ¤ ½Ã°£ µ¿¾È AttackPoint Äİ¶óÀÌ´õ¸¦ ÄÑ°í ²ô´Â ActivateAttackPoint ÄÚ·çÆ¾ È£Ãâ
+    /// ë„êµ¬ ì‚¬ìš©: ì¼ì • ì‹œê°„ ë™ì•ˆ AttackPoint ì½œë¼ì´ë”ë¥¼ ì¼œê³  ë„ëŠ” ActivateAttackPoint ì½”ë£¨í‹´ í˜¸ì¶œ
     /// </summary>
     public override void Use(PlayerController user)
     {
@@ -41,28 +41,28 @@ public abstract class HandyToolItem : Item
 
         if (attackCollider == null)
         {
-            Debug.LogWarning("AttackCollider°¡ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("AttackColliderê°€ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
-        user.StartCoroutine(ActivateAttackPoint()); // Coroutine ½ÇÇà
+        user.StartCoroutine(ActivateAttackPoint()); // Coroutine ì‹¤í–‰
     }
 
     /// <summary>
-    /// AttackPoint Äİ¶óÀÌ´õ¸¦ ÀÏÁ¤ ½Ã°£ µ¿¾È È°¼ºÈ­ÇÏ´Â ÄÚ·çÆ¾
+    /// AttackPoint ì½œë¼ì´ë”ë¥¼ ì¼ì • ì‹œê°„ ë™ì•ˆ í™œì„±í™”í•˜ëŠ” ì½”ë£¨í‹´
     /// </summary>
     protected IEnumerator ActivateAttackPoint()
     {
         isUsing = true;
 
-        // Äİ¶óÀÌ´õ ¼¼ÆÃ
+        // ì½œë¼ì´ë” ì„¸íŒ…
         attackCollider.enabled = true;
         attackCollider.transform.localScale = Vector3.one * size;
 
         yield return new WaitForSeconds(delay);
 
-        attackCollider.enabled = false; // Ãæµ¹ Á¾·á
+        attackCollider.enabled = false; // ì¶©ëŒ ì¢…ë£Œ
 
-        // È¤½Ã ¸ô¶ó¼­ ÅÂ±× ÃÊ±âÈ­
+        // í˜¹ì‹œ ëª°ë¼ì„œ íƒœê·¸ ì´ˆê¸°í™”
         attackPoint.tag = "Untagged";
 
         isUsing = false;

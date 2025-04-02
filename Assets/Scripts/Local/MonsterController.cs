@@ -274,7 +274,7 @@ public class MonsterController : NetworkBehaviour
             DropItem();
 
             // 생명체 오브젝트 파괴
-            NetworkServer.Destroy(gameObject);
+            NetworkResourceManager.Instance.DestroyMonster(gameObject);
         }
     }
 

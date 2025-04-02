@@ -6,10 +6,10 @@ public class IronItem : Item
 {
     private void OnEnable()
     {
-        itemID = "9";
+        // itemID = "9";
+        // itemName = "철 주괴";
         itemType = ItemType.Ingredient;
         equipable = Equipable.None;
-        itemName = "철 주괴";
 
         canStack = true;
         maxStackAmount = 64;

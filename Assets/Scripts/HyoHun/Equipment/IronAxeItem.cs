@@ -8,8 +8,8 @@ public class IronAxeItem : AxeItem
     {
         base.Awake();
 
-        itemID = "23";
-        itemName = "철 도끼";
+        // itemID = "23";
+        // itemName = "철 도끼";
         damage = 8f; 
         delay = 0.2f; 
         size = 1f;

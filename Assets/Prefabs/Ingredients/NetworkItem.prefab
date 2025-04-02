@@ -170,7 +170,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  itemID: -1
+  itemID: 0
 --- !u!114 &2518856736968486608
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,15 +10,15 @@ public class IronPickItem : PickItem
     {
         base.Awake();
 
-        itemID = "24";
-        itemName = "Ã¶ °î±ªÀÌ";
-        damage = 8f;         // µµ³¢ÀÇ ±âº» ÇÇÇØ
-        delay = 0.2f;         // ÇÇÇØ °£°İ ½Ã°£
-        size = 1.0f;        // Äİ¶óÀÌ´õ Å©±â ¹èÀ²
+        // itemID = "24";
+        // itemName = "ì²  ê³¡ê´­ì´";
+        damage = 8f;         // ë„ë¼ì˜ ê¸°ë³¸ í”¼í•´
+        delay = 0.2f;         // í”¼í•´ ê°„ê²© ì‹œê°„
+        size = 1.0f;        // ì½œë¼ì´ë” í¬ê¸° ë°°ìœ¨
     }
 
     public override void Use(PlayerController user)
     {
-        base.Use(user); // °ø°İ Ã³¸®
+        base.Use(user); // ê³µê²© ì²˜ë¦¬
     }
 }

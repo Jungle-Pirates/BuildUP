@@ -10,6 +10,7 @@ TagManager:
   - SWORD
   - OneWayPlatform
   - Monster
+  - Ground
   layers:
   - Default
   - TransparentFX

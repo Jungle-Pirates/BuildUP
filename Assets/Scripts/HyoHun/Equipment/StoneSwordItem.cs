@@ -10,15 +10,15 @@ public class StoneSwordItem : SwordItem
     {
         base.Awake();
 
-        itemID = "22";
-        itemName = "µ¹ Ä®";
-        damage = 5f;         // µµ³¢ÀÇ ±âº» ÇÇÇØ
-        delay = 0.2f;         // ÇÇÇØ °£°İ ½Ã°£
-        size = 1.0f;        // Äİ¶óÀÌ´õ Å©±â ¹èÀ²
+        // itemID = "22";
+        // itemName = "ëŒ ì¹¼";
+        damage = 5f;         // ë„ë¼ì˜ ê¸°ë³¸ í”¼í•´
+        delay = 0.2f;         // í”¼í•´ ê°„ê²© ì‹œê°„
+        size = 1.0f;        // ì½œë¼ì´ë” í¬ê¸° ë°°ìœ¨
     }
 
     public override void Use(PlayerController user)
     {
-        base.Use(user); // °ø°İ Ã³¸®
+        base.Use(user); // ê³µê²© ì²˜ë¦¬
     }
 }
