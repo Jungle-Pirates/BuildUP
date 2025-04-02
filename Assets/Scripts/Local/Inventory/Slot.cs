@@ -26,7 +26,7 @@ public class Slot : MonoBehaviour
 
     private void OnEnable()
     {
-        //참고 했던 자료에 장비 장착 관련 코드가 있었음
+        // 참고 했던 자료에 장착 관련 코드가 있었음
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ public class Slot : MonoBehaviour
             ? inventoryItem.count.ToString()
             : string.Empty;
 
-        // �巡�� ���� �ʱ�ȭ
+        // 드래그 상태 초기화
         CanvasGroup canvasGroup = icon.GetComponent<CanvasGroup>();
         if (canvasGroup != null)
         {
