@@ -137,14 +137,13 @@ public class NetworkResource : NetworkBehaviour
             }
         }
     }
-
-    /// <summary>
-    /// 드롭할 아이템 세트 클래스
-    /// </summary>
-    [Serializable]
-    public class DropItemSet
-    {
-        public string itemID; // 아이템 코드
-        public int itemCount; // 드롭할 아이템 개수
-    }
+}
+/// <summary>
+/// 드롭할 아이템 세트 클래스
+/// </summary>
+[Serializable]
+public class DropItemSet
+{
+    public string itemID; // 아이템 코드
+    public int itemCount; // 드롭할 아이템 개수
 }

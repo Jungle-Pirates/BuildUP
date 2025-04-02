@@ -26,10 +26,10 @@ public class NetworkItemManager : Singleton<NetworkItemManager>
             Destroy(dropItem);
             return;
         }
-        // 아이템이 null이 아니면 아이템 정보를 설정합니다.
-        item.SetItemInfo(itemCode);
         // 아이템을 클라이언트모두에게 생성
         NetworkServer.Spawn(dropItem);
+        // 아이템이 null이 아니면 아이템 정보를 설정합니다.
+        item.SetItemInfo(itemCode);
 
         // 아이템을 생성한 후, 아이템의 위치를 설정합니다.
         ItemDropMovement dropMovement = dropItem.GetComponent<ItemDropMovement>();
