@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WoodMItem : Item
 {
-    private void OnEnable()
+    private void Awake()
     {
         // itemID = "7";
         // itemName = "목재";
