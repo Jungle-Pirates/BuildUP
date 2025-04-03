@@ -25,6 +25,12 @@ public class InventoryManager : Singleton<InventoryManager>
     public Button useButton; // 사용 버튼
     public Button dropButton; // 버리기 버튼
 
+    [Header("제작 UI")]
+    public GameObject craftingPanel; // 끄고 켤 수 있는 제작 UI 묶음
+    public Button craftButton;
+    public TextMeshProUGUI craftWarningText;
+    private string selectedCraftItemID = null;
+
     void Start()
     {
         // 플레이어 연결 및 이벤트 등록
@@ -47,6 +53,9 @@ public class InventoryManager : Singleton<InventoryManager>
 
         ClearSelectedItemWindow();
         inventoryWindow.SetActive(false);
+
+        craftButton.gameObject.SetActive(false);
+        craftWarningText.gameObject.SetActive(false);
     }
     void Update()
     {
@@ -170,6 +179,10 @@ public class InventoryManager : Singleton<InventoryManager>
         selectedItemStatName.text = string.Empty; // 향후 확장
         selectedItemStatValue.text = string.Empty;
 
+        //제작 관련 버튼 및 텍스트는 일반 인벤토리 눌렀을 땐 꺼져야 함 
+        craftButton.gameObject.SetActive(false);
+        craftWarningText.gameObject.SetActive(false);
+
         useButton.gameObject.SetActive(selectedItem.inventoryItem.itemType == ItemType.Food);
         dropButton.gameObject.SetActive(true);
     }
@@ -225,19 +238,91 @@ public class InventoryManager : Singleton<InventoryManager>
     }
 
     /// <summary>
+    /// 인벤토리에서 특정 아이템을 지정된 수량만큼 제거
+    /// </summary>
+    public void RemoveItem(string itemID, int amount)
+    {
+        int remaining = amount;
+
+        foreach (Slot slot in slots)
+        {
+            if (slot.inventoryItem != null && slot.inventoryItem.itemID == itemID)
+            {
+                int count = slot.inventoryItem.count;
+
+                if (count >= remaining)
+                {
+                    slot.inventoryItem.count -= remaining;
+
+                    if (slot.inventoryItem.count <= 0)
+                        slot.inventoryItem = null;
+
+                    break;
+                }
+                else
+                {
+                    remaining -= count;
+                    slot.inventoryItem = null;
+                }
+            }
+        }
+
+        UpdateUI();
+    }
+
+    /// <summary>
     /// 특정 아이템 존재 여부 확인
     /// </summary>
-    // public bool HasItem(int itemID, int quantity)
-    // {
-    //     foreach (Slot slot in slots)
-    //     {
-    //         if (slot.inventoryItem != null &&
-    //             slot.inventoryItem.itemID == itemID &&
-    //             slot.inventoryItem.count >= quantity)
-    //         {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // }
+    public bool HasItemAmount(string itemID, int requiredAmount)
+    {
+        int totalAmount = 0;
+
+        foreach (Slot slot in slots)
+        {
+            if (slot.inventoryItem != null && slot.inventoryItem.itemID == itemID)
+            {
+                totalAmount += slot.inventoryItem.count;
+                if (totalAmount >= requiredAmount)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 제작 UI 슬롯 클릭시 호출
+    /// </summary>
+    public void SelectCraftingRecipe(string itemID)
+    {
+        selectedCraftItemID = itemID;
+
+        Recipe recipe = CraftingManager.Instance.GetRecipeByItemID(itemID);
+        if (recipe == null)
+        {
+            Debug.LogError($"레시피 없음: {itemID}");
+            craftButton.gameObject.SetActive(false);
+            craftWarningText.text = "레시피를 찾을 수 없습니다.";
+            return;
+        }
+
+        // UI 업데이트
+        selectedItemName.text = recipe.recipeName;
+        selectedItemType.text = "Craft Result"; //TODO : 이거 제작 UI 슬롯이 해당 아이템 스크립트 가지도록 해서 Item 참조해서 ItemType 받아오도록 수정하자.
+
+        bool canCraft = CraftingManager.Instance.IsAbleToCraft(recipe);
+        craftButton.gameObject.SetActive(canCraft);
+        craftWarningText.text = canCraft ? "" : "재료가 부족합니다.";
+        craftWarningText.gameObject.SetActive(!canCraft);
+        dropButton.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// 인벤토리의 Craft버튼을 누르면 호출됨
+    /// 아이템ID를 넘겨주며 CraftItem() 호출
+    /// </summary>
+    public void OnCraftButton()
+    {
+        if (string.IsNullOrEmpty(selectedCraftItemID)) return;
+        CraftingManager.Instance.CraftItem(selectedCraftItemID);
+    }
 }
