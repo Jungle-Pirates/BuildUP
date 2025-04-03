@@ -59,7 +59,7 @@ public class CursorController : MonoBehaviour
             }
             else if (Input.GetMouseButtonDown(1))
             {
-                BuildManager.Instance.CmdDeleteRoom(cursorCoordinate);
+                BuildManager.Instance.CmdBuildNonRoom(cursorCoordinate, NonRoomType.pipe);
             }
 
             DrawCursor();
@@ -110,13 +110,13 @@ public class CursorController : MonoBehaviour
             }
             else if (isPlaceMode)
             {
-                if (BuildManager.Instance.CanBuildNonRoom(cursorCoordinate) && (!ableSprite.activeSelf || unableSprite.activeSelf))
+                if (BuildManager.Instance.CanBuildLadder(cursorCoordinate) && (!ableSprite.activeSelf || unableSprite.activeSelf))
                 {
                     placableSprite.SetActive(true);
                     ableSprite.SetActive(false);
                     unableSprite.SetActive(false);
                 }
-                else if (!BuildManager.Instance.CanBuildNonRoom(cursorCoordinate) && (!unableSprite.activeSelf || ableSprite.activeSelf))
+                else if (!BuildManager.Instance.CanBuildLadder(cursorCoordinate) && (!unableSprite.activeSelf || ableSprite.activeSelf))
                 {
                     placableSprite.SetActive(false);
                     ableSprite.SetActive(false);

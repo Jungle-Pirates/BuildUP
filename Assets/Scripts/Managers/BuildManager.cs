@@ -1,6 +1,7 @@
 using Mirror;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.WSA;
 
 public class BuildManager : NetworkBehaviour
 {
@@ -20,16 +21,19 @@ public class BuildManager : NetworkBehaviour
 
     [Header("Room Coordinate")]
     [Tooltip("Data of the room constructed at the coordinates. The foundation can only be built at y: 0.")]
-    [SerializeField] private SerializableDictionary<Vector2Int, Room> worldRoomData = new SerializableDictionary<Vector2Int, Room>();
+    [SerializeField] private SyncDictionary<Vector2Int, GameObject> worldRoomData = new SyncDictionary<Vector2Int, GameObject>();
 
     [SerializeField] private GameObject testRoomObject;
     [SerializeField] private GameObject testFoundationObject;
 
     [Header("설치물 데이터")]
     [Tooltip("설치물 프리팹")]
-    [SerializeField] private GameObject NonRoomPrefab;
-    [Tooltip("설치물 위치 데이터")]
-    [SerializeField] private SerializableDictionary<Vector2Int, NonRoom> worldNonRoomData = new SerializableDictionary<Vector2Int, NonRoom>();
+    [SerializeField] private GameObject LadderPrefab;
+    [SerializeField] private GameObject PipePrefab;
+    [Tooltip("사다리 위치 데이터")]
+    [SerializeField] private SyncDictionary<Vector2Int, GameObject> worldLadderData = new SyncDictionary<Vector2Int, GameObject>();
+    [Tooltip("수로 위치 데이터")]
+    [SerializeField] private SyncDictionary<Vector2Int, GameObject> worldPipeData = new SyncDictionary<Vector2Int, GameObject>();
 
     private void Awake()
     {
@@ -81,7 +85,7 @@ public class BuildManager : NetworkBehaviour
     /// <returns></returns>
     private bool CheckRoomExistance(Vector2Int coordinate)
     {
-        if (worldRoomData.TryGetValue(coordinate, out Room room))
+        if (worldRoomData.TryGetValue(coordinate, out GameObject room))
             return true;
         else
             return false;
@@ -117,22 +121,32 @@ public class BuildManager : NetworkBehaviour
     /// <returns></returns>
     private bool HasRoomConnectedToFoundationBelow(Vector2Int coordinate)
     {
-        if (!worldRoomData.TryGetValue(coordinate + Vector2Int.down, out Room belowRoom))
+        if (!worldRoomData.TryGetValue(coordinate + Vector2Int.down, out GameObject belowRoom))
             return false;
         else
-            return belowRoom.IsConnectedWithFoundation;
+            return belowRoom.GetComponent<Room>().IsConnectedWithFoundation;
     }
 
     /// <summary>
-    /// 해당 좌표에 방이 존재해야 설치가능, 하지만 NonRoom이 있으면 설치 불가능
+    /// 해당 좌표에 방이 존재해야 설치가능, 하지만 Ladder 있으면 설치 불가능
     /// </summary>
-    /// <param name="coordinate"></param>
-    /// <returns></returns>
-    public bool CanBuildNonRoom(Vector2Int coordinate)
+    public bool CanBuildLadder(Vector2Int coordinate)
     {
-        if (worldNonRoomData.TryGetValue(coordinate, out NonRoom nonRoom))
+        if (worldLadderData.TryGetValue(coordinate, out GameObject nonRoom))
             return false;
-        else if (worldRoomData.TryGetValue(coordinate, out Room room))
+        else if (worldRoomData.TryGetValue(coordinate, out GameObject room))
+            return true;
+        else
+            return false;
+    }
+    /// <summary>
+    /// 해당 좌표에 방이 존재해야 설치가능, 하지만 Pipe 있으면 설치 불가능
+    /// </summary>
+    public bool CanBuildPipe(Vector2Int coordinate)
+    {
+        if (worldPipeData.TryGetValue(coordinate, out GameObject nonRoom))
+            return false;
+        else if (worldRoomData.TryGetValue(coordinate, out GameObject room))
             return true;
         else
             return false;
@@ -169,6 +183,46 @@ public class BuildManager : NetworkBehaviour
     //     }
     // }
 
+    /// <summary>
+    /// 인접한 모든 설치물을 활성화 하는 코드 - BFS를 이어진 모든 PIPE를 활성화 시킴
+    /// 나중에 파이프가 설치될때, 혹은 물탱크가 설치될때 이 메서드를 호출하면 됨
+    /// </summary>
+    /// <param name="waterTankCoordinate">물탱크 혹은 활성화된 파이프 위치(아마 대부분 물탱크)</param>
+    public void ActivatePipe(Vector2Int waterTankCoordinate)
+    {
+        Queue<Vector2Int> queue = new Queue<Vector2Int>();
+        HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+
+        queue.Enqueue(waterTankCoordinate);
+        visited.Add(waterTankCoordinate);
+
+        while (queue.Count > 0)
+        {
+            Vector2Int currentCoordinate = queue.Dequeue();
+            if (worldPipeData.TryGetValue(currentCoordinate, out GameObject pipe))
+            {
+                pipe.GetComponent<NonRoom>().Activate();
+                // 인접한 좌표를 큐에 추가
+                Vector2Int[] adjacentCoordinates = new Vector2Int[4]
+                {
+                    currentCoordinate + Vector2Int.up,
+                    currentCoordinate + Vector2Int.down,
+                    currentCoordinate + Vector2Int.left,
+                    currentCoordinate + Vector2Int.right
+                };
+
+                foreach (Vector2Int adjacentCoordinate in adjacentCoordinates)
+                {
+                    if (!visited.Contains(adjacentCoordinate) && worldPipeData.ContainsKey(adjacentCoordinate))
+                    {
+                        queue.Enqueue(adjacentCoordinate);
+                        visited.Add(adjacentCoordinate);
+                    }
+                }
+            }
+        }
+    }
+
     #endregion
 
     #region Add or Build Room
@@ -201,13 +255,31 @@ public class BuildManager : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdBuildNonRoom(Vector2Int coordinate, NonRoomType nonRoomType)
     {
-        if (CanBuildNonRoom(coordinate))
+        if (nonRoomType == NonRoomType.pipe)
         {
-            BuildNonRoom(nonRoomType, coordinate);
+            if (CanBuildPipe(coordinate))
+            {
+                BuildNonRoom(nonRoomType, coordinate);
+            }
+            else
+            {
+                Debug.Log("설치물을 지을 수 없습니다.");
+            }
+        }
+        else if (nonRoomType == NonRoomType.ladder)
+        {
+            if (CanBuildLadder(coordinate))
+            {
+                BuildNonRoom(nonRoomType, coordinate);
+            }
+            else
+            {
+                Debug.Log("설치물을 지을 수 없습니다.");
+            }
         }
         else
         {
-            Debug.Log("설치물을 지을 수 없습니다.");
+            Debug.LogError("설치물 타입이 잘못되었습니다.");
         }
     }
 
@@ -247,9 +319,26 @@ public class BuildManager : NetworkBehaviour
     [Server]
     private void BuildNonRoom(NonRoomType nonRoomType, Vector2Int coordinate)
     {
-        GameObject nonRoomObject = Instantiate(NonRoomPrefab, FromBasisIntCoordinates(coordinate), Quaternion.identity);
-        NetworkServer.Spawn(nonRoomObject);
-
+        GameObject nonRoomObject = null;
+        if (nonRoomType == NonRoomType.ladder)
+        {
+            Debug.Log("사다리 건설");
+            // 사다리 프리팹을 통해서 NonRoom 오브젝트 생성
+            nonRoomObject = Instantiate(LadderPrefab, FromBasisIntCoordinates(coordinate), Quaternion.identity);
+            NetworkServer.Spawn(nonRoomObject);
+        }
+        else if (nonRoomType == NonRoomType.pipe)
+        {
+            Debug.Log("파이프 건설");
+            // 파이프 프리팹을 통해서 NonRoom 오브젝트 생성
+            nonRoomObject = Instantiate(PipePrefab, FromBasisIntCoordinates(coordinate), Quaternion.identity);
+            NetworkServer.Spawn(nonRoomObject);
+        }
+        else
+        {
+            Debug.LogError("NonRoomType이 잘못되었습니다.");
+            return;
+        }
         // 생성 후 방 데이터 공유
         RpcOnBuildNewNonRoom(coordinate, nonRoomObject);
     }
@@ -257,18 +346,27 @@ public class BuildManager : NetworkBehaviour
     /// <summary>
     /// 방 오브젝트 생성 후 모든 클라이언트에 방 관련 데이터 공유
     /// </summary>
-    [ClientRpc]
     private void RpcOnBuildNewRoom(Vector2Int coordinate, GameObject roomObject)
     {
         // 추후 최적화를 위해서 풀링을 사용하는 것이 좋을 것 같음. 일단은 임시니까 깡으로 객체 생성
         AddRoomData(coordinate, roomObject.GetComponent<Room>());
     }
 
-    [ClientRpc]
     private void RpcOnBuildNewNonRoom(Vector2Int coordinate, GameObject nonRoomObject)
     {
-        // 추후 최적화를 위해서 풀링을 사용하는 것이 좋을 것 같음. 일단은 임시니까 깡으로 객체 생성
-        AddNonRoomData(coordinate, nonRoomObject.GetComponent<NonRoom>());
+        if (nonRoomObject.GetComponent<NonRoom>().NonRoomType == NonRoomType.ladder)
+        {
+            // 사다리일 경우에만 방 데이터 추가
+            AddLadderData(coordinate, nonRoomObject.GetComponent<NonRoom>());
+            return;
+        }
+        if (nonRoomObject.GetComponent<NonRoom>().NonRoomType == NonRoomType.pipe)
+        {
+            AddPipeData(coordinate, nonRoomObject.GetComponent<NonRoom>());
+            return;
+        }
+        Debug.LogError("NonRoomType이 잘못되었습니다.");
+        return;
     }
 
     public void AddRoomData(Vector2Int coordinate, Room room)
@@ -276,15 +374,22 @@ public class BuildManager : NetworkBehaviour
         // 추후 지지대가 추가되면 조건을 더 추가해줘야 함
         room.SetRoomData(Vector2Int.one, true);
 
-        if (!worldRoomData.TryAdd(coordinate, room))
+        if (!worldRoomData.TryAdd(coordinate, room.gameObject))
         {
             Debug.LogWarning("Data already exists at the specified coordinates. Please check the room placement code again.");
         }
     }
 
-    public void AddNonRoomData(Vector2Int coordinate, NonRoom nonRoom)
+    public void AddLadderData(Vector2Int coordinate, NonRoom nonRoom)
     {
-        if (!worldNonRoomData.TryAdd(coordinate, nonRoom))
+        if (!worldLadderData.TryAdd(coordinate, nonRoom.gameObject))
+        {
+            Debug.LogWarning("Data already exists at the specified coordinates. Please check the room placement code again.");
+        }
+    }
+    public void AddPipeData(Vector2Int coordinate, NonRoom nonRoom)
+    {
+        if (!worldPipeData.TryAdd(coordinate, nonRoom.gameObject))
         {
             Debug.LogWarning("Data already exists at the specified coordinates. Please check the room placement code again.");
         }
@@ -300,11 +405,15 @@ public class BuildManager : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdDeleteRoom(Vector2Int coordinate)
     {
-        if (worldNonRoomData.TryGetValue(coordinate, out NonRoom nonRoom))
+        if (worldLadderData.TryGetValue(coordinate, out GameObject nonRoom))
         {
-            DeleteNonRoom(coordinate);
+            DeleteLadder(coordinate);
         }
-        else if (worldRoomData.TryGetValue(coordinate, out Room room))
+        else if (worldPipeData.TryGetValue(coordinate, out GameObject nonRoom2))
+        {
+            DeletePipe(coordinate);
+        }
+        else if (worldRoomData.TryGetValue(coordinate, out GameObject room))
         {
             DeleteRoom(coordinate);
         }
@@ -327,19 +436,24 @@ public class BuildManager : NetworkBehaviour
     }
 
     [Server]
-    private void DeleteNonRoom(Vector2Int coordinate)
+    private void DeleteLadder(Vector2Int coordinate)
     {
         // 제거 후 방 데이터 공유
-        RpcOnDeleteNonRoom(coordinate);
+        RpcOnDeleteLadder(coordinate);
+    }
+    [Server]
+    private void DeletePipe(Vector2Int coordinate)
+    {
+        // 제거 후 방 데이터 공유
+        RpcOnDeletePipe(coordinate);
     }
 
     /// <summary>
     /// 해당 좌표에 방이 있는지 확인 후 모든 클라이언트에서 방을 삭제
     /// </summary>
-    [ClientRpc]
     private void RpcOnDeleteRoom(Vector2Int coordinate)
     {
-        worldRoomData.TryGetValue(coordinate, out Room room);
+        worldRoomData.TryGetValue(coordinate, out GameObject room);
         Debug.Log($"Deleting {room} of the room at coordinates {coordinate}.");
         RemoveRoomData(coordinate);
         DestroyRoomObject(room.gameObject);
@@ -347,12 +461,18 @@ public class BuildManager : NetworkBehaviour
     /// <summary>
     /// 모든 클라이언트에서 NonRoom 삭제
     /// </summary>
-    [ClientRpc]
-    private void RpcOnDeleteNonRoom(Vector2Int coordinate)
+    private void RpcOnDeleteLadder(Vector2Int coordinate)
     {
-        worldNonRoomData.TryGetValue(coordinate, out NonRoom nonRoom);
+        worldLadderData.TryGetValue(coordinate, out GameObject nonRoom);
         Debug.Log($"Deleting {nonRoom} of the non-room at coordinates {coordinate}.");
         RemoveNonRoomData(coordinate);
+        DestroyRoomObject(nonRoom.gameObject);
+    }
+    private void RpcOnDeletePipe(Vector2Int coordinate)
+    {
+        worldPipeData.TryGetValue(coordinate, out GameObject nonRoom);
+        Debug.Log($"Deleting {nonRoom} of the non-room at coordinates {coordinate}.");
+        RemovePipeData(coordinate);
         DestroyRoomObject(nonRoom.gameObject);
     }
 
@@ -371,7 +491,20 @@ public class BuildManager : NetworkBehaviour
 
     private bool RemoveNonRoomData(Vector2Int coordinate)
     {
-        if (worldNonRoomData.Remove(coordinate))
+        if (worldLadderData.Remove(coordinate))
+        {
+            return true;
+        }
+        else
+        {
+            Debug.LogWarning("There is no non-room at the specified coordinates, so it cannot be deleted.");
+            return false;
+        }
+    }
+    
+    private bool RemovePipeData(Vector2Int coordinate)
+    {
+        if (worldPipeData.Remove(coordinate))
         {
             return true;
         }
