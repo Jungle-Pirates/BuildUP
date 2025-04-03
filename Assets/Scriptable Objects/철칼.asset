@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f24acdc85baa8cf4886ee7b002dddc5f, type: 3}
+  m_Name: "\uCCA0\uCE7C"
+  m_EditorClassIdentifier: Assembly-CSharp::CraftableItem
+  recipeName: "\uCCA0\uCE7C"
+  resultItemID: Equipment_06
+  requiredItem:
+  - itemID: Ingredient_09
+    amount: 10
+  - itemID: Ingredient_07
+    amount: 10
+  craftAmount: 1
+  craftTime: 20
