@@ -251,7 +251,7 @@ public class BuildManager : NetworkBehaviour
         NetworkServer.Spawn(nonRoomObject);
 
         // 생성 후 방 데이터 공유
-        RpcOnBuildNewNonRoom(coordinate, nonRoomObject.GetComponent<NonRoom>());
+        RpcOnBuildNewNonRoom(coordinate, nonRoomObject);
     }
 
     /// <summary>
@@ -265,10 +265,10 @@ public class BuildManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void RpcOnBuildNewNonRoom(Vector2Int coordinate, NonRoom nonRoomObject)
+    private void RpcOnBuildNewNonRoom(Vector2Int coordinate, GameObject nonRoomObject)
     {
         // 추후 최적화를 위해서 풀링을 사용하는 것이 좋을 것 같음. 일단은 임시니까 깡으로 객체 생성
-        AddNonRoomData(coordinate, nonRoomObject);
+        AddNonRoomData(coordinate, nonRoomObject.GetComponent<NonRoom>());
     }
 
     public void AddRoomData(Vector2Int coordinate, Room room)

@@ -25,4 +25,8 @@ public class NonRoom : MonoBehaviour
     {
         nonRoomPosition = setPosition;
     }
+    private void Start()
+    {
+        transform.localScale = BuildManager.Instance.RoomUnitSize;
+    }
 }
