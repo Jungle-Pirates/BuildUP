@@ -1,4 +1,5 @@
 using Mirror;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BuildManager : NetworkBehaviour
@@ -8,7 +9,7 @@ public class BuildManager : NetworkBehaviour
     [SerializeField] private CursorController cursorController;
 
     [Header("Unit Room Size")]
-    [SyncVar(hook = nameof(OnUnitSizeChanged))] 
+    [SyncVar(hook = nameof(OnUnitSizeChanged))]
     [SerializeField] private Vector2 roomUnitSize = new Vector2(1, 1);
     public Vector2 RoomUnitSize { get { return roomUnitSize; } }
 
@@ -23,6 +24,12 @@ public class BuildManager : NetworkBehaviour
 
     [SerializeField] private GameObject testRoomObject;
     [SerializeField] private GameObject testFoundationObject;
+
+    [Header("설치물 데이터")]
+    [Tooltip("설치물 프리팹")]
+    [SerializeField] private GameObject NonRoomPrefab;
+    [Tooltip("설치물 위치 데이터")]
+    [SerializeField] private SerializableDictionary<Vector2Int, NonRoom> worldNonRoomData = new SerializableDictionary<Vector2Int, NonRoom>();
 
     private void Awake()
     {
@@ -116,6 +123,52 @@ public class BuildManager : NetworkBehaviour
             return belowRoom.IsConnectedWithFoundation;
     }
 
+    /// <summary>
+    /// 해당 좌표에 방이 존재해야 설치가능, 하지만 NonRoom이 있으면 설치 불가능
+    /// </summary>
+    /// <param name="coordinate"></param>
+    /// <returns></returns>
+    public bool CanBuildNonRoom(Vector2Int coordinate)
+    {
+        if (worldNonRoomData.TryGetValue(coordinate, out NonRoom nonRoom))
+            return false;
+        else if (worldRoomData.TryGetValue(coordinate, out Room room))
+            return true;
+        else
+            return false;
+    }
+
+    #endregion
+
+    #region 방 인접 정보
+
+    /// <summary>
+    /// 인접하고 있는 방의 정보를 가져오는 메서드
+    /// </summary>
+    // public void GetConnectedRoomData(Room room, out List<Room> connectedRoom)
+    // {
+    //     connectedRoom = new List<Room>();
+    //     Vector2Int coordinate = 
+
+    //     // 방의 좌표를 기준으로 인접한 방의 좌표를 가져옴
+    //     Vector2Int[] adjacentCoordinates = new Vector2Int[4]
+    //     {
+    //         coordinate + Vector2Int.up,
+    //         coordinate + Vector2Int.down,
+    //         coordinate + Vector2Int.left,
+    //         coordinate + Vector2Int.right
+    //     };
+
+    //     // 인접한 방이 존재하는지 확인 후 리스트에 추가
+    //     foreach (Vector2Int adjacentCoordinate in adjacentCoordinates)
+    //     {
+    //         if (worldRoomData.TryGetValue(adjacentCoordinate, out Room adjacentRoom))
+    //         {
+    //             connectedRoom.Add(adjacentRoom);
+    //         }
+    //     }
+    // }
+
     #endregion
 
     #region Add or Build Room
@@ -142,6 +195,21 @@ public class BuildManager : NetworkBehaviour
             Debug.Log("건물을 지을 수 없습니다.");
         }
     }
+    /// <summary>
+    /// 클라이언트 측에서 서버로 설치물 건설 요청 커맨드
+    /// </summary>
+    [Command(requiresAuthority = false)]
+    public void CmdBuildNonRoom(Vector2Int coordinate, NonRoomType nonRoomType)
+    {
+        if (CanBuildNonRoom(coordinate))
+        {
+            BuildNonRoom(nonRoomType, coordinate);
+        }
+        else
+        {
+            Debug.Log("설치물을 지을 수 없습니다.");
+        }
+    }
 
     /// <summary>
     /// 플레이어가 커맨드로 방 건설을 요청하면 서버에서 방을 건설
@@ -152,7 +220,8 @@ public class BuildManager : NetworkBehaviour
     {
         // 방 코드를 통해서 방 프리팹 선택 후 방 오브젝트 생성
         GameObject roomObject;
-        switch (roomType) {
+        switch (roomType)
+        {
             case 0:
                 Debug.Log("토대 건설");
                 roomObject = Instantiate(testFoundationObject, FromBasisIntCoordinates(coordinate), Quaternion.identity);
@@ -173,6 +242,19 @@ public class BuildManager : NetworkBehaviour
     }
 
     /// <summary>
+    /// 서버에서 NonRoom을 건설하는 메서드
+    /// </summary>
+    [Server]
+    private void BuildNonRoom(NonRoomType nonRoomType, Vector2Int coordinate)
+    {
+        GameObject nonRoomObject = Instantiate(NonRoomPrefab, FromBasisIntCoordinates(coordinate), Quaternion.identity);
+        NetworkServer.Spawn(nonRoomObject);
+
+        // 생성 후 방 데이터 공유
+        RpcOnBuildNewNonRoom(coordinate, nonRoomObject.GetComponent<NonRoom>());
+    }
+
+    /// <summary>
     /// 방 오브젝트 생성 후 모든 클라이언트에 방 관련 데이터 공유
     /// </summary>
     [ClientRpc]
@@ -180,6 +262,13 @@ public class BuildManager : NetworkBehaviour
     {
         // 추후 최적화를 위해서 풀링을 사용하는 것이 좋을 것 같음. 일단은 임시니까 깡으로 객체 생성
         AddRoomData(coordinate, roomObject.GetComponent<Room>());
+    }
+
+    [ClientRpc]
+    private void RpcOnBuildNewNonRoom(Vector2Int coordinate, NonRoom nonRoomObject)
+    {
+        // 추후 최적화를 위해서 풀링을 사용하는 것이 좋을 것 같음. 일단은 임시니까 깡으로 객체 생성
+        AddNonRoomData(coordinate, nonRoomObject);
     }
 
     public void AddRoomData(Vector2Int coordinate, Room room)
@@ -192,6 +281,15 @@ public class BuildManager : NetworkBehaviour
             Debug.LogWarning("Data already exists at the specified coordinates. Please check the room placement code again.");
         }
     }
+
+    public void AddNonRoomData(Vector2Int coordinate, NonRoom nonRoom)
+    {
+        if (!worldNonRoomData.TryAdd(coordinate, nonRoom))
+        {
+            Debug.LogWarning("Data already exists at the specified coordinates. Please check the room placement code again.");
+        }
+    }
+
     #endregion
 
     #region Delete Room
@@ -202,14 +300,18 @@ public class BuildManager : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdDeleteRoom(Vector2Int coordinate)
     {
-        if (!worldRoomData.TryGetValue(coordinate, out Room room))
+        if (worldNonRoomData.TryGetValue(coordinate, out NonRoom nonRoom))
         {
-            Debug.LogWarning($"There is no room at the specified coordinates.");
-            return;
+            DeleteNonRoom(coordinate);
+        }
+        else if (worldRoomData.TryGetValue(coordinate, out Room room))
+        {
+            DeleteRoom(coordinate);
         }
         else
         {
-            DeleteRoom(coordinate);
+            Debug.LogWarning($"There is no room at the specified coordinates.");
+            return;
         }
     }
 
@@ -224,6 +326,13 @@ public class BuildManager : NetworkBehaviour
         RpcOnDeleteRoom(coordinate);
     }
 
+    [Server]
+    private void DeleteNonRoom(Vector2Int coordinate)
+    {
+        // 제거 후 방 데이터 공유
+        RpcOnDeleteNonRoom(coordinate);
+    }
+
     /// <summary>
     /// 해당 좌표에 방이 있는지 확인 후 모든 클라이언트에서 방을 삭제
     /// </summary>
@@ -235,6 +344,17 @@ public class BuildManager : NetworkBehaviour
         RemoveRoomData(coordinate);
         DestroyRoomObject(room.gameObject);
     }
+    /// <summary>
+    /// 모든 클라이언트에서 NonRoom 삭제
+    /// </summary>
+    [ClientRpc]
+    private void RpcOnDeleteNonRoom(Vector2Int coordinate)
+    {
+        worldNonRoomData.TryGetValue(coordinate, out NonRoom nonRoom);
+        Debug.Log($"Deleting {nonRoom} of the non-room at coordinates {coordinate}.");
+        RemoveNonRoomData(coordinate);
+        DestroyRoomObject(nonRoom.gameObject);
+    }
 
     private bool RemoveRoomData(Vector2Int coordinate)
     {
@@ -245,6 +365,19 @@ public class BuildManager : NetworkBehaviour
         else
         {
             Debug.LogWarning("There is no room at the specified coordinates, so it cannot be deleted.");
+            return false;
+        }
+    }
+
+    private bool RemoveNonRoomData(Vector2Int coordinate)
+    {
+        if (worldNonRoomData.Remove(coordinate))
+        {
+            return true;
+        }
+        else
+        {
+            Debug.LogWarning("There is no non-room at the specified coordinates, so it cannot be deleted.");
             return false;
         }
     }
@@ -273,7 +406,7 @@ public class BuildManager : NetworkBehaviour
     public Vector2Int ToBasisIntCoordinates(Vector2 vec)
     {
         return new Vector2Int(
-            (int)((vec.x < 0 ? vec.x - roomUnitSize.x : vec.x) / roomUnitSize.x), 
+            (int)((vec.x < 0 ? vec.x - roomUnitSize.x : vec.x) / roomUnitSize.x),
             (int)((vec.y < 0 ? vec.y - roomUnitSize.y : vec.y) / roomUnitSize.y));
     }
 
