@@ -159,7 +159,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2622172829123674075}
-  - component: {fileID: 1068425603058742491}
+  - component: {fileID: -5902336278570950250}
   - component: {fileID: 4618893763323612109}
   m_Layer: 0
   m_Name: TestRoomBase
@@ -185,7 +185,7 @@ Transform:
   - {fileID: 7182390976408915361}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1068425603058742491
+--- !u!114 &-5902336278570950250
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -194,12 +194,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 5690240786786780139}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c023bf44adf2b1e4ba25ace592c0e2f7, type: 3}
+  m_Script: {fileID: 11500000, guid: ff508e78a170bcc458195e21af014a32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  RoomName: 
+  RoomSprite: {fileID: -1181574754, guid: dbf65a0a636d67e43ad1561395889de6, type: 3}
+  RequiredItems: []
+  roomSize: {x: 1, y: 1}
 --- !u!114 &4618893763323612109
 MonoBehaviour:
   m_ObjectHideFlags: 0
