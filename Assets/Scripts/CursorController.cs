@@ -9,16 +9,32 @@ public class CursorController : MonoBehaviour
 
     [Header("Cursor Sprites")]
     [SerializeField] private GameObject ableSprite;
+    [SerializeField] private GameObject placableSprite;
     [SerializeField] private GameObject unableSprite;
 
     private bool isBuildMode = false;
+    private bool isPlaceMode = false; // 건설 모드인지 배치 모드인지 구분하는 변수
 
     private void Update()
     {
-        //임시로 'B'를 누르면 건설모드로 들어가도록
+        //임시로 'B'를 모드 전환 되도록
         if (Input.GetKeyDown(KeyCode.B))
         {
-            isBuildMode = !isBuildMode;
+            if (isBuildMode)
+            {
+                isBuildMode = false;
+                isPlaceMode = true;
+            }
+            else if (isPlaceMode)
+            {
+                isPlaceMode = false;
+                isBuildMode = false;
+            }
+            else
+            {
+                isBuildMode = true;
+                isPlaceMode = false;
+            }
         }
 
         if (isBuildMode)
@@ -34,8 +50,23 @@ public class CursorController : MonoBehaviour
 
             DrawCursor();
         }
-        else if (!isBuildMode && (ableSprite.activeSelf || unableSprite.activeSelf))
+        if (isPlaceMode)
         {
+            if (Input.GetMouseButtonDown(0))
+            {
+                // 일단 사다리만
+                BuildManager.Instance.CmdBuildNonRoom(cursorCoordinate, NonRoomType.ladder);
+            }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                BuildManager.Instance.CmdBuildNonRoom(cursorCoordinate, NonRoomType.pipe);
+            }
+
+            DrawCursor();
+        }
+        else if (!isBuildMode && !isPlaceMode && (ableSprite.activeSelf || unableSprite.activeSelf || placableSprite.activeSelf))
+        {
+            // 모드가 아닐 때 커서 비활성화
             SetCursorSprite(false);
         }
     }
@@ -62,20 +93,41 @@ public class CursorController : MonoBehaviour
     {
         if (willDrawSprite)
         {
-            if (BuildManager.Instance.CanBuildRoom(cursorCoordinate) && (!ableSprite.activeSelf || unableSprite.activeSelf))
+            if (isBuildMode)
             {
-                ableSprite.SetActive(true);
-                unableSprite.SetActive(false);
+                if (BuildManager.Instance.CanBuildRoom(cursorCoordinate) && (!ableSprite.activeSelf || unableSprite.activeSelf))
+                {
+                    ableSprite.SetActive(true);
+                    placableSprite.SetActive(false);
+                    unableSprite.SetActive(false);
+                }
+                else if (!BuildManager.Instance.CanBuildRoom(cursorCoordinate) && (!unableSprite.activeSelf || ableSprite.activeSelf))
+                {
+                    ableSprite.SetActive(false);
+                    placableSprite.SetActive(false);
+                    unableSprite.SetActive(true);
+                }
             }
-            else if (!BuildManager.Instance.CanBuildRoom(cursorCoordinate) && (!unableSprite.activeSelf || ableSprite.activeSelf))
+            else if (isPlaceMode)
             {
-                ableSprite.SetActive(false);
-                unableSprite.SetActive(true);
+                if (BuildManager.Instance.CanBuildLadder(cursorCoordinate) && (!ableSprite.activeSelf || unableSprite.activeSelf))
+                {
+                    placableSprite.SetActive(true);
+                    ableSprite.SetActive(false);
+                    unableSprite.SetActive(false);
+                }
+                else if (!BuildManager.Instance.CanBuildLadder(cursorCoordinate) && (!unableSprite.activeSelf || ableSprite.activeSelf))
+                {
+                    placableSprite.SetActive(false);
+                    ableSprite.SetActive(false);
+                    unableSprite.SetActive(true);
+                }
             }
         }
         else
         {
             ableSprite.SetActive(false);
+            placableSprite.SetActive(false);
             unableSprite.SetActive(false);
         }
     }

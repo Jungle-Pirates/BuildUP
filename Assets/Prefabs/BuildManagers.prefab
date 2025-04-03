@@ -54,8 +54,17 @@ MonoBehaviour:
   foundationMaxHeights: 0300000005000000070000000a000000
   worldRoomData:
     keys: []
+    values: []
   testRoomObject: {fileID: 931010438534537263, guid: d2fa3a010cd17964bb085612637ce7ec, type: 3}
   testFoundationObject: {fileID: 6461169920956429484, guid: fcafbcaa507591f47987c96e0253c689, type: 3}
+  LadderPrefab: {fileID: 5690240786786780139, guid: 3c748d1175f92af43990f55ce06bce96, type: 3}
+  PipePrefab: {fileID: 5690240786786780139, guid: 9c808b7186405a84292d88a68fa2f7df, type: 3}
+  worldLadderData:
+    keys: []
+    values: []
+  worldPipeData:
+    keys: []
+    values: []
 --- !u!114 &1542805017527539659
 MonoBehaviour:
   m_ObjectHideFlags: 0

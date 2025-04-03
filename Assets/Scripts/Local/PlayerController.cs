@@ -17,6 +17,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] float m_speed = 4.0f;
     [SerializeField] float m_jumpForce = 7.5f;
     [SerializeField] float m_rollForce = 6.0f;
+    [SerializeField] float m_climbSpeed = 4.0f;
     [SerializeField] bool m_noBlood = false;
     [SerializeField] GameObject m_slideDust;
 
@@ -37,6 +38,8 @@ public class PlayerController : NetworkBehaviour
     private float m_delayToIdle = 0.0f;
     private float m_rollDuration = 8.0f / 14.0f;
     private float m_rollCurrentTime;
+    private int overlappingLadderCount = 0; // 플레이어가 사다리와 겹친횟수 0보다 크면 사다리 위에 있음
+    private float vertical;
 
     [Header("도구 사용")]
     public GameObject attackPoint;  //공격 범위 판정용 오브젝트 
@@ -255,6 +258,23 @@ public class PlayerController : NetworkBehaviour
             if (m_delayToIdle < 0)
                 m_animator.SetInteger("AnimState", 0);
         }
+        //Climb
+        if (overlappingLadderCount > 0)
+        {
+            vertical = Input.GetAxisRaw("Vertical"); // W, S 또는 ↑, ↓ 키 감지
+        }
+    }
+    void FixedUpdate()
+    {
+        if (overlappingLadderCount > 0)
+        {
+            m_body2d.velocity = new Vector2(m_body2d.velocity.x, vertical * m_climbSpeed);
+            m_body2d.gravityScale = 0f; // 중력 제거 (사다리에서 부드럽게 이동)
+        }
+        else
+        {
+            m_body2d.gravityScale = 1f; // 다시 원래 중력 복구
+        }
     }
 
     /// <summary>
@@ -288,7 +308,7 @@ public class PlayerController : NetworkBehaviour
     }
 
     /// <summary>
-    /// ���� ���� ���� ������ ��ȯ : �ڿ� ������Ʈ�� ȣ��
+    /// ���� ���� ���� ������ ��ȯ : �ڿ� ������Ʈ�� ȣ��
     /// </summary>
     public Item GetEquippedItem()
     {
@@ -313,4 +333,26 @@ public class PlayerController : NetworkBehaviour
         attackPoint.SetActive(false);
     }
     */
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Monster"))
+        {
+            // 공격 판정
+            //collision.GetComponent<Enemy>().TakeDamage(10);
+            //StartCoroutine(AttackPointEnable());
+        }
+        if (collision.CompareTag("Ladder"))
+        {
+            overlappingLadderCount++;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Ladder"))
+        {
+            overlappingLadderCount--;
+        }
+    }
+
 }

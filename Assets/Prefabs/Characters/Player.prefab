@@ -187,6 +187,7 @@ MonoBehaviour:
   m_speed: 4
   m_jumpForce: 10
   m_rollForce: 6
+  m_climbSpeed: 4
   m_noBlood: 0
   m_slideDust: {fileID: 1038168246061390451, guid: 8b8c8cc6774fb074cb9139cc631b108e, type: 3}
   attackPoint: {fileID: 7523769605810076268}
@@ -747,7 +748,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1991432749103157228
 Transform:
   m_ObjectHideFlags: 0
