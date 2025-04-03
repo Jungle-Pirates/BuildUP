@@ -2583,7 +2583,6 @@ MonoBehaviour:
   - {fileID: 5465408349737334575, guid: 21b9337de44b78441af262631cb4b4bd, type: 3}
   - {fileID: 5465408349737334575, guid: 4e2e4a8d7957c814aa5394743ab6e1bf, type: 3}
   - {fileID: 4328445041376920398, guid: a64739c261b43b94b91f5404049e9d90, type: 3}
-  - {fileID: 1516130435472132554, guid: 6ce5c7b5d09dcec4881f6db476d69ef1, type: 3}
   - {fileID: 5465408349737334575, guid: 3b9b1a800feeb874984994695464f392, type: 3}
   - {fileID: 1106276074698760010, guid: dbcddb2477526ad4887e339a78df6bfe, type: 3}
   - {fileID: 6461169920956429484, guid: fcafbcaa507591f47987c96e0253c689, type: 3}
@@ -4953,6 +4952,63 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 652459729977316115, guid: 7871b14167e703d45a1899281ed7ed47, type: 3}
   m_PrefabInstance: {fileID: 1367302459}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1444118339
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1444118340}
+  - component: {fileID: 1444118341}
+  m_Layer: 0
+  m_Name: CraftingManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1444118340
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1444118339}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.1062005, y: -12.601926, z: -0.32053232}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1444118341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1444118339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f4a40d219d628d4d9fc811061c436a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recipes:
+  - {fileID: 11400000, guid: f676e12e752b97d43a758f210fe88ee1, type: 2}
+  - {fileID: 11400000, guid: 473ebc1c5dbf3a644ab345d4403b1e52, type: 2}
+  - {fileID: 11400000, guid: 35b0569a4a402c94e82b1073bc719fa2, type: 2}
+  - {fileID: 11400000, guid: e6aec1e99f5ec2847b5d8e35c55c3a2f, type: 2}
+  - {fileID: 11400000, guid: 66b04d5f74a5bae4588353d227834ced, type: 2}
+  - {fileID: 11400000, guid: c410472ad4b36b548ab4dbf4dc348446, type: 2}
+  - {fileID: 11400000, guid: adc9618f634855444bb1f3de7c177fde, type: 2}
+  - {fileID: 11400000, guid: 09b05413bc7e00949ba6a03bce49d56c, type: 2}
+  - {fileID: 11400000, guid: 448e83ba9c9acee4386da1a5104d7a5a, type: 2}
+  - {fileID: 11400000, guid: 055d46d8a7713ef4ca5ff035438002a6, type: 2}
+  - {fileID: 11400000, guid: 5df355d03a9f93b44b1a50a7a456283d, type: 2}
+  - {fileID: 11400000, guid: f9ba88b5be1b35c4ebb6f427c27932ac, type: 2}
 --- !u!1 &1539844098
 GameObject:
   m_ObjectHideFlags: 0
@@ -6634,6 +6690,7 @@ SceneRoots:
   - {fileID: 1658348809}
   - {fileID: 1054727745}
   - {fileID: 1206266857}
+  - {fileID: 1444118340}
   - {fileID: 1353921921}
   - {fileID: 1032368911}
   - {fileID: 2108413890}
