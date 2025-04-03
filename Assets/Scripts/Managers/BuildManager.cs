@@ -113,7 +113,7 @@ public class BuildManager : NetworkBehaviour
         if (!worldRoomData.TryGetValue(coordinate + Vector2Int.down, out Room belowRoom))
             return false;
         else
-            return belowRoom.Data.IsConnectedWithFoundation;
+            return belowRoom.IsConnectedWithFoundation;
     }
 
     #endregion
@@ -179,23 +179,18 @@ public class BuildManager : NetworkBehaviour
     private void RpcOnBuildNewRoom(Vector2Int coordinate, GameObject roomObject)
     {
         // 추후 최적화를 위해서 풀링을 사용하는 것이 좋을 것 같음. 일단은 임시니까 깡으로 객체 생성
-        AddRoomData(coordinate, new Room(new RoomData(), roomObject.GetComponent<RoomEntity>()));
+        AddRoomData(coordinate, roomObject.GetComponent<Room>());
     }
 
     public void AddRoomData(Vector2Int coordinate, Room room)
     {
         // 추후 지지대가 추가되면 조건을 더 추가해줘야 함
-        room.Data.SetRoomData(Vector2Int.one, true);
+        room.SetRoomData(Vector2Int.one, true);
 
         if (!worldRoomData.TryAdd(coordinate, room))
         {
             Debug.LogWarning("Data already exists at the specified coordinates. Please check the room placement code again.");
         }
-    }
-
-    public void AddRoomData(Vector2Int coordinate, RoomData data, RoomEntity entity)
-    {
-        AddRoomData(coordinate, new Room(data, entity));
     }
     #endregion
 
@@ -236,9 +231,9 @@ public class BuildManager : NetworkBehaviour
     private void RpcOnDeleteRoom(Vector2Int coordinate)
     {
         worldRoomData.TryGetValue(coordinate, out Room room);
-        Debug.Log($"Deleting {room.Data} of the room at coordinates {coordinate}.");
+        Debug.Log($"Deleting {room} of the room at coordinates {coordinate}.");
         RemoveRoomData(coordinate);
-        DestroyRoomObject(room.Entity.gameObject);
+        DestroyRoomObject(room.gameObject);
     }
 
     private bool RemoveRoomData(Vector2Int coordinate)
