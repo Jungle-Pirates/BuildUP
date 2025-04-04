@@ -8,12 +8,12 @@ using UnityEngine;
 public class ResourceRespawnManager : Singleton<ResourceRespawnManager>
 {
     [Header("리스폰 시간 설정 (초)")]
-    [SerializeField] private float respawnDelayMin = 5f;
-    [SerializeField] private float respawnDelayMax = 6f;
+    [SerializeField] private float respawnDelayMin = 180f;
+    [SerializeField] private float respawnDelayMax = 240f;
 
     [Header("몬스터 리스폰 시간 설정 (초)")]
-    [SerializeField] private float monsterRespawnMin = 5f;
-    [SerializeField] private float monsterRespawnMax = 6f;
+    [SerializeField] private float monsterRespawnMin = 30f;
+    [SerializeField] private float monsterRespawnMax = 45f;
 
     /// <summary>
     /// 자원 객체의 리스폰을 요청받는 함수

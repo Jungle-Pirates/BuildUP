@@ -870,10 +870,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e19616a6a3fbf418789788bdd6c004, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  respawnDelayMin: 5
-  respawnDelayMax: 6
-  monsterRespawnMin: 10
-  monsterRespawnMax: 15
+  respawnDelayMin: 180
+  respawnDelayMax: 240
+  monsterRespawnMin: 30
+  monsterRespawnMax: 45
 --- !u!4 &567763713
 Transform:
   m_ObjectHideFlags: 0
