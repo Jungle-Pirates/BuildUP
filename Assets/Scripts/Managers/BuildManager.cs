@@ -22,6 +22,7 @@ public class BuildManager : NetworkBehaviour
     [Header("Room Coordinate")]
     [Tooltip("Data of the room constructed at the coordinates. The foundation can only be built at y: 0.")]
     [SerializeField] private SyncDictionary<Vector2Int, GameObject> worldRoomData = new SyncDictionary<Vector2Int, GameObject>();
+    public SyncDictionary<Vector2Int, GameObject> WorldRoomData => worldRoomData;
 
     [SerializeField] private GameObject testFoundationObject;
     private bool _isBuildMode = false;

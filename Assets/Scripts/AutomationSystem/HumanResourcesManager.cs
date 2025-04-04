@@ -75,15 +75,40 @@ public class HumanResourcesManager : Singleton<HumanResourcesManager>
         }
     }
     
+    private void CalculateClusterBonuses()
+    {
+        for (int i = 0; i < clusters.Count; i++)
+        {
+            List<ResidentialRoom> cluster = clusters[i];
+            int clusterSize = cluster.Count;
+            
+            // 기본 일꾼 수 (각 주거지마다 1명)
+            int baseWorkers = clusterSize;
+            
+            // 클러스터 크기에 따른 보너스 (한 클러스터당 한 번만 적용)
+            int bonus = 0;
+            if (clusterSize >= 15) bonus = 5;
+            else if (clusterSize >= 14) bonus = 4;
+            else if (clusterSize >= 12) bonus = 3;
+            else if (clusterSize >= 9) bonus = 2;
+            else if (clusterSize >= 5) bonus = 1;
+            
+            // 클러스터 총 일꾼 수
+            clusterTotalWorkers[i] = baseWorkers + bonus;
+            
+            Debug.Log($"주거지 클러스터 {i}: 크기={clusterSize}, 기본 일꾼={baseWorkers}, 보너스={bonus}, 총={totalWorkers}");
+        }
+    }
+    
     public void UpdateTotalWorkers()
     {
         int previousTotal = totalWorkers;
         totalWorkers = 0;
 
-        // 모든 주거지에서 제공하는 일꾼 수 계산
-        foreach (ResidentialRoom residence in allResidences)
+        // 모든 주거지 클러스터에서 제공하는 일꾼 수 계산
+        foreach (int workers in clusterTotalWorkers)
         {
-            totalWorkers += residence.GetTotalProvidedWorkers();
+            totalWorkers += workers;
         }
 
         // 새로 획득한/잃은 일꾼 수 계산
@@ -174,6 +199,7 @@ public class HumanResourcesManager : Singleton<HumanResourcesManager>
     }
     
     // 우선순위에 따라 일꾼 재분배
+    /*
     public void ReassignWorkersByPriority()
     {
         // 모든 방에서 일꾼 회수
@@ -199,14 +225,23 @@ public class HumanResourcesManager : Singleton<HumanResourcesManager>
         
         UpdateWorkerUI();
     }
+    */
     
     // UI 업데이트
     private void UpdateWorkerUI()
     {
+        int usedWorkers = 0;
+        foreach (Room room in assignedRooms)
+        {
+            usedWorkers += room.currentWorkers;
+        }
+        Debug.Log($"전체 일꾼: {totalWorkers}, 일 하는 중: {usedWorkers}, 대기 중: {availableWorkers}");
+        /*
         // UI 업데이트 로직
         if (WorkerManagementUI.instance != null)
         {
             WorkerManagementUI.instance.UpdateUI();
         }
+        */
     }
 }

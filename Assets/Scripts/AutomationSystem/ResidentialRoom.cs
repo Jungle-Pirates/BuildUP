@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ResidentialRoom : MonoBehaviour
@@ -7,6 +8,10 @@ public class ResidentialRoom : MonoBehaviour
     // 이 주거지가 제공하는 일꾼 수
     public int providedWorkers = 1;
 
+    public List<ResidentialRoom> adjacentResidences = new List<ResidentialRoom>();
+
+    public Vector2Int coordinate = Vector2Int.zero; // **향후 수정 필요 Room 클래스의 좌표 받아오기**
+    
     // 주거지가 속한 클러스터 아이디
     public int clusterId;
 
@@ -39,25 +44,18 @@ public class ResidentialRoom : MonoBehaviour
         adjacentResidences.Clear();
 
         // 상, 하, 좌, 우 방향의 인접 셀 확인
-        Vector2Int[] directions = new Vector2Int[]
+        Vector2Int[] adjacentCoordinates = new Vector2Int[]
         {
-            new Vector2Int(0, 1), // 상
-            new Vector2Int(0, -1), // 하
-            new Vector2Int(-1, 0), // 좌
-            new Vector2Int(1, 0) // 우
+            coordinate + Vector2Int.up,
+            coordinate + Vector2Int.down,
+            coordinate + Vector2Int.left,
+            coordinate + Vector2Int.right
         };
 
-        Vector2Int currentPos = new Vector2Int(
-            Mathf.RoundToInt(transform.position.x),
-            Mathf.RoundToInt(transform.position.y)
-        );
-
-        foreach (Vector2Int dir in directions)
+        foreach (Vector2Int adj in adjacentCoordinates)
         {
-            Vector2Int checkPos = currentPos + dir;
-
             // 게임 로직에 맞게 인접 셀의 주거지 확인 방법 구현
-            ResidentialRoom adjRoom = FindResidenceAtPosition(checkPos);
+            ResidentialRoom adjRoom = FindResidenceAtPosition(adj);
             if (adjRoom != null)
             {
                 adjacentResidences.Add(adjRoom);
@@ -65,11 +63,14 @@ public class ResidentialRoom : MonoBehaviour
         }
     }
 
-    // 특정 위치의 주거지 찾기 (구현이 필요함)
-    private ResidentialRoom FindResidenceAtPosition(Vector2Int pos)
+    private ResidentialRoom FindResidenceAtPosition(Vector2Int adjCoordinate)
     {
-        // 탑 구조와 맞게 구현 필요
-        return null; // 임시 반환값
+        if (BuildManager.Instance.WorldRoomData.TryGetValue(adjCoordinate, out GameObject room))
+        {
+            return room.GetComponent<ResidentialRoom>();
+        }
+        
+        return null;
     }
 
     // 인접 주거지들에게 변경 사항 알림
@@ -79,29 +80,5 @@ public class ResidentialRoom : MonoBehaviour
         {
             room.FindAdjacentResidences();
         }
-    }
-
-    // 인접 주거지 수에 따른 보너스 일꾼 계산
-    public int CalculateBonusWorkers()
-    {
-        int adjacentCount = adjacentResidences.Count;
-
-        // 인접 주거지 개수에 따른 보너스 계산
-        // 5, 9, 12, 14, 15개 일 때마다 보너스 1 추가
-        int bonus = 0;
-        if (adjacentCount >= 15) bonus = 5;
-        else if (adjacentCount >= 14) bonus = 4;
-        else if (adjacentCount >= 12) bonus = 3;
-        else if (adjacentCount >= 9) bonus = 2;
-        else if (adjacentCount >= 5) bonus = 1;
-
-        bonusWorkers = bonus;
-        return bonus;
-    }
-
-    // 이 주거지가 제공하는 총 일꾼 수 계산
-    public int GetTotalProvidedWorkers()
-    {
-        return providedWorkers + CalculateBonusWorkers();
     }
 }
