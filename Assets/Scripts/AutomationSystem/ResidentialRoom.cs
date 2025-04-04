@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class ResidentialRoom : MonoBehaviour
+public class ResidentialRoom : Room
 {
     // 이 주거지가 제공하는 일꾼 수
     public int providedWorkers = 1;
 
     public List<ResidentialRoom> adjacentResidences = new List<ResidentialRoom>();
-
-    public Vector2Int coordinate = Vector2Int.zero; // **향후 수정 필요 Room 클래스의 좌표 받아오기**
     
     // 주거지가 속한 클러스터 아이디
     public int clusterId;
@@ -46,10 +44,10 @@ public class ResidentialRoom : MonoBehaviour
         // 상, 하, 좌, 우 방향의 인접 셀 확인
         Vector2Int[] adjacentCoordinates = new Vector2Int[]
         {
-            coordinate + Vector2Int.up,
-            coordinate + Vector2Int.down,
-            coordinate + Vector2Int.left,
-            coordinate + Vector2Int.right
+            RoomPosition + Vector2Int.up,
+            RoomPosition + Vector2Int.down,
+            RoomPosition + Vector2Int.left,
+            RoomPosition + Vector2Int.right
         };
 
         foreach (Vector2Int adj in adjacentCoordinates)

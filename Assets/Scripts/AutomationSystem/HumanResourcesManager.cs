@@ -157,7 +157,7 @@ public class HumanResourcesManager : Singleton<HumanResourcesManager>
             availableWorkers += count;
             
             // 일꾼이 없어지면 리스트에서 제거
-            if (room.currentWorkers == 0)
+            if (room.CurrentWorkers == 0)
             {
                 assignedRooms.Remove(room);
             }
@@ -178,7 +178,7 @@ public class HumanResourcesManager : Singleton<HumanResourcesManager>
         for (int i = 0; i < assignedRooms.Count && remainingToRecover > 0; i++)
         {
             Room room = assignedRooms[i];
-            int workerToRemove = Mathf.Min(remainingToRecover, room.currentWorkers);
+            int workerToRemove = Mathf.Min(remainingToRecover, room.CurrentWorkers);
             
             if (workerToRemove > 0)
             {
@@ -186,7 +186,7 @@ public class HumanResourcesManager : Singleton<HumanResourcesManager>
                 remainingToRecover -= workerToRemove;
                 
                 // 모든 일꾼이 제거되면 리스트에서 제거
-                if (room.currentWorkers == 0)
+                if (room.CurrentWorkers == 0)
                 {
                     assignedRooms.Remove(room);
                     i--; // 리스트 변경에 따른 인덱스 조정
@@ -233,7 +233,7 @@ public class HumanResourcesManager : Singleton<HumanResourcesManager>
         int usedWorkers = 0;
         foreach (Room room in assignedRooms)
         {
-            usedWorkers += room.currentWorkers;
+            usedWorkers += room.CurrentWorkers;
         }
         Debug.Log($"전체 일꾼: {totalWorkers}, 일 하는 중: {usedWorkers}, 대기 중: {availableWorkers}");
         /*
