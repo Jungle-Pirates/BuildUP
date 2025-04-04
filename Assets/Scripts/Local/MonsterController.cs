@@ -179,6 +179,12 @@ public class MonsterController : NetworkBehaviour
     private float currentActionTime = 0f; // 현재 행동 시간
     private float maxActionTime = 0f; // 최대 행동 시간
 
+    [ClientRpc]
+    private void RpcSetActive(bool isActive)
+    {
+        gameObject.SetActive(isActive);
+    }
+
     /// <summary>
     /// 로컬 데이터 초기화 할때 사용
     /// </summary>
@@ -273,9 +279,47 @@ public class MonsterController : NetworkBehaviour
             // 아이템 드롭
             DropItem();
 
+            // 서버에서만 처리
+            if (isServer)
+            {
+                // 오브젝트 비활성화 (서버에서 실행되면 클라에도 반영됨)
+                RpcSetActive(false);
+
+                // 리스폰 요청
+                ResourceRespawnManager.Instance.RequestMonsterRespawn(gameObject);
+            }
+
             // 생명체 오브젝트 파괴
-            NetworkResourceManager.Instance.DestroyMonster(gameObject);
+            //NetworkResourceManager.Instance.DestroyMonster(gameObject);
         }
+    }
+
+    [Server]
+    public void ResetMonster()
+    {
+        currentHealth = fullHealth;
+
+        healthBar.fillAmount = 1; // 체력바 초기화
+        if (healthBar != null)
+        {
+            healthBarBG.SetActive(false); // 시작 시 체력바 비활성화
+        }
+        /*
+        if (isServer)
+        {
+            DecideNextAction(); // 서버에서 몬스터 행동 결정
+        }
+        */
+        // 필요하다면 위치도 초기화
+        // transform.position = spawnPoint;
+
+        if (animator != null)
+        {
+            animator.Rebind();  // 애니메이션 초기화
+            animator.Update(0f);
+        }
+
+        RpcSetActive(true); // 클라이언트들도 활성화
     }
 
     /// <summary>
