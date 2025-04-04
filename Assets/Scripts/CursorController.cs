@@ -12,32 +12,9 @@ public class CursorController : MonoBehaviour
     [SerializeField] private GameObject placableSprite;
     [SerializeField] private GameObject unableSprite;
 
-    private bool isBuildMode = false;
-    private bool isPlaceMode = false; // 건설 모드인지 배치 모드인지 구분하는 변수
-
     private void Update()
     {
-        //임시로 'B'를 모드 전환 되도록
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            if (isBuildMode)
-            {
-                isBuildMode = false;
-                isPlaceMode = true;
-            }
-            else if (isPlaceMode)
-            {
-                isPlaceMode = false;
-                isBuildMode = false;
-            }
-            else
-            {
-                isBuildMode = true;
-                isPlaceMode = false;
-            }
-        }
-
-        if (isBuildMode)
+        if (BuildManager.Instance.IsBuildMode)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -50,7 +27,7 @@ public class CursorController : MonoBehaviour
 
             DrawCursor();
         }
-        if (isPlaceMode)
+        if (BuildManager.Instance.IsPlaceMode)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -64,7 +41,7 @@ public class CursorController : MonoBehaviour
 
             DrawCursor();
         }
-        else if (!isBuildMode && !isPlaceMode && (ableSprite.activeSelf || unableSprite.activeSelf || placableSprite.activeSelf))
+        else if (!BuildManager.Instance.IsBuildMode && !BuildManager.Instance.IsPlaceMode && (ableSprite.activeSelf || unableSprite.activeSelf || placableSprite.activeSelf))
         {
             // 모드가 아닐 때 커서 비활성화
             SetCursorSprite(false);
@@ -93,7 +70,7 @@ public class CursorController : MonoBehaviour
     {
         if (willDrawSprite)
         {
-            if (isBuildMode)
+            if (BuildManager.Instance.IsBuildMode)
             {
                 if (BuildManager.Instance.CanBuildRoom(cursorCoordinate) && (!ableSprite.activeSelf || unableSprite.activeSelf))
                 {
@@ -108,7 +85,7 @@ public class CursorController : MonoBehaviour
                     unableSprite.SetActive(true);
                 }
             }
-            else if (isPlaceMode)
+            else if (BuildManager.Instance.IsPlaceMode)
             {
                 if (BuildManager.Instance.CanBuildLadder(cursorCoordinate) && (!ableSprite.activeSelf || unableSprite.activeSelf))
                 {

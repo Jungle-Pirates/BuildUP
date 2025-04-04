@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7910405977603589519}
   - component: {fileID: 2374954460994875353}
+  - component: {fileID: 3553199788521400148}
   - component: {fileID: 1542805017527539659}
   m_Layer: 0
   m_Name: BuildManagers
@@ -52,19 +53,27 @@ MonoBehaviour:
   roomUnitSize: {x: 4, y: 3}
   currentFoundationLevel: 0
   foundationMaxHeights: 0300000005000000070000000a000000
-  worldRoomData:
-    keys: []
-    values: []
-  testRoomObject: {fileID: 931010438534537263, guid: d2fa3a010cd17964bb085612637ce7ec, type: 3}
   testFoundationObject: {fileID: 6461169920956429484, guid: fcafbcaa507591f47987c96e0253c689, type: 3}
+  buildUI: {fileID: 0}
   LadderPrefab: {fileID: 5690240786786780139, guid: 3c748d1175f92af43990f55ce06bce96, type: 3}
   PipePrefab: {fileID: 5690240786786780139, guid: 9c808b7186405a84292d88a68fa2f7df, type: 3}
-  worldLadderData:
-    keys: []
-    values: []
-  worldPipeData:
-    keys: []
-    values: []
+--- !u!114 &3553199788521400148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9151725661775615831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac8372fbb17ed5445bab9e8a6678ca80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Rooms:
+  - {fileID: 8627888066419482477, guid: 144e01945b248404298f4250b3bbf5d3, type: 3}
+  - {fileID: 8627888066419482477, guid: e5b4edfbb8c23c448bfe7e835dce80b7, type: 3}
+  - {fileID: 8627888066419482477, guid: d2ec85cc303dd584898decaab8e6ff98, type: 3}
+  - {fileID: 8627888066419482477, guid: 18c8b54e168921f42adf6816c661ff3c, type: 3}
 --- !u!114 &1542805017527539659
 MonoBehaviour:
   m_ObjectHideFlags: 0

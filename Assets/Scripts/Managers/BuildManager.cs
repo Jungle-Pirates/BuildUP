@@ -23,8 +23,16 @@ public class BuildManager : NetworkBehaviour
     [Tooltip("Data of the room constructed at the coordinates. The foundation can only be built at y: 0.")]
     [SerializeField] private SyncDictionary<Vector2Int, GameObject> worldRoomData = new SyncDictionary<Vector2Int, GameObject>();
 
-    [SerializeField] private GameObject testRoomObject;
     [SerializeField] private GameObject testFoundationObject;
+    private bool _isBuildMode = false;
+    public bool IsBuildMode { get { return _isBuildMode; } }
+    private bool _isPlaceMode = false;
+    public bool IsPlaceMode { get { return _isPlaceMode; } }
+
+    private Room _selectRoom;
+
+    [Header("UI")]
+    [SerializeField] private GameObject buildUI;
 
     [Header("설치물 데이터")]
     [Tooltip("설치물 프리팹")]
@@ -35,6 +43,7 @@ public class BuildManager : NetworkBehaviour
     [Tooltip("수로 위치 데이터")]
     [SerializeField] private SyncDictionary<Vector2Int, GameObject> worldPipeData = new SyncDictionary<Vector2Int, GameObject>();
 
+    #region Monobehavior
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -48,12 +57,58 @@ public class BuildManager : NetworkBehaviour
         {
             cursorController = FindFirstObjectByType<CursorController>();
         }
+        if (buildUI == null)
+        {
+            buildUI = FindAnyObjectByType<BuildUI>().gameObject;
+        }
     }
 
     private void Start()
     {
         cursorController.SetCursorSize(roomUnitSize);
+        SetSelectedRoom(BuildUpgradeManager.Instance.Rooms[0].GetComponent<Room>());
     }
+
+    private void Update()
+    {
+        //임시로 'B'를 누르면 건설모드로 들어가도록
+        //임시로 'B'를 모드 전환 되도록
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            if (_isBuildMode)
+            {
+                _isBuildMode = false;
+                _isPlaceMode = true;
+            }
+            else if (_isPlaceMode)
+            {
+                _isPlaceMode = false;
+                _isBuildMode = false;
+            }
+            else
+            {
+                _isBuildMode = true;
+                _isPlaceMode = false;
+            }
+        }
+
+        if (buildUI != null)
+        {
+            if (_isBuildMode)
+            {
+                buildUI.SetActive(true);
+            }
+            else
+            {
+                buildUI.SetActive(false);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("There is no Build UI in the current scene.");
+        }
+    }
+    #endregion
 
     /// <summary>
     /// 방의 유닛 사이즈 변경 시 호출되는 함수
@@ -63,7 +118,7 @@ public class BuildManager : NetworkBehaviour
         cursorController.SetCursorSize(newSize);
     }
 
-    #region Methods to check Room placement availability
+    #region Check Room placement availability
 
     /// <summary>
     /// A method that returns whether a building can be placed at the given coordinates.
@@ -152,6 +207,20 @@ public class BuildManager : NetworkBehaviour
             return false;
     }
 
+    /// <summary>
+    /// 해당하는 방을 설치할 수 있는 자원을 가지고 있는가를 반환
+    /// </summary>
+    /// <returns>true: 자원 충분, false: 자원 부족</returns>
+    public bool HasResourceToBuild(Room room)
+    {
+        foreach (RequiredItem requiredItem in room.RequiredItems)
+        {
+            if (!InventoryManager.Instance.HasItemAmount(requiredItem.itemID, requiredItem.amount))
+                return false;
+        }
+        return true;
+    }
+
     #endregion
 
     #region 방 인접 정보
@@ -233,7 +302,15 @@ public class BuildManager : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdBuildRoom(Vector2Int coordinate)
     {
-        if (CanBuildRoom(coordinate))
+        if (!CanBuildRoom(coordinate))
+        {
+            Debug.Log("<color=red>해당 위치에 건물을 지을 수 없습니다.</color>");
+        }
+        else if (!HasResourceToBuild(_selectRoom))
+        {
+            Debug.Log("<color=red>해당 방을 짓기에 자원이 부족합니다.</color>");
+        }
+        else
         {
             if (coordinate.y == 0)
             {
@@ -244,11 +321,8 @@ public class BuildManager : NetworkBehaviour
                 BuildRoom(1, coordinate);
             }
         }
-        else
-        {
-            Debug.Log("건물을 지을 수 없습니다.");
-        }
     }
+
     /// <summary>
     /// 클라이언트 측에서 서버로 설치물 건설 요청 커맨드
     /// </summary>
@@ -299,8 +373,8 @@ public class BuildManager : NetworkBehaviour
                 roomObject = Instantiate(testFoundationObject, FromBasisIntCoordinates(coordinate), Quaternion.identity);
                 break;
             case 1:
-                Debug.Log("일반 방 건설");
-                roomObject = Instantiate(testRoomObject, FromBasisIntCoordinates(coordinate), Quaternion.identity);
+                Debug.Log("선택한 방 건설");
+                roomObject = Instantiate(_selectRoom.gameObject, FromBasisIntCoordinates(coordinate), Quaternion.identity);
                 break;
             default:
                 Debug.Log($"An invalid room type input has been entered.");
@@ -311,6 +385,7 @@ public class BuildManager : NetworkBehaviour
 
         // 생성 후 방 데이터 공유
         RpcOnBuildNewRoom(coordinate, roomObject);
+        UseRequiredItem(_selectRoom);
     }
 
     /// <summary>
@@ -372,7 +447,7 @@ public class BuildManager : NetworkBehaviour
     public void AddRoomData(Vector2Int coordinate, Room room)
     {
         // 추후 지지대가 추가되면 조건을 더 추가해줘야 함
-        room.SetRoomData(Vector2Int.one, true);
+        room.SetRoomData(coordinate, Vector2Int.one, true);
 
         if (!worldRoomData.TryAdd(coordinate, room.gameObject))
         {
@@ -392,6 +467,18 @@ public class BuildManager : NetworkBehaviour
         if (!worldPipeData.TryAdd(coordinate, nonRoom.gameObject))
         {
             Debug.LogWarning("Data already exists at the specified coordinates. Please check the room placement code again.");
+        }
+    }
+
+    /// <summary>
+    /// 해당하는 방을 지을 때 소모되는 자원을 차감하는 함수
+    /// </summary>
+    /// <param name="room"></param>
+    private void UseRequiredItem(Room room)
+    {
+        foreach (var required in room.RequiredItems)
+        {
+            InventoryManager.Instance.RemoveItem(required.itemID, required.amount);
         }
     }
 
@@ -555,4 +642,13 @@ public class BuildManager : NetworkBehaviour
     }
 
     #endregion
+
+    /// <summary>
+    /// 플레이어가 설치하고자 하는 방
+    /// </summary>
+    /// <param name="room"></param>
+    public void SetSelectedRoom(Room room)
+    {
+        _selectRoom = room;
+    }
 }
