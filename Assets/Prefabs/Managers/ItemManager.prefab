@@ -1,0 +1,144 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5169305199875252912
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2456199257621523099}
+  - component: {fileID: 4032030806855447435}
+  - component: {fileID: 7919588606243534836}
+  - component: {fileID: 4049648116901216679}
+  m_Layer: 0
+  m_Name: ItemManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2456199257621523099
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5169305199875252912}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.9514139, y: 2.7793431, z: -0.07231887}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4032030806855447435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5169305199875252912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7421a0f6c8ada0a469e8895fd493c8c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemPrefabs:
+  - itemCode: Ingredient_00
+    itemPrefab: {fileID: 7363160457919382477, guid: 9763d4cf8c10648459659ff44b9e2b46, type: 3}
+  - itemCode: Ingredient_01
+    itemPrefab: {fileID: 7363160457919382477, guid: 4bb35e1744c4a354189dbf21d60fbcc3, type: 3}
+  - itemCode: Ingredient_02
+    itemPrefab: {fileID: 7363160457919382477, guid: 607de423664e5954bb25f3dd909dd85d, type: 3}
+  - itemCode: Ingredient_03
+    itemPrefab: {fileID: 7363160457919382477, guid: 440601d7347f2c84cb66de850fa60ab1, type: 3}
+  - itemCode: Ingredient_04
+    itemPrefab: {fileID: 7363160457919382477, guid: 0612c45f67fb9bb4e8b58d0ead2db3ec, type: 3}
+  - itemCode: Ingredient_05
+    itemPrefab: {fileID: 7363160457919382477, guid: 5fce46d4eaa67c343a21911a3ee6067e, type: 3}
+  - itemCode: Ingredient_06
+    itemPrefab: {fileID: 7363160457919382477, guid: 4dcd996c1df4d1049b7138c3b5d37057, type: 3}
+  - itemCode: Ingredient_07
+    itemPrefab: {fileID: 7363160457919382477, guid: c4db0865b6861774d9abfded8fd414ab, type: 3}
+  - itemCode: Ingredient_08
+    itemPrefab: {fileID: 7363160457919382477, guid: 09eac3d9c41734849aff7089931a7f80, type: 3}
+  - itemCode: Ingredient_09
+    itemPrefab: {fileID: 7363160457919382477, guid: 61348b17afe03b249afbe772a3a569e1, type: 3}
+  - itemCode: Ingredient_10
+    itemPrefab: {fileID: 7363160457919382477, guid: b9758aaf77e07e9479bd5ee34fb58529, type: 3}
+  - itemCode: Ingredient_11
+    itemPrefab: {fileID: 7363160457919382477, guid: 3b005ca5ebb35884588d386579a081a0, type: 3}
+  - itemCode: Ingredient_12
+    itemPrefab: {fileID: 7363160457919382477, guid: 32b229882cf04d84391b9daeb10f43d0, type: 3}
+  - itemCode: Ingredient_13
+    itemPrefab: {fileID: 7363160457919382477, guid: c4a250533d5721146bffe9addebcb615, type: 3}
+  - itemCode: Equipment_01
+    itemPrefab: {fileID: 7507301870768487481, guid: 58aeb69b8c7c542428b2cb1d4e24fe02, type: 3}
+  - itemCode: Equipment_02
+    itemPrefab: {fileID: 8448248930150657756, guid: 0f0eeb5b7fa08114dbc83493d69fdc1f, type: 3}
+  - itemCode: Equipment_03
+    itemPrefab: {fileID: 5835402318371152493, guid: 4ea64f2adba311949a6054efe61b4a6a, type: 3}
+  - itemCode: Equipment_04
+    itemPrefab: {fileID: 9050712519032557110, guid: a1807153aed725943944a66d827ed56c, type: 3}
+  - itemCode: Equipment_05
+    itemPrefab: {fileID: 8477398196338840477, guid: 06d215d0fd716f643a365b848cd52fb6, type: 3}
+  - itemCode: Equipment_06
+    itemPrefab: {fileID: 4927897567675928663, guid: fbd8eec22f0411a4ba7e95727c45ba93, type: 3}
+  - itemCode: Equipment_07
+    itemPrefab: {fileID: 7507301870768487481, guid: 7849c9147650e86429e2c4e3c19b5ad9, type: 3}
+  - itemCode: Equipment_08
+    itemPrefab: {fileID: 8448248930150657756, guid: 5e0bfa004dc1eff42b92e3de42b5e1ff, type: 3}
+  - itemCode: Food_01
+    itemPrefab: {fileID: 7363160457919382477, guid: 8b87dede44f789042854f60bad0575a9, type: 3}
+  - itemCode: Food_02
+    itemPrefab: {fileID: 7363160457919382477, guid: e9d547d3553c5924ab0be0e890a48511, type: 3}
+  - itemCode: Food_03
+    itemPrefab: {fileID: 7363160457919382477, guid: a47db89059d94284aa1608c5951eb91f, type: 3}
+  - itemCode: Food_04
+    itemPrefab: {fileID: 7363160457919382477, guid: a69c81228ba2b8241928a8948896eee3, type: 3}
+--- !u!114 &7919588606243534836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5169305199875252912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e5491aae7402b3429d811fe5ec566a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemPrefab: {fileID: -2550920458885841942, guid: a64739c261b43b94b91f5404049e9d90, type: 3}
+--- !u!114 &4049648116901216679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5169305199875252912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e264a0dbcb4f9849854e9f1731fedb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourceSets:
+  - resourceType: 0
+    resourcePrefab: {fileID: 5465408349737334575, guid: f1a7aab8f47064a44920c11eacaaa038, type: 3}
+  - resourceType: 1
+    resourcePrefab: {fileID: 5465408349737334575, guid: 3b9b1a800feeb874984994695464f392, type: 3}
+  - resourceType: 2
+    resourcePrefab: {fileID: 5465408349737334575, guid: 4e2e4a8d7957c814aa5394743ab6e1bf, type: 3}
+  - resourceType: 3
+    resourcePrefab: {fileID: 5465408349737334575, guid: 21b9337de44b78441af262631cb4b4bd, type: 3}
+  - resourceType: 4
+    resourcePrefab: {fileID: 5465408349737334575, guid: 197889a750c1e28449b475d382f4d82a, type: 3}
+  monsterSets:
+  - monsterType: 0
+    monsterPrefab: {fileID: 3547545519384445648, guid: fca5eac9ea198a94c894b485c716ef7b, type: 3}
+  - monsterType: 1
+    monsterPrefab: {fileID: 3310435726288952766, guid: 66c5caee3cb17e8498414b232d1900b0, type: 3}
+  - monsterType: 2
+    monsterPrefab: {fileID: 1106276074698760010, guid: dbcddb2477526ad4887e339a78df6bfe, type: 3}

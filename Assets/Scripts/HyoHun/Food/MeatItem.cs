@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Meat : FoodItem
+public class MeatItem : FoodItem
 {
     private void OnEnable()
     {
         // itemID = "31";
         // itemName = "고기";
-        healAmount = 25f;
+        healAmount = 10f;
     }
 
     public override void Use(PlayerController user)

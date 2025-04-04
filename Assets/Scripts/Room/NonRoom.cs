@@ -1,3 +1,4 @@
+using Mirror;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ public enum NonRoomType
     pipe = 2
 }
 [Serializable]
-public class NonRoom : MonoBehaviour
+public class NonRoom : NetworkBehaviour
 {
     [Header("설치물 데이터")]
     [Tooltip("설치물 타입")]
@@ -24,6 +25,7 @@ public class NonRoom : MonoBehaviour
     public Vector2Int NonRoomPosition { get { return nonRoomPosition; } }
 
     [Tooltip("활성화 되어있는지, 파이프의 경우에는 물이 흐르는지")]
+    [SyncVar]
     [SerializeField]
     private bool isActivated = false;
 
