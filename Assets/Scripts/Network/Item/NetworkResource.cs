@@ -33,6 +33,23 @@ public class NetworkResource : NetworkBehaviour
     [Tooltip("이 자원에 피해를 줄 수 있는 도구 태그 (예: AXE, PICK)")]
     [SerializeField] private string toolTag = "AXE";
 
+
+    [SyncVar(hook = nameof(OnActiveStateChanged))]
+    private bool isActive = true;
+    /// <summary>
+    /// 서버에서 isActive를 설정하면 자동으로 모든 클라이언트에서 OnActiveStateChanaged() 호출되어 SetActive를 반영시킴
+    /// </summary>
+    private void OnActiveStateChanged(bool oldValue, bool newValue)
+    {
+        gameObject.SetActive(newValue);
+    }
+
+    [Server]
+    public void SetActiveState(bool state)
+    {
+        isActive = state; // SyncVar을 통해 모든 클라이언트에게 반영됨
+    }
+
     void Start()
     {
         healthBar.fillAmount = 1;
@@ -69,8 +86,14 @@ public class NetworkResource : NetworkBehaviour
             // 아이템 드롭
             DropItem();
 
+            // 리스폰 매니저에 비활성화 + 재활성 요청
+            ResourceRespawnManager.Instance.RequestRespawn(gameObject);
+
+            isActive = false;
+
+
             // 자원 오브젝트 파괴
-            NetworkServer.Destroy(gameObject);
+            //NetworkServer.Destroy(gameObject);
         }
     }
 
@@ -136,6 +159,22 @@ public class NetworkResource : NetworkBehaviour
                 CmdHitResource(tool.damage); // 피해량 전달
             }
         }
+    }
+
+    /// <summary>
+    /// 자원 재활성화 시 상태 초기화
+    /// </summary>
+    [Server]
+    public void ResetResource()
+    {
+        currentHealth = resourceHealth;
+
+        // 체력바 초기화
+        healthBar.fillAmount = 1f;
+
+        // 체력바 UI 비활성화 (체력이 모두 찬 상태로 시작)
+        if (healthBarBG != null)
+            healthBarBG.SetActive(false);
     }
 }
 /// <summary>
