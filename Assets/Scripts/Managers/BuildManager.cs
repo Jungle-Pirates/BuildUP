@@ -345,6 +345,7 @@ public class BuildManager : NetworkBehaviour
             {
                 BuildRoom(1, coordinate);
             }
+            UseRequiredItem(_selectRoom);
         }
     }
 
@@ -410,7 +411,6 @@ public class BuildManager : NetworkBehaviour
 
         // 생성 후 방 데이터 공유
         RpcOnBuildNewRoom(coordinate, roomObject);
-        UseRequiredItem(_selectRoom);
     }
 
     /// <summary>
