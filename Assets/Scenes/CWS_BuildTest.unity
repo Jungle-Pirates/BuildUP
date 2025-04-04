@@ -4458,6 +4458,9 @@ MonoBehaviour:
   selectedItemStatValue: {fileID: 1656200578}
   useButton: {fileID: 301122665}
   dropButton: {fileID: 791692158}
+  craftingPanel: {fileID: 0}
+  craftButton: {fileID: 0}
+  craftWarningText: {fileID: 0}
 --- !u!4 &1206266857
 Transform:
   m_ObjectHideFlags: 0

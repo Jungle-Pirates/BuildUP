@@ -19,6 +19,11 @@ public abstract class Room: NetworkBehaviour
     private Vector2Int roomPosition = Vector2Int.zero;
     public Vector2Int RoomPosition { get { return roomPosition; } }
 
+    [Tooltip("활성화 되어있는지, 일꾼이 일할 수 있는 상태인지")]
+    [SyncVar]
+    [SerializeField]
+    private bool isActivated = false;
+
     private bool isConnectedWithFoundation;         // 해당하는 방이 토대와 연결되어 있는가
     public bool IsConnectedWithFoundation { get { return isConnectedWithFoundation; } }
     private bool isConnectedWithSupport;            // 해당하는 방이 지지대와 연결되어 있는가, 이 부분은 나중에 지지대를 만들 때 수정
@@ -31,7 +36,12 @@ public abstract class Room: NetworkBehaviour
         isConnectedWithFoundation = setFoundationConnected;
     }
 
-    protected virtual void Start()
+    public void Activate()
+    {
+        isActivated = true;
+    }
+
+    private void Start()
     {
         transform.localScale = BuildManager.Instance.RoomUnitSize;
     }

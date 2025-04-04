@@ -257,6 +257,7 @@ public class BuildManager : NetworkBehaviour
     /// 나중에 파이프가 설치될때, 혹은 물탱크가 설치될때 이 메서드를 호출하면 됨
     /// </summary>
     /// <param name="waterTankCoordinate">물탱크 혹은 활성화된 파이프 위치(아마 대부분 물탱크)</param>
+    [Server]
     public void ActivatePipe(Vector2Int waterTankCoordinate)
     {
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
@@ -287,7 +288,31 @@ public class BuildManager : NetworkBehaviour
                         queue.Enqueue(adjacentCoordinate);
                         visited.Add(adjacentCoordinate);
                     }
+                    // 인접한 방이 물레라면 활성화
+                    var room = worldRoomData.GetValueOrDefault(adjacentCoordinate, null);
+                    if(room != null && !visited.Contains(adjacentCoordinate))// && room.GetComponent<WaterMill>() != null)
+                    {
+                        ActivatePower(adjacentCoordinate);
+                    }
                 }
+            }
+        }
+    }
+    [Server]
+    public void ActivatePower(Vector2Int waterMillCoordinate)
+    {
+        Vector2Int[] adjacentCoordinates = new Vector2Int[4]
+       {
+            waterMillCoordinate + Vector2Int.up,
+            waterMillCoordinate + Vector2Int.down,
+            waterMillCoordinate + Vector2Int.left,
+            waterMillCoordinate + Vector2Int.right
+       };
+        foreach (Vector2Int adjacentCoordinate in adjacentCoordinates)
+        {
+            if (worldRoomData.TryGetValue(adjacentCoordinate, out GameObject room))
+            {
+                room.GetComponent<Room>().Activate();
             }
         }
     }
@@ -588,7 +613,7 @@ public class BuildManager : NetworkBehaviour
             return false;
         }
     }
-    
+
     private bool RemovePipeData(Vector2Int coordinate)
     {
         if (worldPipeData.Remove(coordinate))
