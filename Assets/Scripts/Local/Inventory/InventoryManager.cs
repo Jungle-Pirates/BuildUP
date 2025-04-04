@@ -103,17 +103,7 @@ public class InventoryManager : Singleton<InventoryManager>
         }
 
         // 슬롯 없음 >> 바닥에 드롭
-        ThrowItem(newItem);
-    }
-
-    /// <summary>
-    /// 아이템 버리기
-    /// </summary>
-    public void ThrowItem(Item item)
-    {
-        //플레이어 위치에 드롭
-        //위치는 NetworkManager에서 client를 찾아 설정
-        NetworkItemManager.Instance.SpawnItem(item.itemID, NetworkClient.localPlayer.transform.position, false);
+        NetworkClient.localPlayer.GetComponent<PlayerController>().ThrowItem(newItem.itemID);
     }
 
     /// <summary>
@@ -219,7 +209,7 @@ public class InventoryManager : Singleton<InventoryManager>
     /// </summary>
     public void OnDropButton()
     {
-        ThrowItem(selectedItem.inventoryItem); // TODO: 실제 드롭 구현 시 selectedItem 사용
+        NetworkClient.localPlayer.GetComponent<PlayerController>().ThrowItem(selectedItem.inventoryItem.itemID);
         RemoveSelectedItem();
     }
 

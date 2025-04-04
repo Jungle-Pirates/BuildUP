@@ -55,6 +55,7 @@ public abstract class HandyToolItem : Item
         isUsing = true;
 
         // 콜라이더 세팅
+        attackPoint.SetActive(true);
         attackCollider.enabled = true;
         attackCollider.transform.localScale = Vector3.one * size;
 
@@ -64,6 +65,8 @@ public abstract class HandyToolItem : Item
 
         // 혹시 몰라서 태그 초기화
         attackPoint.tag = "Untagged";
+
+        attackPoint.SetActive(false);
 
         isUsing = false;
     }

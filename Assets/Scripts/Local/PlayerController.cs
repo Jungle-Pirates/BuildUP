@@ -38,13 +38,13 @@ public class PlayerController : NetworkBehaviour
     private float m_delayToIdle = 0.0f;
     private float m_rollDuration = 8.0f / 14.0f;
     private float m_rollCurrentTime;
-    private int overlappingLadderCount = 0; // í”Œë ˆì´ì–´ê°€ ì‚¬ë‹¤ë¦¬ì™€ ê²¹ì¹œíšŸìˆ˜ 0ë³´ë‹¤ í¬ë©´ ì‚¬ë‹¤ë¦¬ ìœ„ì— ìˆìŒ
+    private int overlappingLadderCount = 0; // ÇÃ·¹ÀÌ¾î°¡ »ç´Ù¸®¿Í °ãÄ£È½¼ö 0º¸´Ù Å©¸é »ç´Ù¸® À§¿¡ ÀÖÀ½
     private float vertical;
 
-    [Header("ë„êµ¬ ì‚¬ìš©")]
-    public GameObject attackPoint;  //ê³µê²© ë²”ìœ„ íŒì •ìš© ì˜¤ë¸Œì íŠ¸ 
-    //ì¸ë²¤í† ë¦¬ ì ‘ê·¼ìš© InventoryManager
-    //private bool isEquipped = false; //ì†ì— ì¥ë¹„ ì¥ì°© ì—¬ë¶€
+    [Header("µµ±¸ »ç¿ë")]
+    public GameObject attackPoint;  //°ø°İ ¹üÀ§ ÆÇÁ¤¿ë ¿ÀºêÁ§Æ® 
+    //ÀÎº¥Åä¸® Á¢±Ù¿ë InventoryManager
+    //private bool isEquipped = false; //¼Õ¿¡ Àåºñ ÀåÂø ¿©ºÎ
 
 
     // Use this for initialization
@@ -52,12 +52,12 @@ public class PlayerController : NetworkBehaviour
     {
         if (isLocalPlayer && SteamManager.Initialized)
         {
-            // ë‚´ ì´ë¦„ì„ ê°€ì ¸ì™€ì„œ ì„œë²„ì— ì„¤ì •
+            // ³» ÀÌ¸§À» °¡Á®¿Í¼­ ¼­¹ö¿¡ ¼³Á¤
             string myName = SteamFriends.GetPersonaName();
             CmdSetDisplayName(myName);
-            // ë‚´ ì¹´ë©”ë¼ë§Œ êº¼ì£¼ê¸°
+            // ³» Ä«¸Ş¶ó¸¸ ²¨ÁÖ±â
             virtualCamera.gameObject.SetActive(true);
-            //ë Œë”ëŸ¬ ìš°ì„ ìˆœìœ„ +1
+            //·»´õ·¯ ¿ì¼±¼øÀ§ +1
             GetComponent<SpriteRenderer>().sortingOrder += 1;
         }
 
@@ -71,21 +71,21 @@ public class PlayerController : NetworkBehaviour
         m_wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
         attackPoint = transform.Find("AttackPoint").gameObject;
-        //attackPoint.SetActive(false); //ì•„ì´í…œ Use()ì—ì„œ Collider2D ì»´í¬ë„ŒíŠ¸ë¥¼ ë„ê³  í‚¤ëŠ”ì¤‘ 
+        //attackPoint.SetActive(false); //¾ÆÀÌÅÛ Use()¿¡¼­ Collider2D ÄÄÆ÷³ÍÆ®¸¦ ²ô°í Å°´ÂÁß 
     }
 
     /// <summary>
-    /// ì„œë²„ì— ì´ë¦„ì„ ì„¤ì •í•˜ë„ë¡ ìš”ì²­í•˜ëŠ” Command
+    /// ¼­¹ö¿¡ ÀÌ¸§À» ¼³Á¤ÇÏµµ·Ï ¿äÃ»ÇÏ´Â Command
     /// </summary>
     [Command]
     private void CmdSetDisplayName(string myName)
     {
-        // ì„œë²„ì—ì„œ ì´ë¦„ ì„¤ì • (SyncVarë¥¼ í†µí•´ ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ì— ì „íŒŒë¨)
+        // ¼­¹ö¿¡¼­ ÀÌ¸§ ¼³Á¤ (SyncVar¸¦ ÅëÇØ ¸ğµç Å¬¶óÀÌ¾ğÆ®¿¡ ÀüÆÄµÊ)
         displayName = myName;
     }
 
     /// <summary>
-    /// ì´ë¦„ì´ ë³€ê²½ë  ë•Œ í˜¸ì¶œë˜ëŠ” Hook í•¨ìˆ˜
+    /// ÀÌ¸§ÀÌ º¯°æµÉ ¶§ È£ÃâµÇ´Â Hook ÇÔ¼ö
     /// </summary>
     private void OnDisplayNameChanged(string oldName, string newName)
     {
@@ -93,7 +93,7 @@ public class PlayerController : NetworkBehaviour
     }
 
     /// <summary>
-    /// ì„œë²„ì— í”Œë ˆì´ì–´ê°€ ë°”ë¼ë³´ëŠ” ë°©í–¥ì„ ì„¤ì •í•˜ë„ë¡ ìš”ì²­í•˜ëŠ” Command
+    /// ¼­¹ö¿¡ ÇÃ·¹ÀÌ¾î°¡ ¹Ù¶óº¸´Â ¹æÇâÀ» ¼³Á¤ÇÏµµ·Ï ¿äÃ»ÇÏ´Â Command
     /// </summary>
     /// <param name="direction"></param>
     [Command]
@@ -103,7 +103,7 @@ public class PlayerController : NetworkBehaviour
     }
 
     /// <summary>
-    /// ë°©í–¥ì´ ë³€ê²½ë  ë•Œ í˜¸ì¶œë˜ëŠ” Hook í•¨ìˆ˜
+    /// ¹æÇâÀÌ º¯°æµÉ ¶§ È£ÃâµÇ´Â Hook ÇÔ¼ö
     /// </summary>
     private void OnFacingDirectionChanged(int oldDirection, int newDirection)
     {
@@ -188,12 +188,12 @@ public class PlayerController : NetworkBehaviour
             m_animator.SetTrigger("Hurt");
 
         //Attack
-        //ì¥ë¹„ ì¥ì°©ì¤‘ì¸ì§€ ê²€ì‚¬ > ì¥ë¹„ ì•„ì´í…œì´ë¼ë©´ ì¥ë¹„ ì•„ì´í…œì˜ Useí˜¸ì¶œ
+        //Àåºñ ÀåÂøÁßÀÎÁö °Ë»ç > Àåºñ ¾ÆÀÌÅÛÀÌ¶ó¸é Àåºñ ¾ÆÀÌÅÛÀÇ UseÈ£Ãâ
         else if (Input.GetMouseButtonDown(0) && m_timeSinceAttack > 0.25f && !m_rolling)
         {
-            if (IsHandEquipped())  // ì†ì— ì¥ë¹„ ì¥ì°© ì—¬ë¶€ í™•ì¸
+            if (IsHandEquipped())  // ¼Õ¿¡ Àåºñ ÀåÂø ¿©ºÎ È®ÀÎ
             {
-                InventoryManager.Instance.slots[0].inventoryItem?.Use(this);  // ì¥ë¹„ì˜ Use() í˜¸ì¶œ
+                InventoryManager.Instance.slots[0].inventoryItem?.Use(this);  // ÀåºñÀÇ Use() È£Ãâ
 
 
                 m_currentAttack++;
@@ -261,7 +261,7 @@ public class PlayerController : NetworkBehaviour
         //Climb
         if (overlappingLadderCount > 0)
         {
-            vertical = Input.GetAxisRaw("Vertical"); // W, S ë˜ëŠ” â†‘, â†“ í‚¤ ê°ì§€
+            vertical = Input.GetAxisRaw("Vertical"); // W, S ¶Ç´Â ¡è, ¡é Å° °¨Áö
         }
     }
     void FixedUpdate()
@@ -269,16 +269,16 @@ public class PlayerController : NetworkBehaviour
         if (overlappingLadderCount > 0)
         {
             m_body2d.velocity = new Vector2(m_body2d.velocity.x, vertical * m_climbSpeed);
-            m_body2d.gravityScale = 0f; // ì¤‘ë ¥ ì œê±° (ì‚¬ë‹¤ë¦¬ì—ì„œ ë¶€ë“œëŸ½ê²Œ ì´ë™)
+            m_body2d.gravityScale = 0f; // Áß·Â Á¦°Å (»ç´Ù¸®¿¡¼­ ºÎµå·´°Ô ÀÌµ¿)
         }
         else
         {
-            m_body2d.gravityScale = 1f; // ë‹¤ì‹œ ì›ë˜ ì¤‘ë ¥ ë³µêµ¬
+            m_body2d.gravityScale = 1f; // ´Ù½Ã ¿ø·¡ Áß·Â º¹±¸
         }
     }
 
     /// <summary>
-    /// ì¥ì°©ëœ ì¥ë¹„ í™•ì¸
+    /// ÀåÂøµÈ Àåºñ È®ÀÎ
     /// </summary>
     private bool IsHandEquipped()
     {
@@ -308,7 +308,7 @@ public class PlayerController : NetworkBehaviour
     }
 
     /// <summary>
-    /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ : ï¿½Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ È£ï¿½ï¿½
+    /// ???? ???? ???? ?????? ??? : ??? ????????? ???
     /// </summary>
     public Item GetEquippedItem()
     {
@@ -321,9 +321,19 @@ public class PlayerController : NetworkBehaviour
 
         return null;
     }
+    /// <summary>
+    /// ¾ÆÀÌÅÛÀ» ´øÁı´Ï´Ù. ´øÁø ¾ÆÀÌÅÛÀº ¹Ù´Ú¿¡ ¶³¾îÁö¸ç ¹Ù´Ú¿¡ ¶³¾îÁø ¾ÆÀÌÅÛ µ¿±âÈ­µÊ
+    /// ÀÎº¥Åä¸®¿¡¼­ Á¦°ÅÇÏ´Â °Ç InventoryManager¿¡¼­ Ã³¸®
+    /// </summary>
+    [Command (requiresAuthority = false)]
+    public void ThrowItem(string itemCode)
+    {
+        // ¾ÆÀÌÅÛ µå·Ó
+        NetworkItemManager.Instance.SpawnItem(itemCode, transform.position, false);
+    }
 
     /// <summary>
-    /// ì„ì‹œ ê³µê²© íŒì •
+    /// ÀÓ½Ã °ø°İ ÆÇÁ¤
     /// </summary>
     /*
     private IEnumerator AttackPointEnable()
@@ -337,7 +347,7 @@ public class PlayerController : NetworkBehaviour
     {
         if (collision.CompareTag("Monster"))
         {
-            // ê³µê²© íŒì •
+            // °ø°İ ÆÇÁ¤
             //collision.GetComponent<Enemy>().TakeDamage(10);
             //StartCoroutine(AttackPointEnable());
         }
