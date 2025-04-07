@@ -1,8 +1,14 @@
-using Mirror;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
+public struct CraftUISet
+{
+    public RoomType roomType;
+    public GameObject craftingUI; //제작 UI 프리팹
+}
 public class CraftingManager : Singleton<CraftingManager>
 {
     [Header("제작 레시피 목록")]
@@ -15,7 +21,7 @@ public class CraftingManager : Singleton<CraftingManager>
     {
         return recipes.Find(recipe => recipe.recipeName == recipeName);
     }
-    
+
     /// <summary>
     /// 레시피 아이템 ID로 레시피 찾기
     /// </summary>
@@ -30,48 +36,6 @@ public class CraftingManager : Singleton<CraftingManager>
     public List<Recipe> GetAllRecipes()
     {
         return recipes;
-    }
-
-    /// <summary>
-    /// 아이템 제작 함수
-    /// </summary>
-    /// <param name="itemID">제작할 아이템 아이디</param>
-    public void CraftItem(string itemID)
-    {
-        Recipe recipe = GetRecipeByItemID(itemID);
-        if (recipe == null)
-        {
-            Debug.LogError($"레시피를 찾을 수 없음: {itemID}");
-            return;
-        }
-
-        //인벤토리에서 재료 아이템이 전부 존재하는지 체크 >> 제작 가능 여부 반환(bool)
-        if(IsAbleToCraft(recipe))
-        {
-            // 아이템 제작 로직
-            StartCoroutine(CraftItemCoroutine(recipe));
-        }
-        else
-        {
-            //TODO : 제작 불가능 안내 UI 띄우기
-            Debug.LogWarning($"재료가 부족하여 제작할 수 없음: {itemID}");
-            
-        }
-    }
-
-    /// <summary>
-    /// 아이템 제작 코루틴 (제작 시간 지연 처리)
-    /// </summary>
-    private IEnumerator CraftItemCoroutine(Recipe recipe)
-    {
-        // 제작 시작 알림 (UI 업데이트 등)
-        OnCraftingStarted(recipe);
-
-        // 제작 시간만큼 대기
-        yield return new WaitForSeconds(recipe.craftTime);
-
-        // 제작 완료 처리
-        CompleteCrafting(recipe);
     }
 
     /// <summary>
@@ -93,7 +57,7 @@ public class CraftingManager : Singleton<CraftingManager>
     /// 제작 시작 시 호출될 함수
     /// 레시피 재료 요구량만큼 재료 삭제
     /// </summary>
-    private void OnCraftingStarted(Recipe recipe)
+    public void OnCraftingStarted(Recipe recipe)
     {
         foreach (var required in recipe.requiredItem)
         {
@@ -113,7 +77,7 @@ public class CraftingManager : Singleton<CraftingManager>
     /// <summary>
     /// 제작 완료 처리
     /// </summary>
-    private void CompleteCrafting(Recipe recipe)
+    public void OnCompleteCrafting(Recipe recipe)
     {
         InventoryManager.Instance.AddItem(recipe.resultItemID, recipe.craftAmount);
         Debug.Log($"[{recipe.recipeName}] 제작 완료! {recipe.resultItemID} ×{recipe.craftAmount} 추가됨.");

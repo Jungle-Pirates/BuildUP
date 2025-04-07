@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.WSA;
 
+public enum RoomType
+{
+    토대, 빈방, 제작방, 제련방, 농장, 취사장, 주거지, 빗물저장소, 물레, 방앗간
+}
 public class BuildManager : NetworkBehaviour
 {
     public static BuildManager Instance { get; private set; }
@@ -291,7 +295,7 @@ public class BuildManager : NetworkBehaviour
                     }
                     // 인접한 방이 물레라면 활성화
                     var room = worldRoomData.GetValueOrDefault(adjacentCoordinate, null);
-                    if(room != null && !visited.Contains(adjacentCoordinate))// && room.GetComponent<WaterMill>() != null)
+                    if (room != null && !visited.Contains(adjacentCoordinate))// && room.GetComponent<WaterMill>() != null)
                     {
                         ActivatePower(adjacentCoordinate);
                     }

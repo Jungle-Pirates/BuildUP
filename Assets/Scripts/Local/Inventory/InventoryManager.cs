@@ -305,14 +305,4 @@ public class InventoryManager : Singleton<InventoryManager>
         craftWarningText.gameObject.SetActive(!canCraft);
         dropButton.gameObject.SetActive(false);
     }
-
-    /// <summary>
-    /// 인벤토리의 Craft버튼을 누르면 호출됨
-    /// 아이템ID를 넘겨주며 CraftItem() 호출
-    /// </summary>
-    public void OnCraftButton()
-    {
-        if (string.IsNullOrEmpty(selectedCraftItemID)) return;
-        CraftingManager.Instance.CraftItem(selectedCraftItemID);
-    }
 }

@@ -137,11 +137,13 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  roomType: 0
   RoomName: Foundation Room
   RoomSprite: {fileID: 1339194287, guid: dbf65a0a636d67e43ad1561395889de6, type: 3}
   RequiredItems:
-  - itemID: Ingredient_07
-    amount: 2
-  - itemID: Ingredient_06
-    amount: 2
+  - itemID: Ingredient_00
+    amount: 10
+  - itemID: Ingredient_01
+    amount: 10
   roomSize: {x: 1, y: 1}
+  isActivated: 0

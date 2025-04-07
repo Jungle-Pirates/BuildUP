@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class CraftingSlot : MonoBehaviour
 {
+    private CraftingRoom craftingRoom;
     public string itemID;
     public Button button;
 
@@ -12,10 +13,23 @@ public class CraftingSlot : MonoBehaviour
     {
         button = GetComponent<Button>();
         button.onClick.AddListener(OnClickSlot);
+        craftingRoom = GetComponentInParent<CraftingRoom>();
+        if (craftingRoom == null)
+        {
+            Debug.LogError("CraftingRoom component not found in parent.");
+        }
     }
 
     public void OnClickSlot()
     {
-        InventoryManager.Instance.SelectCraftingRecipe(itemID);
+        // Check if the crafting room is not null before proceeding
+        if (craftingRoom != null)
+        {
+            craftingRoom.AddCraftingQueue(itemID);
+        }
+        else
+        {
+            Debug.LogError("CraftingRoom reference is null.");
+        }
     }
 }
