@@ -21,7 +21,8 @@ public class MonsterController : NetworkBehaviour
     [Header("몬스터 종류")]
 
     [SerializeField]
-    private MonsterType monsterType; // 몬스터 종류
+    public MonsterType monsterType; // 몬스터 종류
+
     [Range(0, 10)]
     [Tooltip("몬스터 속도")]
     [SerializeField]
@@ -141,7 +142,6 @@ public class MonsterController : NetworkBehaviour
     [Tooltip("돌진 후 휴식 시간")]
     [SerializeField]
     private float boarRestAfterChargeDuration = 3f;
-
 
     // 멧돼지 상태 변수들
     private bool isResting = false;
@@ -304,12 +304,8 @@ public class MonsterController : NetworkBehaviour
         {
             healthBarBG.SetActive(false); // 시작 시 체력바 비활성화
         }
-        /*
-        if (isServer)
-        {
-            DecideNextAction(); // 서버에서 몬스터 행동 결정
-        }
-        */
+        targetToFleeFrom = null; // 도망갈 대상 비우기
+        isFleeing = false; // 도망 상태 초기화
         // 필요하다면 위치도 초기화
         // transform.position = spawnPoint;
 

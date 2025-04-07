@@ -4,6 +4,7 @@ using TMPro;
 using Steamworks;
 using Cinemachine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PlayerController : NetworkBehaviour
 {
@@ -38,13 +39,32 @@ public class PlayerController : NetworkBehaviour
     private float m_delayToIdle = 0.0f;
     private float m_rollDuration = 8.0f / 14.0f;
     private float m_rollCurrentTime;
-    private int overlappingLadderCount = 0; // ÇÃ·¹ÀÌ¾î°¡ »ç´Ù¸®¿Í °ãÄ£È½¼ö 0º¸´Ù Å©¸é »ç´Ù¸® À§¿¡ ÀÖÀ½
+    private int overlappingLadderCount = 0; // í”Œë ˆì´ì–´ê°€ ì‚¬ë‹¤ë¦¬ì™€ ê²¹ì¹œíšŸìˆ˜ 0ë³´ë‹¤ í¬ë©´ ì‚¬ë‹¤ë¦¬ ìœ„ì— ìˆìŒ
     private float vertical;
 
-    [Header("µµ±¸ »ç¿ë")]
-    public GameObject attackPoint;  //°ø°İ ¹üÀ§ ÆÇÁ¤¿ë ¿ÀºêÁ§Æ® 
-    //ÀÎº¥Åä¸® Á¢±Ù¿ë InventoryManager
-    //private bool isEquipped = false; //¼Õ¿¡ Àåºñ ÀåÂø ¿©ºÎ
+    [Header("ëª¬ìŠ¤í„° ì²´ë ¥")]
+
+    [Tooltip("ìµœëŒ€ ì²´ë ¥")]
+    [SerializeField]
+    private int fullHealth = 100;
+    [Tooltip("ìµœì†Œ ë°ë¯¸ì§€")]
+    [SerializeField]
+    private int minDamage = 1;
+
+    [SyncVar(hook = nameof(OnHealthChanged))]
+    [Tooltip("í˜„ì¬ ì²´ë ¥")]
+    [SerializeField]
+    private int currentHealth;
+
+    [Tooltip("ì²´ë ¥ë°” ì´ë¯¸ì§€")]
+    [SerializeField]
+    private Image healthBar;
+    private GameObject healthBarBG; // ì²´ë ¥ë°” ë°°ê²½
+
+    [Header("ë„êµ¬ ì‚¬ìš©")]
+    public GameObject attackPoint;  //ê³µê²© ë²”ìœ„ íŒì •ìš© ì˜¤ë¸Œì íŠ¸ 
+    //ì¸ë²¤í† ë¦¬ ì ‘ê·¼ìš© InventoryManager
+    //private bool isEquipped = false; //ì†ì— ì¥ë¹„ ì¥ì°© ì—¬ë¶€
 
 
     // Use this for initialization
@@ -52,12 +72,12 @@ public class PlayerController : NetworkBehaviour
     {
         if (isLocalPlayer && SteamManager.Initialized)
         {
-            // ³» ÀÌ¸§À» °¡Á®¿Í¼­ ¼­¹ö¿¡ ¼³Á¤
+            // ë‚´ ì´ë¦„ì„ ê°€ì ¸ì™€ì„œ ì„œë²„ì— ì„¤ì •
             string myName = SteamFriends.GetPersonaName();
             CmdSetDisplayName(myName);
-            // ³» Ä«¸Ş¶ó¸¸ ²¨ÁÖ±â
+            // ë‚´ ì¹´ë©”ë¼ë§Œ êº¼ì£¼ê¸°
             virtualCamera.gameObject.SetActive(true);
-            //·»´õ·¯ ¿ì¼±¼øÀ§ +1
+            //ë Œë”ëŸ¬ ìš°ì„ ìˆœìœ„ +1
             GetComponent<SpriteRenderer>().sortingOrder += 1;
         }
 
@@ -71,21 +91,29 @@ public class PlayerController : NetworkBehaviour
         m_wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
         attackPoint = transform.Find("AttackPoint").gameObject;
-        //attackPoint.SetActive(false); //¾ÆÀÌÅÛ Use()¿¡¼­ Collider2D ÄÄÆ÷³ÍÆ®¸¦ ²ô°í Å°´ÂÁß 
+        //attackPoint.SetActive(false); //ì•„ì´í…œ Use()ì—ì„œ Collider2D ì»´í¬ë„ŒíŠ¸ë¥¼ ë„ê³  í‚¤ëŠ”ì¤‘ 
+
+        healthBarBG = healthBar.transform.parent.gameObject;
+
+        healthBar.fillAmount = 1; // ì²´ë ¥ë°” ì´ˆê¸°í™”
+        if (healthBar != null)
+        {
+            healthBarBG.SetActive(false); // ì‹œì‘ ì‹œ ì²´ë ¥ë°” ë¹„í™œì„±í™”
+        }
     }
 
     /// <summary>
-    /// ¼­¹ö¿¡ ÀÌ¸§À» ¼³Á¤ÇÏµµ·Ï ¿äÃ»ÇÏ´Â Command
+    /// ì„œë²„ì— ì´ë¦„ì„ ì„¤ì •í•˜ë„ë¡ ìš”ì²­í•˜ëŠ” Command
     /// </summary>
     [Command]
     private void CmdSetDisplayName(string myName)
     {
-        // ¼­¹ö¿¡¼­ ÀÌ¸§ ¼³Á¤ (SyncVar¸¦ ÅëÇØ ¸ğµç Å¬¶óÀÌ¾ğÆ®¿¡ ÀüÆÄµÊ)
+        // ì„œë²„ì—ì„œ ì´ë¦„ ì„¤ì • (SyncVarë¥¼ í†µí•´ ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ì— ì „íŒŒë¨)
         displayName = myName;
     }
 
     /// <summary>
-    /// ÀÌ¸§ÀÌ º¯°æµÉ ¶§ È£ÃâµÇ´Â Hook ÇÔ¼ö
+    /// ì´ë¦„ì´ ë³€ê²½ë  ë•Œ í˜¸ì¶œë˜ëŠ” Hook í•¨ìˆ˜
     /// </summary>
     private void OnDisplayNameChanged(string oldName, string newName)
     {
@@ -93,7 +121,7 @@ public class PlayerController : NetworkBehaviour
     }
 
     /// <summary>
-    /// ¼­¹ö¿¡ ÇÃ·¹ÀÌ¾î°¡ ¹Ù¶óº¸´Â ¹æÇâÀ» ¼³Á¤ÇÏµµ·Ï ¿äÃ»ÇÏ´Â Command
+    /// ì„œë²„ì— í”Œë ˆì´ì–´ê°€ ë°”ë¼ë³´ëŠ” ë°©í–¥ì„ ì„¤ì •í•˜ë„ë¡ ìš”ì²­í•˜ëŠ” Command
     /// </summary>
     /// <param name="direction"></param>
     [Command]
@@ -103,11 +131,26 @@ public class PlayerController : NetworkBehaviour
     }
 
     /// <summary>
-    /// ¹æÇâÀÌ º¯°æµÉ ¶§ È£ÃâµÇ´Â Hook ÇÔ¼ö
+    /// ë°©í–¥ì´ ë³€ê²½ë  ë•Œ í˜¸ì¶œë˜ëŠ” Hook í•¨ìˆ˜
     /// </summary>
     private void OnFacingDirectionChanged(int oldDirection, int newDirection)
     {
         GetComponent<SpriteRenderer>().flipX = newDirection == -1;
+    }
+
+    /// <summary>
+    /// ì²´ë ¥ ë³€ê²½ ì‹œ í˜¸ì¶œë˜ëŠ” ë©”ì„œë“œ - ì²´ë ¥ë°” ì—…ë°ì´íŠ¸
+    /// </summary>
+    public void OnHealthChanged(int oldHealth, int newHealth)
+    {
+        currentHealth = newHealth;
+
+        // ì²´ë ¥ë°” ì—…ë°ì´íŠ¸
+        if (healthBar != null && currentHealth < fullHealth)
+        {
+            healthBarBG.SetActive(true); // ì²´ë ¥ë°” í™œì„±í™”
+            healthBar.fillAmount = (float)currentHealth / fullHealth; // ì²´ë ¥ ë¹„ìœ¨ ê³„ì‚°
+        }
     }
 
     void Update()
@@ -188,12 +231,12 @@ public class PlayerController : NetworkBehaviour
             m_animator.SetTrigger("Hurt");
 
         //Attack
-        //Àåºñ ÀåÂøÁßÀÎÁö °Ë»ç > Àåºñ ¾ÆÀÌÅÛÀÌ¶ó¸é Àåºñ ¾ÆÀÌÅÛÀÇ UseÈ£Ãâ
+        //ì¥ë¹„ ì¥ì°©ì¤‘ì¸ì§€ ê²€ì‚¬ > ì¥ë¹„ ì•„ì´í…œì´ë¼ë©´ ì¥ë¹„ ì•„ì´í…œì˜ Useí˜¸ì¶œ
         else if (Input.GetMouseButtonDown(0) && m_timeSinceAttack > 0.25f && !m_rolling)
         {
-            if (IsHandEquipped())  // ¼Õ¿¡ Àåºñ ÀåÂø ¿©ºÎ È®ÀÎ
+            if (IsHandEquipped())  // ì†ì— ì¥ë¹„ ì¥ì°© ì—¬ë¶€ í™•ì¸
             {
-                InventoryManager.Instance.slots[0].inventoryItem?.Use(this);  // ÀåºñÀÇ Use() È£Ãâ
+                InventoryManager.Instance.slots[0].inventoryItem?.Use(this);  // ì¥ë¹„ì˜ Use() í˜¸ì¶œ
 
 
                 m_currentAttack++;
@@ -261,7 +304,7 @@ public class PlayerController : NetworkBehaviour
         //Climb
         if (overlappingLadderCount > 0)
         {
-            vertical = Input.GetAxisRaw("Vertical"); // W, S ¶Ç´Â ¡è, ¡é Å° °¨Áö
+            vertical = Input.GetAxisRaw("Vertical"); // W, S ë˜ëŠ” â†‘, â†“ í‚¤ ê°ì§€
         }
     }
     void FixedUpdate()
@@ -269,16 +312,16 @@ public class PlayerController : NetworkBehaviour
         if (overlappingLadderCount > 0)
         {
             m_body2d.velocity = new Vector2(m_body2d.velocity.x, vertical * m_climbSpeed);
-            m_body2d.gravityScale = 0f; // Áß·Â Á¦°Å (»ç´Ù¸®¿¡¼­ ºÎµå·´°Ô ÀÌµ¿)
+            m_body2d.gravityScale = 0f; // ì¤‘ë ¥ ì œê±° (ì‚¬ë‹¤ë¦¬ì—ì„œ ë¶€ë“œëŸ½ê²Œ ì´ë™)
         }
         else
         {
-            m_body2d.gravityScale = 1f; // ´Ù½Ã ¿ø·¡ Áß·Â º¹±¸
+            m_body2d.gravityScale = 1f; // ë‹¤ì‹œ ì›ë˜ ì¤‘ë ¥ ë³µêµ¬
         }
     }
 
     /// <summary>
-    /// ÀåÂøµÈ Àåºñ È®ÀÎ
+    /// ì¥ì°©ëœ ì¥ë¹„ í™•ì¸
     /// </summary>
     private bool IsHandEquipped()
     {
@@ -322,18 +365,18 @@ public class PlayerController : NetworkBehaviour
         return null;
     }
     /// <summary>
-    /// ¾ÆÀÌÅÛÀ» ´øÁı´Ï´Ù. ´øÁø ¾ÆÀÌÅÛÀº ¹Ù´Ú¿¡ ¶³¾îÁö¸ç ¹Ù´Ú¿¡ ¶³¾îÁø ¾ÆÀÌÅÛ µ¿±âÈ­µÊ
-    /// ÀÎº¥Åä¸®¿¡¼­ Á¦°ÅÇÏ´Â °Ç InventoryManager¿¡¼­ Ã³¸®
+    /// ì•„ì´í…œì„ ë˜ì§‘ë‹ˆë‹¤. ë˜ì§„ ì•„ì´í…œì€ ë°”ë‹¥ì— ë–¨ì–´ì§€ë©° ë°”ë‹¥ì— ë–¨ì–´ì§„ ì•„ì´í…œ ë™ê¸°í™”ë¨
+    /// ì¸ë²¤í† ë¦¬ì—ì„œ ì œê±°í•˜ëŠ” ê±´ InventoryManagerì—ì„œ ì²˜ë¦¬
     /// </summary>
     [Command (requiresAuthority = false)]
     public void ThrowItem(string itemCode)
     {
-        // ¾ÆÀÌÅÛ µå·Ó
+        // ì•„ì´í…œ ë“œë¡­
         NetworkItemManager.Instance.SpawnItem(itemCode, transform.position, false);
     }
 
     /// <summary>
-    /// ÀÓ½Ã °ø°İ ÆÇÁ¤
+    /// ì„ì‹œ ê³µê²© íŒì •
     /// </summary>
     /*
     private IEnumerator AttackPointEnable()
@@ -347,9 +390,24 @@ public class PlayerController : NetworkBehaviour
     {
         if (collision.CompareTag("Monster"))
         {
-            // °ø°İ ÆÇÁ¤
-            //collision.GetComponent<Enemy>().TakeDamage(10);
-            //StartCoroutine(AttackPointEnable());
+            Debug.Log("ëª¬ìŠ¤í„°ì™€ ì¶©ëŒ");
+            //ë§·ë¼ì§€ì¸ì§€ ì²´í¬
+            if (collision.GetComponent<MonsterController>() is MonsterController monsterCon)
+            {
+                if( monsterCon.monsterType == MonsterType.Boar )
+                {
+                    Debug.Log("ë§·ë¼ì§€ì™€ ì¶©ëŒ");
+                    // ë§ì•˜ì„ ë•Œ ì• ë‹ˆë©”ì´ì…˜ íŠ¸ë¦¬ê±°
+                    if (m_animator != null)
+                    {
+                        m_animator.SetTrigger("Hurt");
+                    }
+
+                    StopCoroutine(ShowHealthBar()); // ì²´ë ¥ë°” í‘œì‹œ
+
+                    CmdHitResource(monsterCon.MonsterDamage); // í”¼í•´ëŸ‰ ì „ë‹¬
+                }
+            }
         }
         if (collision.CompareTag("Ladder"))
         {
@@ -365,4 +423,41 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    /// <summary>
+    /// í”¼ê²© í•¨ìˆ˜
+    /// </summary>
+    [Command(requiresAuthority = false)] // ì•„ë¬´ í´ë¼ì´ì–¸íŠ¸ë‚˜ í˜¸ì¶œ ê°€ëŠ¥
+    public void CmdHitResource(float damage)
+    {
+        if (currentHealth <= 0)
+        {
+            return;
+        }
+
+        // í”¼í•´ ì ìš© (ë°˜ì˜¬ë¦¼ ë˜ëŠ” ê°•ì œ ì •ìˆ˜ ì²˜ë¦¬)
+        currentHealth -= Mathf.CeilToInt(damage);
+
+        // ì£½ì—ˆëŠ”ì§€ í™•ì¸
+        if (currentHealth <= 0)
+        {
+            //TODO : ì£½ìŒ ì²˜ë¦¬
+
+            //ì¼ë‹¨ ì²´ë ¥ ìµœëŒ€ë¡œ ì˜¬ë ¤ì£¼ëŠ” ìŠ¤í¬ë¦½íŠ¸
+            currentHealth = fullHealth;
+            //ì²´ë ¥ë°” ì´ˆê¸°í™”
+            healthBar.fillAmount = 1;
+            if (healthBar != null)
+            {
+                healthBarBG.SetActive(false); // ì‹œì‘ ì‹œ ì²´ë ¥ë°” ë¹„í™œì„±í™”
+            }
+        }
+
+    }
+
+    private IEnumerator ShowHealthBar()
+    {
+        healthBarBG.SetActive(true); // ì²´ë ¥ë°” í™œì„±í™”
+        yield return new WaitForSeconds(2f); // 2ì´ˆ ëŒ€ê¸°
+        healthBarBG.SetActive(false); // ì²´ë ¥ë°” ë¹„í™œì„±í™”
+    }
 }

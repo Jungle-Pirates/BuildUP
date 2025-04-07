@@ -12,6 +12,7 @@ TagManager:
   - Monster
   - Ground
   - Ladder
+  - MonsterAttack
   layers:
   - Default
   - TransparentFX
