@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7910405977603589519}
   - component: {fileID: 2374954460994875353}
-  - component: {fileID: 3553199788521400148}
+  - component: {fileID: 5173293137385021501}
   - component: {fileID: 1542805017527539659}
   m_Layer: 0
   m_Name: BuildManagers
@@ -57,7 +57,7 @@ MonoBehaviour:
   buildUI: {fileID: 0}
   LadderPrefab: {fileID: 5690240786786780139, guid: 3c748d1175f92af43990f55ce06bce96, type: 3}
   PipePrefab: {fileID: 5690240786786780139, guid: 9c808b7186405a84292d88a68fa2f7df, type: 3}
---- !u!114 &3553199788521400148
+--- !u!114 &5173293137385021501
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -69,11 +69,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac8372fbb17ed5445bab9e8a6678ca80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   Rooms:
   - {fileID: 8627888066419482477, guid: 144e01945b248404298f4250b3bbf5d3, type: 3}
   - {fileID: 8627888066419482477, guid: e5b4edfbb8c23c448bfe7e835dce80b7, type: 3}
   - {fileID: 8627888066419482477, guid: d2ec85cc303dd584898decaab8e6ff98, type: 3}
   - {fileID: 8627888066419482477, guid: 18c8b54e168921f42adf6816c661ff3c, type: 3}
+  EmptyRoom: {fileID: 8627888066419482477, guid: 144e01945b248404298f4250b3bbf5d3, type: 3}
 --- !u!114 &1542805017527539659
 MonoBehaviour:
   m_ObjectHideFlags: 0

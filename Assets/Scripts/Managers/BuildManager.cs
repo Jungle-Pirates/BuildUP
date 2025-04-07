@@ -29,10 +29,13 @@ public class BuildManager : NetworkBehaviour
     public SyncDictionary<Vector2Int, GameObject> WorldRoomData => worldRoomData;
 
     [SerializeField] private GameObject testFoundationObject;
+
     private bool _isBuildMode = false;
     public bool IsBuildMode { get { return _isBuildMode; } }
     private bool _isPlaceMode = false;
     public bool IsPlaceMode { get { return _isPlaceMode; } }
+    private bool _isDestructionMode = false;
+    public bool IsDestructionMode { get { return _isDestructionMode; } }
 
     private Room _selectRoom;
 
@@ -76,10 +79,11 @@ public class BuildManager : NetworkBehaviour
 
     private void Update()
     {
-        //임시로 'B'를 누르면 건설모드로 들어가도록
         //임시로 'B'를 모드 전환 되도록
         if (Input.GetKeyDown(KeyCode.B))
         {
+            _isDestructionMode = false;
+
             if (_isBuildMode)
             {
                 _isBuildMode = false;
@@ -94,6 +98,20 @@ public class BuildManager : NetworkBehaviour
             {
                 _isBuildMode = true;
                 _isPlaceMode = false;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            _isPlaceMode = false;
+            _isBuildMode = false;
+
+            if (_isDestructionMode)
+            {
+                _isDestructionMode = false;
+            }
+            else
+            {
+                _isDestructionMode = true;
             }
         }
 
@@ -143,7 +161,7 @@ public class BuildManager : NetworkBehaviour
     /// </summary>
     /// <param name="coordinate"></param>
     /// <returns></returns>
-    private bool CheckRoomExistance(Vector2Int coordinate)
+    public bool CheckRoomExistance(Vector2Int coordinate)
     {
         if (worldRoomData.TryGetValue(coordinate, out GameObject room))
             return true;
@@ -325,6 +343,7 @@ public class BuildManager : NetworkBehaviour
     #endregion
 
     #region Add or Build Room
+
     /// <summary>
     /// A method that constructs a building at the given coordinates.
     /// </summary>
@@ -332,26 +351,36 @@ public class BuildManager : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdBuildRoom(Vector2Int coordinate)
     {
-        if (!CanBuildRoom(coordinate))
+        if (_selectRoom.IsEmptyRoom)
         {
-            Debug.Log("<color=red>해당 위치에 건물을 지을 수 없습니다.</color>");
-        }
-        else if (!HasResourceToBuild(_selectRoom))
-        {
-            Debug.Log("<color=red>해당 방을 짓기에 자원이 부족합니다.</color>");
-        }
-        else
-        {
-            if (coordinate.y == 0)
+            // 새 방 생성
+            if (!CanBuildRoom(coordinate))
             {
-                BuildRoom(0, coordinate);
+                Debug.Log("<color=red>해당 위치에 건물을 지을 수 없습니다.</color>");
+            }
+            else if (!HasResourceToBuild(_selectRoom))
+            {
+                Debug.Log("<color=red>해당 방을 짓기에 자원이 부족합니다.</color>");
             }
             else
             {
-                BuildRoom(1, coordinate);
+                if (coordinate.y == 0)
+                {
+                    BuildRoom(0, coordinate);
+                }
+                else
+                {
+                    BuildRoom(1, coordinate);
+                }
+                UseRequiredItem(_selectRoom);
             }
-            UseRequiredItem(_selectRoom);
         }
+        else
+        {
+            // 빈 방 업그레이드
+            BuildUpgradeManager.Instance.CmdRoomUpgrade(coordinate, _selectRoom);
+        }
+        
     }
 
     /// <summary>
@@ -404,7 +433,7 @@ public class BuildManager : NetworkBehaviour
                 roomObject = Instantiate(testFoundationObject, FromBasisIntCoordinates(coordinate), Quaternion.identity);
                 break;
             case 1:
-                Debug.Log("선택한 방 건설");
+                Debug.Log("빈 방 건설");
                 roomObject = Instantiate(_selectRoom.gameObject, FromBasisIntCoordinates(coordinate), Quaternion.identity);
                 break;
             default:
@@ -412,7 +441,6 @@ public class BuildManager : NetworkBehaviour
                 return;
         }
         NetworkServer.Spawn(roomObject);
-        //roomObject.transform.position = FromBasisIntCoordinates(coordinate);
 
         // 생성 후 방 데이터 공유
         RpcOnBuildNewRoom(coordinate, roomObject);
@@ -530,9 +558,19 @@ public class BuildManager : NetworkBehaviour
         {
             DeletePipe(coordinate);
         }
-        else if (worldRoomData.TryGetValue(coordinate, out GameObject room))
+        else if (worldRoomData.TryGetValue(coordinate, out GameObject roomObj))
         {
-            DeleteRoom(coordinate);
+            Room room = roomObj.GetComponent<Room>();
+            // 빈 방이거나 토대면 방 오브젝트를 제거
+            if (room.IsEmptyRoom || room.IsFoundationRoom)
+            {
+                DeleteRoom(coordinate);
+            }
+            // 아니라면 빈 방으로 다운그레이드
+            else
+            {
+                BuildUpgradeManager.Instance.RoomDowngrade(coordinate);
+            }
         }
         else
         {
@@ -547,7 +585,6 @@ public class BuildManager : NetworkBehaviour
     [Server]
     private void DeleteRoom(Vector2Int coordinate)
     {
-        //DestroyRoomObject(deleteRoom.Entity.gameObject);
         // 제거 후 방 데이터 공유
         RpcOnDeleteRoom(coordinate);
     }
@@ -645,6 +682,33 @@ public class BuildManager : NetworkBehaviour
 
     #endregion
 
+    /// <summary>
+    /// 기존의 방 데이터를 다른 방으로 교체
+    /// </summary>
+    /// <param name="coordinate"></param>
+    /// <param name="replaceRoom"></param>
+    public bool ReplaceRoomData(Vector2Int coordinate, Room replaceRoom)
+    {
+        // 기존의 방 데이터 제거
+        if (worldRoomData.Remove(coordinate))
+        {
+            // 교체한 방 데이터 추가
+            replaceRoom.SetRoomData(coordinate, Vector2Int.one, true);
+
+            if (!worldRoomData.TryAdd(coordinate, replaceRoom.gameObject))
+            {
+                Debug.LogWarning("<color=red>[에러 발생]</color>데이터를 추가하고자 하는 좌표에 이미 데이터가 있습니다.");
+                return false;
+            }
+            return true;
+        }
+        else
+        {
+            Debug.LogWarning("<color=red>[에러 발생]</color>제거하고자 하는 좌표의 데이터가 존재하지 않습니다.");
+            return false;
+        }
+    }
+
     #region Unit Room Size Basis Coordinate Conversion Method
 
     /// <summary>
@@ -680,5 +744,24 @@ public class BuildManager : NetworkBehaviour
     public void SetSelectedRoom(Room room)
     {
         _selectRoom = room;
+    }
+
+    /// <summary>
+    /// 입력한 좌표에 Room을 반환하는 메서드
+    /// - 해당 좌표에 방이 존재하지 않으면 null을 반환
+    /// </summary>
+    /// <param name="coordinate"></param>
+    /// <returns></returns>
+    public Room GetRoomWithCoordinate(Vector2Int coordinate)
+    {
+        if (CheckRoomExistance(coordinate))
+        {
+            worldRoomData.TryGetValue(coordinate, out GameObject roomObj);
+            return roomObj.GetComponent<Room>();
+        }
+        else
+        {
+            return null;
+        }
     }
 }

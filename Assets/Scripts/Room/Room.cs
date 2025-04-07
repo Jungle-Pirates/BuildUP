@@ -53,6 +53,11 @@ public abstract class Room : NetworkBehaviour
     private bool isConnectedWithSupport;            // 해당하는 방이 지지대와 연결되어 있는가, 이 부분은 나중에 지지대를 만들 때 수정
     public bool IsConnectedWithSupport { get { return isConnectedWithSupport; } }
 
+    [SerializeField] private bool isEmptyRoom = false;
+    public bool IsEmptyRoom {  get { return isEmptyRoom; } }
+    [SerializeField] private bool isFoundationRoom = false;
+    public bool IsFoundationRoom { get { return isFoundationRoom; } }
+
     public void SetRoomData(Vector2Int coordinate, Vector2Int setSize, bool setFoundationConnected)
     {
         roomPosition = coordinate;
