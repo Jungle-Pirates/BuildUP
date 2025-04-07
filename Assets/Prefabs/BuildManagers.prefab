@@ -53,7 +53,7 @@ MonoBehaviour:
   roomUnitSize: {x: 4, y: 3}
   currentFoundationLevel: 0
   foundationMaxHeights: 0300000005000000070000000a000000
-  testFoundationObject: {fileID: 6461169920956429484, guid: fcafbcaa507591f47987c96e0253c689, type: 3}
+  testFoundationObject: {fileID: 5424020133352042080, guid: 9a053a80c647b9f468779981797eac9f, type: 3}
   buildUI: {fileID: 0}
   LadderPrefab: {fileID: 5690240786786780139, guid: 3c748d1175f92af43990f55ce06bce96, type: 3}
   PipePrefab: {fileID: 5690240786786780139, guid: 9c808b7186405a84292d88a68fa2f7df, type: 3}
@@ -73,11 +73,16 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   Rooms:
-  - {fileID: 8627888066419482477, guid: 144e01945b248404298f4250b3bbf5d3, type: 3}
-  - {fileID: 8627888066419482477, guid: e5b4edfbb8c23c448bfe7e835dce80b7, type: 3}
-  - {fileID: 8627888066419482477, guid: d2ec85cc303dd584898decaab8e6ff98, type: 3}
-  - {fileID: 8627888066419482477, guid: 18c8b54e168921f42adf6816c661ff3c, type: 3}
-  EmptyRoom: {fileID: 8627888066419482477, guid: 144e01945b248404298f4250b3bbf5d3, type: 3}
+  - {fileID: 5424020133352042080, guid: 005efcedd3f37204f86f9310a9e72547, type: 3}
+  - {fileID: 5424020133352042080, guid: 844b46bc3969c3547a61c717b8f3b8da, type: 3}
+  - {fileID: 5424020133352042080, guid: 9242e09f7af2d7a43a21fbc6f611ec43, type: 3}
+  - {fileID: 5424020133352042080, guid: 52c7845970a19f14ba287623ca003e77, type: 3}
+  - {fileID: 5424020133352042080, guid: 85d20c6515ab6b64ea7acf839f982886, type: 3}
+  - {fileID: 5424020133352042080, guid: 71e4c92eb38b93b40b8e0dec5007bb71, type: 3}
+  - {fileID: 5424020133352042080, guid: da72f7ec4fd25854d8d27f21dcc081ce, type: 3}
+  - {fileID: 5424020133352042080, guid: db177bb3462d5fe4ba421d724362d0b7, type: 3}
+  - {fileID: 5424020133352042080, guid: 69e3c702f565ff54c8c56a716a1aa722, type: 3}
+  EmptyRoom: {fileID: 5424020133352042080, guid: 005efcedd3f37204f86f9310a9e72547, type: 3}
 --- !u!114 &1542805017527539659
 MonoBehaviour:
   m_ObjectHideFlags: 0
