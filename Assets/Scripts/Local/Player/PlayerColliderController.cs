@@ -1,3 +1,4 @@
+using Mirror;
 using UnityEngine;
 
 public class PlayerColliderController : MonoBehaviour
@@ -6,6 +7,11 @@ public class PlayerColliderController : MonoBehaviour
     public int OverlappingLadderCount => overlappingLadderCount; // 외부에서 접근할 수 있도록 프로퍼티로 제공
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        //내 캐릭터가 아니면 무시
+        if (GetComponentInParent<NetworkIdentity>().isLocalPlayer == false)
+        {
+            return;
+        }
         if (collision.CompareTag("Monster"))
         {
             // 공격 판정
@@ -19,8 +25,9 @@ public class PlayerColliderController : MonoBehaviour
         if (collision.CompareTag("Room"))
         {
             // 방이 사용중이면 UI를 열지 않음
-            if (collision.GetComponent<Room>().IsOccupied)
+            if (collision.GetComponent<Room>().IsOccupied && collision.GetComponent<Room>().isOccupiedByMe == false)
             {
+                Debug.LogWarning($"방이 사용중입니다: {collision.name}");
                 return;
             }
             collision.GetComponent<Room>().OpenRoomUI();
@@ -29,6 +36,11 @@ public class PlayerColliderController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        //내 캐릭터가 아니면 무시
+        if (GetComponentInParent<NetworkIdentity>().isLocalPlayer == false)
+        {
+            return;
+        }
         if (collision.CompareTag("Ladder"))
         {
             overlappingLadderCount--;

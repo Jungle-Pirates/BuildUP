@@ -25,7 +25,7 @@ public abstract class CraftingRoom : Room
     }
     public override void OpenRoomUI()
     {
-        if (IsOccupied) // 방이 사용중이면 UI를 열지 않음
+        if (IsOccupied && !isOccupiedByMe) // 방이 사용중이면 UI를 열지 않음
         {
             return;
         }
@@ -45,7 +45,7 @@ public abstract class CraftingRoom : Room
     }
     public void AddCraftingQueue(string ItemID)
     {
-        if (IsOccupied) // 방이 사용중이면 큐에 추가하지 않음
+        if (IsOccupied && !isOccupiedByMe) // 방이 나로인해 사용중이 아니라면 
         {
             Debug.LogWarning($"방이 사용중입니다: {ItemID}");
             return;
@@ -74,6 +74,7 @@ public abstract class CraftingRoom : Room
         UpdateQueueUI();
         if (craftingCoroutine == null)
         {
+            isOccupiedByMe = true; // 내가 방을 사용중임을 표시
             SetOccupied(true); // 제작 시작 시 Occupy 설정
             craftingCoroutine = StartCoroutine(CraftingCoroutine());
         }
@@ -108,6 +109,7 @@ public abstract class CraftingRoom : Room
         }
         craftingCoroutine = null;
         // 제작 종료하면 Occupy 해제
+        isOccupiedByMe = false; // 내가 방을 사용중이 아님을 표시
         SetOccupied(false);
     }
     private void UpdateQueueUI()

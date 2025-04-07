@@ -36,7 +36,8 @@ public abstract class Room : NetworkBehaviour
     [SyncVar(hook = nameof(OnIsOccupiedChanged))]
     [SerializeField]
     private bool isOccupied = false; // 다른 클라이언트가 방을 사용중인지 확인하기 위한 변수
-    public bool IsOccupied { get { return isActivated; } }
+    public bool IsOccupied { get { return isOccupied; } }
+    public bool isOccupiedByMe = false; // 내가 방을 사용중인지 확인하기 위한 변수
 
     public int maxWorkers = 1;
     private int currentWorkers = 0;
