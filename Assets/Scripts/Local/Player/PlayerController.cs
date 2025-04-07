@@ -38,13 +38,13 @@ public class PlayerController : NetworkBehaviour
     private float m_delayToIdle = 0.0f;
     private float m_rollDuration = 8.0f / 14.0f;
     private float m_rollCurrentTime;
-    private int overlappingLadderCount = 0; // 플레이어가 사다리와 겹친횟수 0보다 크면 사다리 위에 있음
     private float vertical;
+    private PlayerColliderController playerColliderController;
 
-    [Header("도구 사용")]
-    public GameObject attackPoint;  //공격 범위 판정용 오브젝트 
-    //인벤토리 접근용 InventoryManager
-    //private bool isEquipped = false; //손에 장비 장착 여부
+    [Header("???? ???")]
+    public GameObject attackPoint;  //???? ???? ?????? ??????? 
+    //?κ??? ????? InventoryManager
+    //private bool isEquipped = false; //??? ??? ???? ????
 
 
     // Use this for initialization
@@ -52,14 +52,15 @@ public class PlayerController : NetworkBehaviour
     {
         if (isLocalPlayer && SteamManager.Initialized)
         {
-            // 내 이름을 가져와서 서버에 설정
+            // ?? ????? ??????? ?????? ????
             string myName = SteamFriends.GetPersonaName();
             CmdSetDisplayName(myName);
-            // 내 카메라만 꺼주기
+            // ?? ???? ?????
             virtualCamera.gameObject.SetActive(true);
-            //렌더러 우선순위 +1
+            //?????? ?켱???? +1
             GetComponent<SpriteRenderer>().sortingOrder += 1;
         }
+        playerColliderController = transform.Find("PlayerCollider").GetComponent<PlayerColliderController>();
 
         transform.position = new Vector3(Random.Range(-10, 10), 1, 0);
 
@@ -71,21 +72,21 @@ public class PlayerController : NetworkBehaviour
         m_wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
         attackPoint = transform.Find("AttackPoint").gameObject;
-        //attackPoint.SetActive(false); //아이템 Use()에서 Collider2D 컴포넌트를 끄고 키는중 
+        //attackPoint.SetActive(false); //?????? Use()???? Collider2D ????????? ???? ????? 
     }
 
     /// <summary>
-    /// 서버에 이름을 설정하도록 요청하는 Command
+    /// ?????? ????? ????????? ?????? Command
     /// </summary>
     [Command]
     private void CmdSetDisplayName(string myName)
     {
-        // 서버에서 이름 설정 (SyncVar를 통해 모든 클라이언트에 전파됨)
+        // ???????? ??? ???? (SyncVar?? ???? ??? ????????? ?????)
         displayName = myName;
     }
 
     /// <summary>
-    /// 이름이 변경될 때 호출되는 Hook 함수
+    /// ????? ????? ?? ????? Hook ???
     /// </summary>
     private void OnDisplayNameChanged(string oldName, string newName)
     {
@@ -93,7 +94,7 @@ public class PlayerController : NetworkBehaviour
     }
 
     /// <summary>
-    /// 서버에 플레이어가 바라보는 방향을 설정하도록 요청하는 Command
+    /// ?????? ?÷???? ???? ?????? ????????? ?????? Command
     /// </summary>
     /// <param name="direction"></param>
     [Command]
@@ -103,7 +104,7 @@ public class PlayerController : NetworkBehaviour
     }
 
     /// <summary>
-    /// 방향이 변경될 때 호출되는 Hook 함수
+    /// ?????? ????? ?? ????? Hook ???
     /// </summary>
     private void OnFacingDirectionChanged(int oldDirection, int newDirection)
     {
@@ -188,12 +189,12 @@ public class PlayerController : NetworkBehaviour
             m_animator.SetTrigger("Hurt");
 
         //Attack
-        //장비 장착중인지 검사 > 장비 아이템이라면 장비 아이템의 Use호출
+        //??? ?????????? ??? > ??? ?????????? ??? ???????? Use???
         else if (Input.GetMouseButtonDown(0) && m_timeSinceAttack > 0.25f && !m_rolling)
         {
-            if (IsHandEquipped())  // 손에 장비 장착 여부 확인
+            if (IsHandEquipped())  // ??? ??? ???? ???? ???
             {
-                InventoryManager.Instance.slots[0].inventoryItem?.Use(this);  // 장비의 Use() 호출
+                InventoryManager.Instance.slots[0].inventoryItem?.Use(this);  // ????? Use() ???
 
 
                 m_currentAttack++;
@@ -259,26 +260,26 @@ public class PlayerController : NetworkBehaviour
                 m_animator.SetInteger("AnimState", 0);
         }
         //Climb
-        if (overlappingLadderCount > 0)
+        if (playerColliderController.OverlappingLadderCount > 0)
         {
-            vertical = Input.GetAxisRaw("Vertical"); // W, S 또는 ↑, ↓ 키 감지
+            vertical = Input.GetAxisRaw("Vertical"); // W, S ??? ??, ?? ? ????
         }
     }
     void FixedUpdate()
     {
-        if (overlappingLadderCount > 0)
+        if (playerColliderController.OverlappingLadderCount > 0)
         {
             m_body2d.velocity = new Vector2(m_body2d.velocity.x, vertical * m_climbSpeed);
-            m_body2d.gravityScale = 0f; // 중력 제거 (사다리에서 부드럽게 이동)
+            m_body2d.gravityScale = 0f; // ??? ???? (???????? ?ε巴?? ???)
         }
         else
         {
-            m_body2d.gravityScale = 1f; // 다시 원래 중력 복구
+            m_body2d.gravityScale = 1f; // ??? ???? ??? ????
         }
     }
 
     /// <summary>
-    /// 장착된 장비 확인
+    /// ?????? ??? ???
     /// </summary>
     private bool IsHandEquipped()
     {
@@ -322,18 +323,18 @@ public class PlayerController : NetworkBehaviour
         return null;
     }
     /// <summary>
-    /// 아이템을 던집니다. 던진 아이템은 바닥에 떨어지며 바닥에 떨어진 아이템 동기화됨
-    /// 인벤토리에서 제거하는 건 InventoryManager에서 처리
+    /// ???????? ???????. ???? ???????? ???? ???????? ???? ?????? ?????? ???????
+    /// ?κ??????? ??????? ?? InventoryManager???? ???
     /// </summary>
     [Command (requiresAuthority = false)]
     public void ThrowItem(string itemCode)
     {
-        // 아이템 드롭
+        // ?????? ???
         NetworkItemManager.Instance.SpawnItem(itemCode, transform.position, false);
     }
 
     /// <summary>
-    /// 임시 공격 판정
+    /// ??? ???? ????
     /// </summary>
     /*
     private IEnumerator AttackPointEnable()
@@ -343,26 +344,4 @@ public class PlayerController : NetworkBehaviour
         attackPoint.SetActive(false);
     }
     */
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Monster"))
-        {
-            // 공격 판정
-            //collision.GetComponent<Enemy>().TakeDamage(10);
-            //StartCoroutine(AttackPointEnable());
-        }
-        if (collision.CompareTag("Ladder"))
-        {
-            overlappingLadderCount++;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Ladder"))
-        {
-            overlappingLadderCount--;
-        }
-    }
-
 }

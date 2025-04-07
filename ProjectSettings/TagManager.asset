@@ -12,6 +12,7 @@ TagManager:
   - Monster
   - Ground
   - Ladder
+  - Room
   layers:
   - Default
   - TransparentFX

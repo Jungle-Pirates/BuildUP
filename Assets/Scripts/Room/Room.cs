@@ -16,9 +16,11 @@ public enum TaskStatus
 /// 기본 방 객체
 /// </summary>
 [Serializable]
-public abstract class Room: NetworkBehaviour
+public abstract class Room : NetworkBehaviour
 {
     [Header("Room Data")]
+    [Tooltip("방 타입")]
+    public RoomType roomType = RoomType.빈방;
     public string RoomName;
     public Sprite RoomSprite;
     public RequiredItem[] RequiredItems;
@@ -31,6 +33,10 @@ public abstract class Room: NetworkBehaviour
     [SyncVar]
     [SerializeField]
     private bool isActivated = false;
+    [SyncVar(hook = nameof(OnIsOccupiedChanged))]
+    [SerializeField]
+    private bool isOccupied = false; // 다른 클라이언트가 방을 사용중인지 확인하기 위한 변수
+    public bool IsOccupied { get { return isActivated; } }
 
     public int maxWorkers = 1;
     private int currentWorkers = 0;
@@ -58,11 +64,27 @@ public abstract class Room: NetworkBehaviour
         isActivated = true;
     }
 
-    private void Start()
+    /// <summary>
+    /// 서버에게 방이 활성화 되었음을 알림
+    /// </summary>
+    [Command(requiresAuthority = false)] // 아무 클라이언트나 호출 가능
+    public void SetOccupied(bool occupied)
+    {
+        isOccupied = occupied;
+    }
+    /// <summary>
+    /// 방이 활성화 되면 상태를 변경해줌
+    /// </summary>
+    public void OnIsOccupiedChanged(bool oldValue, bool newValue)
+    {
+        isOccupied = newValue;
+    }
+
+    protected virtual void Start()
     {
         transform.localScale = BuildManager.Instance.RoomUnitSize;
     }
-    
+
     // 일꾼을 방에 할당
     public virtual bool AssignWorker(int count)
     {
@@ -74,7 +96,7 @@ public abstract class Room: NetworkBehaviour
         }
         return false;
     }
-    
+
     // 일꾼 제거
     public virtual bool RemoveWorker(int count)
     {
@@ -86,20 +108,20 @@ public abstract class Room: NetworkBehaviour
         }
         return false;
     }
-    
+
     // 생산 속도 배율 업데이트
     protected virtual void UpdateProductionMultiplier()
     {
         productionMultiplier = currentWorkers / (float)maxWorkers;
     }
-    
+
     // 상호작용 메서드
     public virtual void Interact()
     {
         // UI 열기
         // WorkerManagementUI.instance.OpenRoomUI(this);
     }
-    
+
     public virtual void StartTask()
     {
         if (currentWorkers > 0 && isAutomated)
@@ -112,11 +134,25 @@ public abstract class Room: NetworkBehaviour
             taskStatus = TaskStatus.Waiting;
         }
     }
-    
+
     // 작업 완료
     public virtual void CompleteTask()
     {
         taskStatus = TaskStatus.Completed;
         // 다음 작업 설정 또는 작업 종료
+    }
+    /// <summary>
+    /// 방 UI를 여는 함수, 각 방마다 다르게 구현해야 함
+    /// </summary>
+    public virtual void OpenRoomUI()
+    {
+        Debug.Log("방 UI를 여는 함수입니다.");
+    }
+    /// <summary>
+    /// 방 UI를 닫는 함수, 각 방마다 다르게 구현해야 함
+    /// </summary>
+    public virtual void CloseRoomUI()
+    {
+        Debug.Log("방 UI를 닫는 함수입니다.");
     }
 }
