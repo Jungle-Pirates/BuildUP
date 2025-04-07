@@ -23,7 +23,7 @@ public class ResidentialRoom : Room
         NotifyAdjacentResidences();
 
         // 일꾼 업데이트
-        HumanResourcesManager.Instance.UpdateTotalWorkers();
+        HumanResourcesManager.Instance.RecalculateClusters();
     }
 
     // 주거지가 제거될 때 호출
@@ -33,7 +33,7 @@ public class ResidentialRoom : Room
         NotifyAdjacentResidences();
 
         // 일꾼 업데이트
-        HumanResourcesManager.Instance.UpdateTotalWorkers();
+        HumanResourcesManager.Instance.RecalculateClusters();
     }
 
     // 인접 주거지 찾기
