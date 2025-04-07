@@ -19,6 +19,8 @@ public class BuildUI : MonoBehaviour
 
     private void UpdateUI()
     {
+        upgradeRooms.Clear();
+
         // 방 리스트 피벗의 자식을 모두 삭제
         foreach (Transform child in upgradeRoomsParent)
         {

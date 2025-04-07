@@ -18,11 +18,6 @@ public class BuildManager : NetworkBehaviour
     [SerializeField] private Vector2 roomUnitSize = new Vector2(1, 1);
     public Vector2 RoomUnitSize { get { return roomUnitSize; } }
 
-    [Header("Foundation")]
-    [SyncVar]
-    [SerializeField] private int currentFoundationLevel;
-    [SerializeField] private int[] foundationMaxHeights;
-
     [Header("Room Coordinate")]
     [Tooltip("Data of the room constructed at the coordinates. The foundation can only be built at y: 0.")]
     [SerializeField] private SyncDictionary<Vector2Int, GameObject> worldRoomData = new SyncDictionary<Vector2Int, GameObject>();
@@ -181,7 +176,7 @@ public class BuildManager : NetworkBehaviour
             //Debug.Log("Rooms cannot be constructed at coordinates lower than 0.");
             return false;
         }
-        else if (coordinate.y >= foundationMaxHeights[currentFoundationLevel])
+        else if (coordinate.y >= FoundationManager.Instance.FoundationMaxHeights[FoundationManager.Instance.CurrentFoundationLevel])
         {
             //Debug.Log("Rooms cannot be constructed at heights higher than the current maximum building height.");
             return false;
