@@ -22,7 +22,8 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] bool m_noBlood = false;
     [SerializeField] GameObject m_slideDust;
 
-    private Animator m_animator;
+    public  Animator m_animator;
+
     private Rigidbody2D m_body2d;
     private Sensor_HeroKnight m_groundSensor;
     private Sensor_HeroKnight m_wallSensorR1;
@@ -439,21 +440,6 @@ public class PlayerController : NetworkBehaviour
         attackPoint.SetActive(false);
     }
     */
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Ladder"))
-        {
-            overlappingLadderCount++;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Ladder"))
-        {
-            overlappingLadderCount--;
-        }
-    }
 
     /// <summary>
     /// 피격 함수
@@ -500,7 +486,7 @@ public class PlayerController : NetworkBehaviour
 
     }
 
-    private IEnumerator ShowHealthBar()
+    public IEnumerator ShowHealthBar()
     {
         healthBarBG.SetActive(true); // 체력바 활성화
         yield return new WaitForSeconds(2f); // 2초 대기
