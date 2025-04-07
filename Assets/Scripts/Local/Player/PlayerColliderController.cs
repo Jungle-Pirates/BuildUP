@@ -22,13 +22,11 @@ public class PlayerColliderController : MonoBehaviour
         }
         if (collision.CompareTag("Monster"))
         {
-            Debug.Log("몬스터와 충돌");
             //맷돼지인지 체크
             if (collision.GetComponent<MonsterController>() is MonsterController monsterCon)
             {
                 if (monsterCon.monsterType == MonsterType.Boar)
                 {
-                    Debug.Log("맷돼지와 충돌");
                     // 맞았을 때 애니메이션 트리거
                     
                     if (playerController.m_animator != null)

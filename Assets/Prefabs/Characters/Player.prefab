@@ -192,6 +192,7 @@ MonoBehaviour:
   m_climbSpeed: 4
   m_noBlood: 0
   m_slideDust: {fileID: 1038168246061390451, guid: 8b8c8cc6774fb074cb9139cc631b108e, type: 3}
+  m_animator: {fileID: 0}
   fullHealth: 100
   minDamage: 1
   currentHealth: 0
@@ -1160,7 +1161,7 @@ GameObject:
   - component: {fileID: 1406893703340979744}
   - component: {fileID: 6828012331404630774}
   - component: {fileID: 6838791940606736491}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: PlayerCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
