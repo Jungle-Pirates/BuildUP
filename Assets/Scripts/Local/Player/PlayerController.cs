@@ -4,6 +4,7 @@ using TMPro;
 using Steamworks;
 using Cinemachine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PlayerController : NetworkBehaviour
 {
@@ -41,10 +42,29 @@ public class PlayerController : NetworkBehaviour
     private float vertical;
     private PlayerColliderController playerColliderController;
 
-    [Header("???? ???")]
-    public GameObject attackPoint;  //???? ???? ?????? ??????? 
-    //?��??? ????? InventoryManager
-    //private bool isEquipped = false; //??? ??? ???? ????
+    [Header("몬스터 체력")]
+
+    [Tooltip("최대 체력")]
+    [SerializeField]
+    private int fullHealth = 100;
+    [Tooltip("최소 데미지")]
+    [SerializeField]
+    private int minDamage = 1;
+
+    [SyncVar(hook = nameof(OnHealthChanged))]
+    [Tooltip("현재 체력")]
+    [SerializeField]
+    private int currentHealth;
+
+    [Tooltip("체력바 이미지")]
+    [SerializeField]
+    private Image healthBar;
+    private GameObject healthBarBG; // 체력바 배경
+
+    [Header("도구 사용")]
+    public GameObject attackPoint;  //공격 범위 판정용 오브젝트 
+    //인벤토리 접근용 InventoryManager
+    //private bool isEquipped = false; //손에 장비 장착 여부
 
 
     // Use this for initialization
@@ -52,12 +72,12 @@ public class PlayerController : NetworkBehaviour
     {
         if (isLocalPlayer && SteamManager.Initialized)
         {
-            // ?? ????? ??????? ?????? ????
+            // 내 이름을 가져와서 서버에 설정
             string myName = SteamFriends.GetPersonaName();
             CmdSetDisplayName(myName);
-            // ?? ???? ?????
+            // 내 카메라만 꺼주기
             virtualCamera.gameObject.SetActive(true);
-            //?????? ?��???? +1
+            //렌더러 우선순위 +1
             GetComponent<SpriteRenderer>().sortingOrder += 1;
         }
         playerColliderController = transform.Find("PlayerCollider").GetComponent<PlayerColliderController>();
@@ -72,21 +92,29 @@ public class PlayerController : NetworkBehaviour
         m_wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
         attackPoint = transform.Find("AttackPoint").gameObject;
-        //attackPoint.SetActive(false); //?????? Use()???? Collider2D ????????? ???? ????? 
+        //attackPoint.SetActive(false); //아이템 Use()에서 Collider2D 컴포넌트를 끄고 키는중 
+
+        healthBarBG = healthBar.transform.parent.gameObject;
+
+        healthBar.fillAmount = 1; // 체력바 초기화
+        if (healthBar != null)
+        {
+            healthBarBG.SetActive(false); // 시작 시 체력바 비활성화
+        }
     }
 
     /// <summary>
-    /// ?????? ????? ????????? ?????? Command
+    /// 서버에 이름을 설정하도록 요청하는 Command
     /// </summary>
     [Command]
     private void CmdSetDisplayName(string myName)
     {
-        // ???????? ??? ???? (SyncVar?? ???? ??? ????????? ?????)
+        // 서버에서 이름 설정 (SyncVar를 통해 모든 클라이언트에 전파됨)
         displayName = myName;
     }
 
     /// <summary>
-    /// ????? ????? ?? ????? Hook ???
+    /// 이름이 변경될 때 호출되는 Hook 함수
     /// </summary>
     private void OnDisplayNameChanged(string oldName, string newName)
     {
@@ -94,7 +122,7 @@ public class PlayerController : NetworkBehaviour
     }
 
     /// <summary>
-    /// ?????? ?��???? ???? ?????? ????????? ?????? Command
+    /// 서버에 플레이어가 바라보는 방향을 설정하도록 요청하는 Command
     /// </summary>
     /// <param name="direction"></param>
     [Command]
@@ -104,11 +132,26 @@ public class PlayerController : NetworkBehaviour
     }
 
     /// <summary>
-    /// ?????? ????? ?? ????? Hook ???
+    /// 방향이 변경될 때 호출되는 Hook 함수
     /// </summary>
     private void OnFacingDirectionChanged(int oldDirection, int newDirection)
     {
         GetComponent<SpriteRenderer>().flipX = newDirection == -1;
+    }
+
+    /// <summary>
+    /// 체력 변경 시 호출되는 메서드 - 체력바 업데이트
+    /// </summary>
+    public void OnHealthChanged(int oldHealth, int newHealth)
+    {
+        currentHealth = newHealth;
+
+        // 체력바 업데이트
+        if (healthBar != null && currentHealth < fullHealth)
+        {
+            healthBarBG.SetActive(true); // 체력바 활성화
+            healthBar.fillAmount = (float)currentHealth / fullHealth; // 체력 비율 계산
+        }
     }
 
     void Update()
@@ -189,12 +232,12 @@ public class PlayerController : NetworkBehaviour
             m_animator.SetTrigger("Hurt");
 
         //Attack
-        //??? ?????????? ??? > ??? ?????????? ??? ???????? Use???
+        //장비 장착중인지 검사 > 장비 아이템이라면 장비 아이템의 Use호출
         else if (Input.GetMouseButtonDown(0) && m_timeSinceAttack > 0.25f && !m_rolling)
         {
-            if (IsHandEquipped())  // ??? ??? ???? ???? ???
+            if (IsHandEquipped())  // 손에 장비 장착 여부 확인
             {
-                InventoryManager.Instance.slots[0].inventoryItem?.Use(this);  // ????? Use() ???
+                InventoryManager.Instance.slots[0].inventoryItem?.Use(this);  // 장비의 Use() 호출
 
 
                 m_currentAttack++;
@@ -262,7 +305,7 @@ public class PlayerController : NetworkBehaviour
         //Climb
         if (playerColliderController.OverlappingLadderCount > 0)
         {
-            vertical = Input.GetAxisRaw("Vertical"); // W, S ??? ??, ?? ? ????
+            vertical = Input.GetAxisRaw("Vertical"); // W, S 또는 ↑, ↓ 키 감지
         }
     }
     void FixedUpdate()
@@ -270,16 +313,16 @@ public class PlayerController : NetworkBehaviour
         if (playerColliderController.OverlappingLadderCount > 0)
         {
             m_body2d.velocity = new Vector2(m_body2d.velocity.x, vertical * m_climbSpeed);
-            m_body2d.gravityScale = 0f; // ??? ???? (???????? ?����?? ???)
+            m_body2d.gravityScale = 0f; // 중력 제거 (사다리에서 부드럽게 이동)
         }
         else
         {
-            m_body2d.gravityScale = 1f; // ??? ???? ??? ????
+            m_body2d.gravityScale = 1f; // 다시 원래 중력 복구
         }
     }
 
     /// <summary>
-    /// ?????? ??? ???
+    /// 장착된 장비 확인
     /// </summary>
     private bool IsHandEquipped()
     {
@@ -323,18 +366,18 @@ public class PlayerController : NetworkBehaviour
         return null;
     }
     /// <summary>
-    /// ???????? ???????. ???? ???????? ???? ???????? ???? ?????? ?????? ???????
-    /// ?��??????? ??????? ?? InventoryManager???? ???
+    /// 아이템을 던집니다. 던진 아이템은 바닥에 떨어지며 바닥에 떨어진 아이템 동기화됨
+    /// 인벤토리에서 제거하는 건 InventoryManager에서 처리
     /// </summary>
     [Command (requiresAuthority = false)]
     public void ThrowItem(string itemCode)
     {
-        // ?????? ???
+        // 아이템 드롭
         NetworkItemManager.Instance.SpawnItem(itemCode, transform.position, false);
     }
 
     /// <summary>
-    /// ??? ???? ????
+    /// 임시 공격 판정
     /// </summary>
     /*
     private IEnumerator AttackPointEnable()
@@ -344,4 +387,57 @@ public class PlayerController : NetworkBehaviour
         attackPoint.SetActive(false);
     }
     */
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Ladder"))
+        {
+            overlappingLadderCount++;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Ladder"))
+        {
+            overlappingLadderCount--;
+        }
+    }
+
+    /// <summary>
+    /// 피격 함수
+    /// </summary>
+    [Command(requiresAuthority = false)] // 아무 클라이언트나 호출 가능
+    public void CmdHitResource(float damage)
+    {
+        if (currentHealth <= 0)
+        {
+            return;
+        }
+
+        // 피해 적용 (반올림 또는 강제 정수 처리)
+        currentHealth -= Mathf.CeilToInt(damage);
+
+        // 죽었는지 확인
+        if (currentHealth <= 0)
+        {
+            //TODO : 죽음 처리
+
+            //일단 체력 최대로 올려주는 스크립트
+            currentHealth = fullHealth;
+            //체력바 초기화
+            healthBar.fillAmount = 1;
+            if (healthBar != null)
+            {
+                healthBarBG.SetActive(false); // 시작 시 체력바 비활성화
+            }
+        }
+
+    }
+
+    private IEnumerator ShowHealthBar()
+    {
+        healthBarBG.SetActive(true); // 체력바 활성화
+        yield return new WaitForSeconds(2f); // 2초 대기
+        healthBarBG.SetActive(false); // 체력바 비활성화
+    }
 }
