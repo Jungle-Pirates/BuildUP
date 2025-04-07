@@ -196,6 +196,7 @@ MonoBehaviour:
   currentHealth: 0
   healthBar: {fileID: 7738950756063030251}
   attackPoint: {fileID: 7523769605810076268}
+  timeToDie: 6000
 --- !u!95 &4929757309884420595
 Animator:
   serializedVersion: 5

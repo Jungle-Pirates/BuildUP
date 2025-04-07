@@ -66,6 +66,11 @@ public class PlayerController : NetworkBehaviour
     //인벤토리 접근용 InventoryManager
     //private bool isEquipped = false; //손에 장비 장착 여부
 
+    [Header("자동 체력 감소 설정")]
+    [Tooltip("최대 체력이 모두 닳는 데 걸리는 시간(초)")]
+    [SerializeField] private float timeToDie = 100f;
+
+    private Coroutine healthDecayCoroutine;
 
     // Use this for initialization
     void Start()
@@ -93,6 +98,8 @@ public class PlayerController : NetworkBehaviour
         attackPoint = transform.Find("AttackPoint").gameObject;
         //attackPoint.SetActive(false); //아이템 Use()에서 Collider2D 컴포넌트를 끄고 키는중 
 
+        currentHealth = fullHealth; // 시작 시 체력을 최대 체력으로 설정
+
         healthBarBG = healthBar.transform.parent.gameObject;
 
         healthBar.fillAmount = 1; // 체력바 초기화
@@ -100,6 +107,46 @@ public class PlayerController : NetworkBehaviour
         {
             healthBarBG.SetActive(false); // 시작 시 체력바 비활성화
         }
+
+        //자동 체력감소 코루틴 시작
+        if (isServer)
+        {
+            healthDecayCoroutine = StartCoroutine(HealthDecayCoroutine());
+        }
+    }
+
+    /// <summary>
+    /// 자동 체력 감소 코루틴
+    /// </summary>
+    private IEnumerator HealthDecayCoroutine()
+    {
+        float damagePerSecond = fullHealth / timeToDie;
+        WaitForSeconds wait = new WaitForSeconds(10f);
+
+        while (true)
+        {
+            if (currentHealth > 0)
+            {
+                CmdHitResource(damagePerSecond);
+            }
+            yield return wait;
+        }
+    }
+
+    /// <summary>
+    /// 임시 피해 입기 코드
+    /// </summary>
+    private void TestHit()
+    {
+        if (m_animator != null)
+        {
+            m_animator.SetTrigger("Hurt");
+        }
+
+        StopCoroutine(ShowHealthBar()); // 체력바 표시
+
+        CmdHitResource(10f); // 피해량 전달
+
     }
 
     /// <summary>
@@ -306,6 +353,11 @@ public class PlayerController : NetworkBehaviour
         {
             vertical = Input.GetAxisRaw("Vertical"); // W, S 또는 ↑, ↓ 키 감지
         }
+
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            TestHit();
+        }
     }
     void FixedUpdate()
     {
@@ -451,6 +503,20 @@ public class PlayerController : NetworkBehaviour
                 healthBarBG.SetActive(false); // 시작 시 체력바 비활성화
             }
         }
+    }
+
+    /// <summary>
+    /// 회복 함수
+    /// </summary>
+
+    [Command(requiresAuthority = false)]
+    public void CmdHeal(float amount)
+    {
+        if (currentHealth <= 0 || currentHealth >= fullHealth)
+            return;
+
+        currentHealth += Mathf.CeilToInt(amount);
+        currentHealth = Mathf.Min(currentHealth, fullHealth); // 최대 체력 제한
 
     }
 

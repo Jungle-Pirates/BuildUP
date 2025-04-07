@@ -18,6 +18,13 @@ public abstract class FoodItem : Item
     public override void Use(PlayerController user)
     {
         // TODO: 실제 회복 처리 (회복량은 최하위객체에서 받도록)
+        if(user == null)
+        {
+            Debug.LogWarning("회복 대상이 어디갔찌;");
+            return;
+        }
+        user.CmdHeal(healAmount);
+
 
         // 인벤토리 접근하여 현재 장착된 슬롯 정보 확인 후 제거
         InventoryManager inventory = InventoryManager.Instance;
