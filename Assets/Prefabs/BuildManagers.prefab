@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7910405977603589519}
   - component: {fileID: 2374954460994875353}
   - component: {fileID: 5173293137385021501}
+  - component: {fileID: 9025140563914109110}
   - component: {fileID: 1542805017527539659}
   m_Layer: 0
   m_Name: BuildManagers
@@ -51,8 +52,6 @@ MonoBehaviour:
   syncInterval: 0
   cursorController: {fileID: 0}
   roomUnitSize: {x: 4, y: 3}
-  currentFoundationLevel: 0
-  foundationMaxHeights: 0300000005000000070000000a000000
   testFoundationObject: {fileID: 5424020133352042080, guid: 9a053a80c647b9f468779981797eac9f, type: 3}
   buildUI: {fileID: 0}
   LadderPrefab: {fileID: 5690240786786780139, guid: 3c748d1175f92af43990f55ce06bce96, type: 3}
@@ -83,6 +82,45 @@ MonoBehaviour:
   - {fileID: 5424020133352042080, guid: db177bb3462d5fe4ba421d724362d0b7, type: 3}
   - {fileID: 5424020133352042080, guid: 69e3c702f565ff54c8c56a716a1aa722, type: 3}
   EmptyRoom: {fileID: 5424020133352042080, guid: 005efcedd3f37204f86f9310a9e72547, type: 3}
+--- !u!114 &9025140563914109110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9151725661775615831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37131885c0477ef46b621c4fc7738eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  currentFoundationLevel: 0
+  foundationMaxHeights: 0300000005000000070000000a000000
+  upgradeRequiredItems:
+  - items:
+    - itemID: Ingredient_09
+      amount: 3
+    - itemID: Ingredient_07
+      amount: 3
+    - itemID: Ingredient_06
+      amount: 3
+  - items:
+    - itemID: Ingredient_10
+      amount: 5
+    - itemID: Ingredient_07
+      amount: 5
+    - itemID: Ingredient_06
+      amount: 5
+  - items:
+    - itemID: Ingredient_11
+      amount: 7
+    - itemID: Ingredient_10
+      amount: 7
+    - itemID: Ingredient_04
+      amount: 7
 --- !u!114 &1542805017527539659
 MonoBehaviour:
   m_ObjectHideFlags: 0
