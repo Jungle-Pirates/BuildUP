@@ -8,21 +8,18 @@ public class CursorController : MonoBehaviour
     private Vector2Int cursorCoordinate = Vector2Int.zero;
 
     [Header("Cursor Sprites")]
-    [SerializeField] private GameObject ableSprite;
+    [SerializeField] private GameObject buildableSprite;
     [SerializeField] private GameObject placableSprite;
+    [SerializeField] private GameObject deletionSprite;
     [SerializeField] private GameObject unableSprite;
 
     private void Update()
     {
         if (BuildManager.Instance.IsBuildMode)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(1))
             {
                 BuildManager.Instance.CmdBuildRoom(cursorCoordinate);
-            }
-            else if (Input.GetMouseButtonDown(1))
-            {
-                BuildManager.Instance.CmdDeleteRoom(cursorCoordinate);
             }
 
             DrawCursor();
@@ -41,7 +38,16 @@ public class CursorController : MonoBehaviour
 
             DrawCursor();
         }
-        else if (!BuildManager.Instance.IsBuildMode && !BuildManager.Instance.IsPlaceMode && (ableSprite.activeSelf || unableSprite.activeSelf || placableSprite.activeSelf))
+        if (BuildManager.Instance.IsDestructionMode)
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+                BuildManager.Instance.CmdDeleteRoom(cursorCoordinate);
+            }
+
+            DrawCursor();
+        }
+        else if (!BuildManager.Instance.IsBuildMode && !BuildManager.Instance.IsPlaceMode && (buildableSprite.activeSelf || unableSprite.activeSelf || placableSprite.activeSelf))
         {
             // 모드가 아닐 때 커서 비활성화
             SetCursorSprite(false);
@@ -72,40 +78,56 @@ public class CursorController : MonoBehaviour
         {
             if (BuildManager.Instance.IsBuildMode)
             {
-                if (BuildManager.Instance.CanBuildRoom(cursorCoordinate) && (!ableSprite.activeSelf || unableSprite.activeSelf))
+                placableSprite.SetActive(false);
+                deletionSprite.SetActive(false);
+                if (BuildManager.Instance.CanBuildRoom(cursorCoordinate))
                 {
-                    ableSprite.SetActive(true);
-                    placableSprite.SetActive(false);
+                    buildableSprite.SetActive(true);
                     unableSprite.SetActive(false);
                 }
-                else if (!BuildManager.Instance.CanBuildRoom(cursorCoordinate) && (!unableSprite.activeSelf || ableSprite.activeSelf))
+                else
                 {
-                    ableSprite.SetActive(false);
-                    placableSprite.SetActive(false);
+                    buildableSprite.SetActive(false);
                     unableSprite.SetActive(true);
                 }
             }
             else if (BuildManager.Instance.IsPlaceMode)
             {
-                if (BuildManager.Instance.CanBuildLadder(cursorCoordinate) && (!ableSprite.activeSelf || unableSprite.activeSelf))
+                buildableSprite.SetActive(false);
+                deletionSprite.SetActive(false);
+                if (BuildManager.Instance.CanBuildLadder(cursorCoordinate))
                 {
                     placableSprite.SetActive(true);
-                    ableSprite.SetActive(false);
                     unableSprite.SetActive(false);
                 }
-                else if (!BuildManager.Instance.CanBuildLadder(cursorCoordinate) && (!unableSprite.activeSelf || ableSprite.activeSelf))
+                else
                 {
                     placableSprite.SetActive(false);
-                    ableSprite.SetActive(false);
+                    unableSprite.SetActive(true);
+                }
+            }
+            else if (BuildManager.Instance.IsDestructionMode)
+            {
+                buildableSprite.SetActive(false);
+                placableSprite.SetActive(false);
+                if (BuildManager.Instance.CheckRoomExistance(cursorCoordinate))
+                {
+                    deletionSprite.SetActive(true);
+                    unableSprite.SetActive(false);
+                }
+                else
+                {
+                    deletionSprite.SetActive(false);
                     unableSprite.SetActive(true);
                 }
             }
         }
         else
         {
-            ableSprite.SetActive(false);
+            buildableSprite.SetActive(false);
             placableSprite.SetActive(false);
             unableSprite.SetActive(false);
+            deletionSprite.SetActive(false);
         }
     }
 }

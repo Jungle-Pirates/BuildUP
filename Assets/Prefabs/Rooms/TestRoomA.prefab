@@ -131,3 +131,11 @@ MonoBehaviour:
     amount: 10
   roomSize: {x: 1, y: 1}
   isActivated: 0
+  isOccupied: 0
+  isOccupiedByMe: 0
+  maxWorkers: 1
+  priority: 0
+  isAutomated: 0
+  taskStatus: 0
+  isEmptyRoom: 1
+  isFoundationRoom: 0

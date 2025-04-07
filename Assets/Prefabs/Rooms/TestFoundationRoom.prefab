@@ -137,7 +137,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  roomType: 0
+  roomType: 1
   RoomName: Foundation Room
   RoomSprite: {fileID: 1339194287, guid: dbf65a0a636d67e43ad1561395889de6, type: 3}
   RequiredItems:
@@ -147,3 +147,11 @@ MonoBehaviour:
     amount: 10
   roomSize: {x: 1, y: 1}
   isActivated: 0
+  isOccupied: 0
+  isOccupiedByMe: 0
+  maxWorkers: 1
+  priority: 0
+  isAutomated: 0
+  taskStatus: 0
+  isEmptyRoom: 0
+  isFoundationRoom: 1
