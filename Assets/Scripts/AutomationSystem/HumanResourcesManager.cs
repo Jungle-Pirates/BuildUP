@@ -96,7 +96,7 @@ public class HumanResourcesManager : Singleton<HumanResourcesManager>
             // 클러스터 총 일꾼 수
             clusterTotalWorkers[i] = baseWorkers + bonus;
             
-            Debug.Log($"주거지 클러스터 {i}: 크기={clusterSize}, 기본 일꾼={baseWorkers}, 보너스={bonus}, 총={totalWorkers}");
+            Debug.Log($"주거지 클러스터 {i}: 크기={clusterSize}, 기본 일꾼={baseWorkers}, 보너스={bonus}, 총={clusterTotalWorkers}");
         }
     }
     
@@ -166,11 +166,13 @@ public class HumanResourcesManager : Singleton<HumanResourcesManager>
         }
     }
     
-    // 일꾼 감소 시 방에서 일꾼 회수 (우선순위에 따라)
+    // 일꾼 감소 시 방에서 일꾼 회수 (우선순위에 따라) -> 우선순위 없음
     private void RecoverWorkersFromRooms(int count)
     {
+        /*
         // 우선순위 역순으로 정렬 (낮은 우선순위부터 회수)
         assignedRooms.Sort((a, b) => a.priority.CompareTo(b.priority));
+        */
         
         int remainingToRecover = count;
         
