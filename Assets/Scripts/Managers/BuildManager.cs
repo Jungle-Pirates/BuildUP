@@ -352,11 +352,11 @@ public class BuildManager : NetworkBehaviour
     {
         if (_selectRoom.IsEmptyRoom)
         {
-            CmdBuildRoom(coordinate);
+            CheckAndBuildRoom(coordinate);
         }
         else
         {
-            BuildUpgradeManager.Instance.CmdRoomUpgrade(coordinate);
+            BuildUpgradeManager.Instance.CheckAndUpgradeRoom(coordinate);
         }
     }
 
@@ -364,8 +364,7 @@ public class BuildManager : NetworkBehaviour
     /// A method that constructs a building at the given coordinates.
     /// </summary>
     /// <param name="coordinate"></param>
-    [Command(requiresAuthority = false)]
-    public void CmdBuildRoom(Vector2Int coordinate)
+    public void CheckAndBuildRoom(Vector2Int coordinate)
     {
         // 새 방 생성
         if (!CanBuildRoom(coordinate))
@@ -378,17 +377,23 @@ public class BuildManager : NetworkBehaviour
         }
         else
         {
-            if (coordinate.y == 0)
-            {
-                BuildRoom(0, coordinate);
-            }
-            else
-            {
-                BuildRoom(1, coordinate);
-            }
             UseRequiredItem(_selectRoom);
+            CmdBuildRoom(coordinate);
         }
 
+    }
+
+    [Command(requiresAuthority = false)]
+    private void CmdBuildRoom(Vector2Int coordinate)
+    {
+        if (coordinate.y == 0)
+        {
+            BuildRoom(0, coordinate);
+        }
+        else
+        {
+            BuildRoom(1, coordinate);
+        }
     }
 
     /// <summary>

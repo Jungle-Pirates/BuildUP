@@ -27,8 +27,7 @@ public class BuildUpgradeManager : NetworkBehaviour
     /// </summary>
     /// <param name="coordinate"></param>
     /// <param name="upgradeRoom"></param>
-    [Command(requiresAuthority = false)]
-    public void CmdRoomUpgrade(Vector2Int coordinate)
+    public void CheckAndUpgradeRoom(Vector2Int coordinate)
     {
         if (!CheckUpgradableRoom(coordinate))
         {
@@ -43,8 +42,14 @@ public class BuildUpgradeManager : NetworkBehaviour
             // 업그레이드 가능 조건 충족 시 
             // 자원 소모 후 방 업그레이드
             BuildManager.Instance.UseRequiredItem(_selectRoom);
-            ReplaceRoom(coordinate, _selectRoom);
+            CmdUpgradeRoom(coordinate);
         }
+    }
+
+    [Command(requiresAuthority = false)]
+    private void CmdUpgradeRoom(Vector2Int coordinate)
+    {
+        ReplaceRoom(coordinate, _selectRoom);
     }
 
     /// <summary>
