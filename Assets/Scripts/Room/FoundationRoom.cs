@@ -21,7 +21,7 @@ public class FoundationRoom : Room
         {
             return;
         }
-        // 농장 UI 열기
+        // UI 열기
         if (upgradeUI != null)
         {
             upgradeUI.gameObject.SetActive(true);
@@ -30,7 +30,7 @@ public class FoundationRoom : Room
 
     public override void CloseRoomUI()
     {
-        // 농장 UI 닫기
+        // UI 닫기
         if (upgradeUI != null)
         {
             upgradeUI.gameObject.SetActive(false);

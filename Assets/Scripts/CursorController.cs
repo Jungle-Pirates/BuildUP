@@ -19,7 +19,7 @@ public class CursorController : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(1))
             {
-                BuildManager.Instance.CmdBuildRoom(cursorCoordinate);
+                BuildManager.Instance.BuildOrUpgradeRoom(cursorCoordinate);
             }
 
             DrawCursor();

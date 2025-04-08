@@ -266,6 +266,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FoundationUpgradeUI
       objectReference: {fileID: 0}
+    - target: {fileID: 4979076817549971353, guid: a51a98f8e4f0b81498f3e8ffb6b5afa2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6999549421640914662, guid: a51a98f8e4f0b81498f3e8ffb6b5afa2, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
