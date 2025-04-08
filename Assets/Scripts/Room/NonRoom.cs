@@ -28,6 +28,7 @@ public class NonRoom : NetworkBehaviour
     [SyncVar]
     [SerializeField]
     private bool isActivated = false;
+    public bool IsActivated { get { return isActivated; } }
 
     public void Activate()
     {

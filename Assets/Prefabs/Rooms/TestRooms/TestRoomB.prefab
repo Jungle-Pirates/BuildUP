@@ -232,8 +232,16 @@ MonoBehaviour:
   roomSize: {x: 1, y: 1}
   isActivated: 0
   isOccupied: 0
+  isOccupiedByMe: 0
+  maxWorkers: 1
+  priority: 0
+  isAutomated: 0
+  taskStatus: 0
+  isEmptyRoom: 0
+  isFoundationRoom: 0
   craftingUI: {fileID: 4699968203588511584}
   craftingQueueUI: {fileID: 1331337945593157907}
+  maxQueueCount: 8
 --- !u!1001 &8332448408867364842
 PrefabInstance:
   m_ObjectHideFlags: 0
