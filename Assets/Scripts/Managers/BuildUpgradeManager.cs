@@ -26,7 +26,6 @@ public class BuildUpgradeManager : NetworkBehaviour
     /// 해당하는 좌표에 방을 업그레이드하는 커멘드 메서드
     /// </summary>
     /// <param name="coordinate"></param>
-    /// <param name="upgradeRoom"></param>
     public void CheckAndUpgradeRoom(Vector2Int coordinate)
     {
         if (!CheckUpgradableRoom(coordinate))
@@ -39,7 +38,7 @@ public class BuildUpgradeManager : NetworkBehaviour
         }
         else
         {
-            // 업그레이드 가능 조건 충족 시 
+            // 업그레이드 가능 조건 충족 시,
             // 자원 소모 후 방 업그레이드
             BuildManager.Instance.UseRequiredItem(_selectRoom);
             CmdUpgradeRoom(coordinate);
@@ -49,7 +48,7 @@ public class BuildUpgradeManager : NetworkBehaviour
     [Command(requiresAuthority = false)]
     private void CmdUpgradeRoom(Vector2Int coordinate)
     {
-        ReplaceRoom(coordinate, _selectRoom);
+        ReplaceRoom(coordinate);
     }
 
     /// <summary>
@@ -74,12 +73,11 @@ public class BuildUpgradeManager : NetworkBehaviour
     /// 커맨드를 통해서 방 업그레이드 요청이 들어오면, 서버에서 방 오브젝트를 바꿔준 다음 방 데이터를 연동하는 메서드
     /// </summary>
     /// <param name="coordinate">업그레이드할 좌표</param>
-    /// <param name="upgradeRoom">업그레이드될 방</param>
     [Server]
-    private void ReplaceRoom(Vector2Int coordinate, Room upgradeRoom)
+    private void ReplaceRoom(Vector2Int coordinate)
     {
-        // 새 방 오브젝트를 생성 
-        GameObject newRoomObj = Instantiate(upgradeRoom.gameObject, BuildManager.Instance.FromBasisIntCoordinates(coordinate), Quaternion.identity);
+        // 새 방 오브젝트를 생성
+        GameObject newRoomObj = Instantiate(BuildManager.Instance.SelectRoom.gameObject, BuildManager.Instance.FromBasisIntCoordinates(coordinate), Quaternion.identity);
         NetworkServer.Spawn(newRoomObj);
 
         // 기존 방 데이터 불러오기
@@ -96,6 +94,6 @@ public class BuildUpgradeManager : NetworkBehaviour
     [Server]
     public void RoomDowngrade(Vector2Int coordinate)
     {
-        ReplaceRoom(coordinate, EmptyRoom.GetComponent<Room>());
+        //ReplaceRoom(coordinate, EmptyRoom.GetComponent<Room>());
     }
 }
