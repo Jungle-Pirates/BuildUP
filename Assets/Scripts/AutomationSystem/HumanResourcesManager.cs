@@ -94,9 +94,9 @@ public class HumanResourcesManager : Singleton<HumanResourcesManager>
             else if (clusterSize >= 5) bonus = 1;
             
             // 클러스터 총 일꾼 수
-            clusterTotalWorkers[i] = baseWorkers + bonus;
+            clusterTotalWorkers.Add(baseWorkers + bonus);
             
-            Debug.Log($"주거지 클러스터 {i}: 크기={clusterSize}, 기본 일꾼={baseWorkers}, 보너스={bonus}, 총={clusterTotalWorkers}");
+            Debug.Log($"주거지 클러스터 {i}: 크기={clusterSize}, 기본 일꾼={baseWorkers}, 보너스={bonus}, 총={clusterTotalWorkers[i]}");
         }
     }
     
