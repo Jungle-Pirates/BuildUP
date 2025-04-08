@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -159,12 +160,12 @@ public abstract class CraftingRoom : Room
             autoCraftingUI.SetActive(false);
         }
     }
-
+    [Command(requiresAuthority = false)] // 아무 클라이언트나 호출 가능
     public void AssignWorker()
     {
         HumanResourcesManager.Instance.AssignWorkersToRoom(this, 1);
     }
-
+    [Command(requiresAuthority = false)] // 아무 클라이언트나 호출 가능
     public void ReleaseWorker()
     {
         HumanResourcesManager.Instance.ReleaseWorkers(this, 1);
