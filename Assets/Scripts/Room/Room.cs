@@ -33,6 +33,7 @@ public abstract class Room : NetworkBehaviour
     [SyncVar(hook = nameof(OnIsActivatedChanged))]
     [SerializeField]
     protected bool isActivated = false;
+    public bool IsActivated { get { return isActivated; } }
     [SyncVar(hook = nameof(OnIsOccupiedChanged))]
     [SerializeField]
     private bool isOccupied = false; // 다른 클라이언트가 방을 사용중인지 확인하기 위한 변수

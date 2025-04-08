@@ -292,7 +292,7 @@ public class BuildManager : NetworkBehaviour
                 pipe.GetComponent<NonRoom>().Activate();
                 //해당 위치에 물레가 존재하면 인접한 방을 활성화
                 var room = worldRoomData.GetValueOrDefault(currentCoordinate, null);
-                if (room != null && room.GetComponent<Room>().roomType == RoomType.물레)
+                if (room != null && room.GetComponent<Room>().roomType == RoomType.물레 && room.GetComponent<Room>().IsActivated)
                 {
                     ActivatePower(currentCoordinate);
                 }
@@ -542,8 +542,13 @@ public class BuildManager : NetworkBehaviour
             Debug.LogWarning("Data already exists at the specified coordinates. Please check the room placement code again.");
             return;
         }
-        // 활성화
-        ActivatePipe(coordinate);
+        foreach (var room in worldRoomData)
+        {
+            if (room.Value.GetComponent<Room>().roomType == RoomType.빗물저장소)
+            {
+                ActivatePipe(room.Key);
+            }
+        }
     }
 
     /// <summary>
