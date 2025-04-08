@@ -20,7 +20,12 @@ public class FoundationUpgradeUI : MonoBehaviour
     {
         UpdateUI();
     }
-    
+
+    private void OnEnable()
+    {
+        UpdateUI();
+    }
+
     private void UpdateUI()
     {
         upgradeResources.Clear();

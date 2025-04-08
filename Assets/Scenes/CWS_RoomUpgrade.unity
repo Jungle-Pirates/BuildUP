@@ -2207,17 +2207,27 @@ MonoBehaviour:
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
+  - {fileID: 5424020133352042080, guid: 844b46bc3969c3547a61c717b8f3b8da, type: 3}
   - {fileID: 3547545519384445648, guid: fca5eac9ea198a94c894b485c716ef7b, type: 3}
   - {fileID: 9151725661775615831, guid: a9a265b44d06ca54295b8c2822a2a308, type: 3}
+  - {fileID: 5424020133352042080, guid: 9aaf91eaedf51af42833a656e2514045, type: 3}
   - {fileID: 3310435726288952766, guid: 66c5caee3cb17e8498414b232d1900b0, type: 3}
+  - {fileID: 5424020133352042080, guid: 52c7845970a19f14ba287623ca003e77, type: 3}
   - {fileID: 5465408349737334575, guid: 197889a750c1e28449b475d382f4d82a, type: 3}
+  - {fileID: 5424020133352042080, guid: 005efcedd3f37204f86f9310a9e72547, type: 3}
+  - {fileID: 5424020133352042080, guid: 85d20c6515ab6b64ea7acf839f982886, type: 3}
+  - {fileID: 5424020133352042080, guid: 9a053a80c647b9f468779981797eac9f, type: 3}
   - {fileID: 5465408349737334575, guid: 21b9337de44b78441af262631cb4b4bd, type: 3}
   - {fileID: 5465408349737334575, guid: 4e2e4a8d7957c814aa5394743ab6e1bf, type: 3}
   - {fileID: 5690240786786780139, guid: 3c748d1175f92af43990f55ce06bce96, type: 3}
+  - {fileID: 5424020133352042080, guid: 71e4c92eb38b93b40b8e0dec5007bb71, type: 3}
   - {fileID: 4328445041376920398, guid: a64739c261b43b94b91f5404049e9d90, type: 3}
   - {fileID: 5690240786786780139, guid: 9c808b7186405a84292d88a68fa2f7df, type: 3}
+  - {fileID: 5424020133352042080, guid: da72f7ec4fd25854d8d27f21dcc081ce, type: 3}
   - {fileID: 5465408349737334575, guid: 3b9b1a800feeb874984994695464f392, type: 3}
   - {fileID: 5465408349737334575, guid: 11a86abd4e0764b46abbb079acb3200d, type: 3}
+  - {fileID: 5690240786786780139, guid: 41dfb023a7147854a9aaa92002dfa3a0, type: 3}
+  - {fileID: 5424020133352042080, guid: 9242e09f7af2d7a43a21fbc6f611ec43, type: 3}
   - {fileID: 1106276074698760010, guid: dbcddb2477526ad4887e339a78df6bfe, type: 3}
   - {fileID: 6461169920956429484, guid: fcafbcaa507591f47987c96e0253c689, type: 3}
   - {fileID: 8627888066419482477, guid: 144e01945b248404298f4250b3bbf5d3, type: 3}
@@ -2226,6 +2236,8 @@ MonoBehaviour:
   - {fileID: 8627888066419482477, guid: d2ec85cc303dd584898decaab8e6ff98, type: 3}
   - {fileID: 8627888066419482477, guid: 18c8b54e168921f42adf6816c661ff3c, type: 3}
   - {fileID: 5465408349737334575, guid: f1a7aab8f47064a44920c11eacaaa038, type: 3}
+  - {fileID: 5424020133352042080, guid: db177bb3462d5fe4ba421d724362d0b7, type: 3}
+  - {fileID: 5424020133352042080, guid: 69e3c702f565ff54c8c56a716a1aa722, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -4659,15 +4671,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7833250500351576693, guid: 0e8fb650213710c4d9abb10f114401f8, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7833250500351576693, guid: 0e8fb650213710c4d9abb10f114401f8, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7833250500351576693, guid: 0e8fb650213710c4d9abb10f114401f8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -25
       objectReference: {fileID: 0}
     - target: {fileID: 8034449100152519773, guid: 0e8fb650213710c4d9abb10f114401f8, type: 3}
       propertyPath: m_AnchorMax.x

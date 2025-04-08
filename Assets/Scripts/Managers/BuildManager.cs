@@ -33,6 +33,7 @@ public class BuildManager : NetworkBehaviour
     public bool IsDestructionMode { get { return _isDestructionMode; } }
 
     private Room _selectRoom;
+    public Room SelectRoom { get { return _selectRoom; } }
 
     [Header("UI")]
     [SerializeField] private GameObject buildUI;
@@ -340,40 +341,50 @@ public class BuildManager : NetworkBehaviour
     #region Add or Build Room
 
     /// <summary>
+    /// 방 건설 관련 동작 시 호출 메서드.
+    /// - 빈 방 건설을 선택했으면 새 건물 건설 실행
+    /// - 빈 방이 아닌 건물 건설을 선택했으면 BuildUpgradeManager로 업그레이드 메서드 호출
+    /// </summary>
+    /// <param name="coordinate"></param>
+    public void BuildOrUpgradeRoom(Vector2Int coordinate)
+    {
+        if (_selectRoom.IsEmptyRoom)
+        {
+            CmdBuildRoom(coordinate);
+        }
+        else
+        {
+            BuildUpgradeManager.Instance.CmdRoomUpgrade(coordinate);
+        }
+    }
+
+    /// <summary>
     /// A method that constructs a building at the given coordinates.
     /// </summary>
     /// <param name="coordinate"></param>
     [Command(requiresAuthority = false)]
     public void CmdBuildRoom(Vector2Int coordinate)
     {
-        if (_selectRoom.IsEmptyRoom)
+        // 새 방 생성
+        if (!CanBuildRoom(coordinate))
         {
-            // 새 방 생성
-            if (!CanBuildRoom(coordinate))
-            {
-                Debug.Log("<color=red>해당 위치에 건물을 지을 수 없습니다.</color>");
-            }
-            else if (!HasResourceToBuild(_selectRoom))
-            {
-                Debug.Log("<color=red>해당 방을 짓기에 자원이 부족합니다.</color>");
-            }
-            else
-            {
-                if (coordinate.y == 0)
-                {
-                    BuildRoom(0, coordinate);
-                }
-                else
-                {
-                    BuildRoom(1, coordinate);
-                }
-                UseRequiredItem(_selectRoom);
-            }
+            Debug.Log("<color=red>해당 위치에 건물을 지을 수 없습니다.</color>");
+        }
+        else if (!HasResourceToBuild(_selectRoom))
+        {
+            Debug.Log("<color=red>해당 방을 짓기에 자원이 부족합니다.</color>");
         }
         else
         {
-            // 빈 방 업그레이드
-            BuildUpgradeManager.Instance.CmdRoomUpgrade(coordinate, _selectRoom);
+            if (coordinate.y == 0)
+            {
+                BuildRoom(0, coordinate);
+            }
+            else
+            {
+                BuildRoom(1, coordinate);
+            }
+            UseRequiredItem(_selectRoom);
         }
 
     }
@@ -555,7 +566,7 @@ public class BuildManager : NetworkBehaviour
     /// 해당하는 방을 지을 때 소모되는 자원을 차감하는 함수
     /// </summary>
     /// <param name="room"></param>
-    private void UseRequiredItem(Room room)
+    public void UseRequiredItem(Room room)
     {
         foreach (var required in room.RequiredItems)
         {

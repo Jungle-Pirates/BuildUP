@@ -10,6 +10,8 @@ public class BuildUpgradeManager : NetworkBehaviour
     public GameObject[] Rooms;
     public GameObject EmptyRoom;
 
+    private Room _selectRoom => BuildManager.Instance.SelectRoom;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -25,20 +27,23 @@ public class BuildUpgradeManager : NetworkBehaviour
     /// </summary>
     /// <param name="coordinate"></param>
     /// <param name="upgradeRoom"></param>
-    [Server]
-    public void CmdRoomUpgrade(Vector2Int coordinate, Room upgradeRoom)
+    [Command(requiresAuthority = false)]
+    public void CmdRoomUpgrade(Vector2Int coordinate)
     {
         if (!CheckUpgradableRoom(coordinate))
         {
             Debug.Log("<color=red>업그레이드를 위해서는 빈 방을 선택해야 합니다.</color>");
         }
-        else if (!BuildManager.Instance.HasResourceToBuild(upgradeRoom))
+        else if (!BuildManager.Instance.HasResourceToBuild(_selectRoom))
         {
             Debug.Log("<color=red>해당 방으로 업그레이드할 자원이 부족합니다.</color>");
         }
         else
         {
-            ReplaceRoom(coordinate, upgradeRoom);
+            // 업그레이드 가능 조건 충족 시 
+            // 자원 소모 후 방 업그레이드
+            BuildManager.Instance.UseRequiredItem(_selectRoom);
+            ReplaceRoom(coordinate, _selectRoom);
         }
     }
 
