@@ -6,7 +6,7 @@ public class BreadItem : FoodItem
 {
     private void OnEnable()
     {
-        healAmount = 25f;
+        healAmount = 30f;
     }
 
     public override void Use(PlayerController user)

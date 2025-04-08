@@ -128,6 +128,8 @@ MonoBehaviour:
   - itemID: Ingredient_07
     amount: 10
   - itemID: Ingredient_06
+    amount: 10
+  - itemID: Ingredient_11
     amount: 5
   roomSize: {x: 1, y: 1}
   isActivated: 0
