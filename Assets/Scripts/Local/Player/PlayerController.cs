@@ -122,7 +122,7 @@ public class PlayerController : NetworkBehaviour
     private IEnumerator HealthDecayCoroutine()
     {
         float damagePerSecond = fullHealth / timeToDie;
-        WaitForSeconds wait = new WaitForSeconds(10f);
+        WaitForSeconds wait = new WaitForSeconds(5f);
 
         while (true)
         {

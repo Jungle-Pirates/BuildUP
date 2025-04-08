@@ -190,6 +190,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BasicCraftingRoom
       objectReference: {fileID: 0}
+    - target: {fileID: 6203084807617124404, guid: 41dfb023a7147854a9aaa92002dfa3a0, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8631933217171874201, guid: 41dfb023a7147854a9aaa92002dfa3a0, type: 3}
       propertyPath: m_Sprite
       value: 
