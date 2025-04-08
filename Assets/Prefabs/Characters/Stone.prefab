@@ -280,6 +280,10 @@ MonoBehaviour:
   dropItemSets:
   - itemID: Ingredient_01
     itemCount: 2
+  - itemID: Ingredient_02
+    itemCount: 1
+  - itemID: Ingredient_03
+    itemCount: 1
   platformCheckDistance: 1
   idleTimeRange: {x: 1, y: 3}
   moveTimeRange: {x: 2, y: 5}

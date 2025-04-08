@@ -401,7 +401,7 @@ MonoBehaviour:
   dropItemPrefab: {fileID: 4328445041376920398, guid: a64739c261b43b94b91f5404049e9d90, type: 3}
   dropItemSets:
   - itemID: Ingredient_05
-    itemCount: 1
+    itemCount: 2
   - itemID: Food_02
     itemCount: 2
   platformCheckDistance: 1
