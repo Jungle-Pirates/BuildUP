@@ -24,6 +24,7 @@ public class InventoryManager : Singleton<InventoryManager>
     public TextMeshProUGUI selectedItemStatValue; // 스탯값 (미사용)
     public Button useButton; // 사용 버튼
     public Button dropButton; // 버리기 버튼
+    public Button destroyButton; //파괴 버튼
 
     [Header("제작 UI")]
     public GameObject craftingPanel; // 끄고 켤 수 있는 제작 UI 묶음
@@ -39,6 +40,7 @@ public class InventoryManager : Singleton<InventoryManager>
         // controller.inventory += Toggle;
         // controller.addItem += AddItem;
         dropButton.onClick.AddListener(OnDropButton);
+        destroyButton.onClick.AddListener(OnDestroyButton);
 
         // 초기화
         slots = new Slot[slotPanel.childCount];
@@ -175,6 +177,7 @@ public class InventoryManager : Singleton<InventoryManager>
 
         useButton.gameObject.SetActive(selectedItem.inventoryItem.itemType == ItemType.Food);
         dropButton.gameObject.SetActive(true);
+        destroyButton.gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -190,6 +193,7 @@ public class InventoryManager : Singleton<InventoryManager>
 
         useButton.gameObject.SetActive(false);
         dropButton.gameObject.SetActive(false);
+        destroyButton.gameObject.SetActive(false);  
     }
 
     /// <summary>
@@ -210,6 +214,14 @@ public class InventoryManager : Singleton<InventoryManager>
     public void OnDropButton()
     {
         NetworkClient.localPlayer.GetComponent<PlayerController>().ThrowItem(selectedItem.inventoryItem.itemID);
+        RemoveSelectedItem();
+    }
+
+    /// <summary>
+    /// Destroy 버튼 클릭 시 호출 
+    /// </summary>
+    public void OnDestroyButton()
+    {
         RemoveSelectedItem();
     }
 
@@ -304,5 +316,6 @@ public class InventoryManager : Singleton<InventoryManager>
         craftWarningText.text = canCraft ? "" : "재료가 부족합니다.";
         craftWarningText.gameObject.SetActive(!canCraft);
         dropButton.gameObject.SetActive(false);
+        destroyButton.gameObject.SetActive(false);
     }
 }

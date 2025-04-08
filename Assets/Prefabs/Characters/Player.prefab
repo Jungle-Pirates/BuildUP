@@ -186,8 +186,8 @@ MonoBehaviour:
   syncInterval: 0
   playerName: {fileID: 845511928521911503}
   virtualCamera: {fileID: 6542094479377602797}
-  m_speed: 4
-  m_jumpForce: 5
+  m_speed: 5.5
+  m_jumpForce: 7.5
   m_rollForce: 6
   m_climbSpeed: 4
   m_noBlood: 0
