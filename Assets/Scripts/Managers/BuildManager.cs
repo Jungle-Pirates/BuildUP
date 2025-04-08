@@ -1,7 +1,6 @@
 using Mirror;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.WSA;
 
 public enum RoomType
 {
@@ -32,6 +31,8 @@ public class BuildManager : NetworkBehaviour
     private bool _isDestructionMode = false;
     public bool IsDestructionMode { get { return _isDestructionMode; } }
 
+    private int _prefabIndex = 0;
+    public int PrefabIndex { get { return _prefabIndex; } }
     private Room _selectRoom;
     public Room SelectRoom { get { return _selectRoom; } }
 
@@ -70,7 +71,7 @@ public class BuildManager : NetworkBehaviour
     private void Start()
     {
         cursorController.SetCursorSize(roomUnitSize);
-        SetSelectedRoom(BuildUpgradeManager.Instance.Rooms[0].GetComponent<Room>());
+        SetSelectedRoom(BuildUpgradeManager.Instance.Rooms[0].GetComponent<Room>(), _prefabIndex);
     }
 
     private void Update()
@@ -830,9 +831,10 @@ public class BuildManager : NetworkBehaviour
     /// 플레이어가 설치하고자 하는 방
     /// </summary>
     /// <param name="room"></param>
-    public void SetSelectedRoom(Room room)
+    public void SetSelectedRoom(Room room, int index)
     {
         _selectRoom = room;
+        _prefabIndex = index;
     }
 
     /// <summary>

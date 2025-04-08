@@ -11,7 +11,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/ItemTestScene.unity
     guid: 91d9abe5e6e2b104486c5f39318096bf
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/CWS_BuildTest.unity
     guid: fa5c3e68b639765448642a396e05eac2
+  - enabled: 1
+    path: Assets/Scenes/Main.unity
+    guid: 5506fc12734f56b43bcdd67cdd3b350a
   m_configObjects: {}
