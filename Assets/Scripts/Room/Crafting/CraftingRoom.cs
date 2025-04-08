@@ -75,7 +75,7 @@ public abstract class CraftingRoom : Room
         Recipe recipe = CraftingManager.Instance.GetRecipeByItemID(ItemID);
         if (recipe == null)
         {
-            Debug.LogError($"레시피를 찾을 수 없음: {recipe.recipeName}");
+            Debug.LogError($"레시피를 찾을 수 없음: {ItemID}");
             return;
         }
         if (!CraftingManager.Instance.IsAbleToCraft(recipe))

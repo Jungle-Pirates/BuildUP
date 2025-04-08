@@ -22,7 +22,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] bool m_noBlood = false;
     [SerializeField] GameObject m_slideDust;
 
-    public  Animator m_animator;
+    public Animator m_animator;
 
     private Rigidbody2D m_body2d;
     private Sensor_HeroKnight m_groundSensor;
@@ -43,7 +43,7 @@ public class PlayerController : NetworkBehaviour
     private float vertical;
     private PlayerColliderController playerColliderController;
 
-    [Header("몬스터 체력")]
+    [Header("캐릭터 체력")]
 
     [Tooltip("최대 체력")]
     [SerializeField]
@@ -60,6 +60,7 @@ public class PlayerController : NetworkBehaviour
     [Tooltip("체력바 이미지")]
     [SerializeField]
     private Image healthBar;
+    [SerializeField]
     private GameObject healthBarBG; // 체력바 배경
 
     [Header("도구 사용")]
@@ -100,8 +101,6 @@ public class PlayerController : NetworkBehaviour
         attackPoint = transform.Find("AttackPoint").gameObject;
         //attackPoint.SetActive(false); //아이템 Use()에서 Collider2D 컴포넌트를 끄고 키는중 
 
-        currentHealth = fullHealth; // 시작 시 체력을 최대 체력으로 설정
-
         healthBarBG = healthBar.transform.parent.gameObject;
 
         healthBar.fillAmount = 1; // 체력바 초기화
@@ -109,10 +108,10 @@ public class PlayerController : NetworkBehaviour
         {
             healthBarBG.SetActive(false); // 시작 시 체력바 비활성화
         }
-
         //자동 체력감소 코루틴 시작
         if (isServer)
         {
+            currentHealth = fullHealth; // 서버에서 체력 초기화
             healthDecayCoroutine = StartCoroutine(HealthDecayCoroutine());
         }
     }
@@ -133,22 +132,6 @@ public class PlayerController : NetworkBehaviour
             }
             yield return wait;
         }
-    }
-
-    /// <summary>
-    /// 임시 피해 입기 코드
-    /// </summary>
-    private void TestHit()
-    {
-        if (m_animator != null)
-        {
-            m_animator.SetTrigger("Hurt");
-        }
-
-        StopCoroutine(ShowHealthBar()); // 체력바 표시
-
-        CmdHitResource(10f); // 피해량 전달
-
     }
 
     /// <summary>
@@ -355,11 +338,6 @@ public class PlayerController : NetworkBehaviour
         {
             vertical = Input.GetAxisRaw("Vertical"); // W, S 또는 ↑, ↓ 키 감지
         }
-
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            TestHit();
-        }
     }
     void FixedUpdate()
     {
@@ -422,7 +400,7 @@ public class PlayerController : NetworkBehaviour
     /// 아이템을 던집니다. 던진 아이템은 바닥에 떨어지며 바닥에 떨어진 아이템 동기화됨
     /// 인벤토리에서 제거하는 건 InventoryManager에서 처리
     /// </summary>
-    [Command (requiresAuthority = false)]
+    [Command(requiresAuthority = false)]
     public void ThrowItem(string itemCode)
     {
         // 아이템 드롭
@@ -462,12 +440,6 @@ public class PlayerController : NetworkBehaviour
 
             //일단 체력 최대로 올려주는 스크립트
             currentHealth = fullHealth;
-            //체력바 초기화
-            healthBar.fillAmount = 1;
-            if (healthBar != null)
-            {
-                healthBarBG.SetActive(false); // 시작 시 체력바 비활성화
-            }
         }
     }
 

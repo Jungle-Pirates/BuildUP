@@ -293,9 +293,10 @@ public class BuildManager : NetworkBehaviour
                 pipe.GetComponent<NonRoom>().Activate();
                 //해당 위치에 물레가 존재하면 인접한 방을 활성화
                 var room = worldRoomData.GetValueOrDefault(currentCoordinate, null);
-                if (room != null && room.GetComponent<Room>().roomType == RoomType.물레)
+                Room roomComponent = room?.GetComponent<Room>();
+                if (room != null && roomComponent.roomType == RoomType.물레)
                 {
-                    room.GetComponent<Room>().Activate();
+                    roomComponent.Activate();
                     ActivatePower(currentCoordinate);
                 }
                 // 인접한 좌표를 큐에 추가
