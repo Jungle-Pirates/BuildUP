@@ -78,10 +78,13 @@ public class BuildUpgradeManager : NetworkBehaviour
     {
         // 새 방 오브젝트를 생성
         GameObject newRoomObj = Instantiate(BuildManager.Instance.SelectRoom.gameObject, BuildManager.Instance.FromBasisIntCoordinates(coordinate), Quaternion.identity);
+        Debug.Log($"new1: {newRoomObj}");
         NetworkServer.Spawn(newRoomObj);
+        Debug.Log($"new2: {newRoomObj}");
 
         // 기존 방 데이터 불러오기
         Room oldRoom = BuildManager.Instance.GetRoomWithCoordinate(coordinate);
+        Debug.Log($"old: {newRoomObj}");
 
         // 새로 만들어진 방으로 데이터 교체
         if (BuildManager.Instance.ReplaceRoomData(coordinate, newRoomObj.GetComponent<Room>()))
