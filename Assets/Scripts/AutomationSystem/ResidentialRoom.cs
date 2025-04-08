@@ -14,24 +14,30 @@ public class ResidentialRoom : Room
     public int clusterId;
 
     // 주거지가 추가될 때 호출
-    public void OnPlaced()
+    protected override void Start()
     {
+        transform.localScale = BuildManager.Instance.RoomUnitSize;
+        
         // 인접 주거지 찾기
         FindAdjacentResidences();
 
         // 주변 주거지들에게 알림
         NotifyAdjacentResidences();
 
+        HumanResourcesManager.Instance.allResidences.Add(this);
+        
         // 일꾼 업데이트
         HumanResourcesManager.Instance.RecalculateClusters();
     }
 
     // 주거지가 제거될 때 호출
-    public void OnRemoved()
+    public void OnDestroy()
     {
         // 주변 주거지들에게 알림
         NotifyAdjacentResidences();
 
+        HumanResourcesManager.Instance.allResidences.Remove(this);
+        
         // 일꾼 업데이트
         HumanResourcesManager.Instance.RecalculateClusters();
     }

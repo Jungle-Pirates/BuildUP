@@ -120,6 +120,8 @@ public abstract class Room : NetworkBehaviour
         {
             currentWorkers += count;
             UpdateProductionMultiplier();
+            if (currentWorkers > 0)
+                isActivated = true;
             return true;
         }
         return false;
@@ -132,6 +134,8 @@ public abstract class Room : NetworkBehaviour
         {
             currentWorkers -= count;
             UpdateProductionMultiplier();
+            if (currentWorkers == 0)
+                isActivated = false;
             return true;
         }
         return false;

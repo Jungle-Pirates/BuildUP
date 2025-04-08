@@ -125,6 +125,7 @@ public abstract class CraftingRoom : Room
         }
         craftingCoroutine = null;
         // 제작 종료하면 Occupy 해제
+        ReleaseWorker();
         isOccupiedByMe = false; // 내가 방을 사용중이 아님을 표시
         SetOccupied(false);
     }
@@ -157,5 +158,15 @@ public abstract class CraftingRoom : Room
         {
             autoCraftingUI.SetActive(false);
         }
+    }
+
+    public void AssignWorker()
+    {
+        HumanResourcesManager.Instance.AssignWorkersToRoom(this, 1);
+    }
+
+    public void ReleaseWorker()
+    {
+        HumanResourcesManager.Instance.ReleaseWorkers(this, 1);
     }
 }

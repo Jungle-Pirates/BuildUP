@@ -133,12 +133,10 @@ MonoBehaviour:
   RoomName: Residence Room
   RoomSprite: {fileID: -1036418509, guid: dbf65a0a636d67e43ad1561395889de6, type: 3}
   RequiredItems:
-  - itemID: Ingredient_07
-    amount: 10
-  - itemID: Ingredient_06
-    amount: 10
-  - itemID: Ingredient_09
-    amount: 5
+  - itemID: Ingredient_00
+    amount: 1
+  - itemID: Ingredient_01
+    amount: 1
   roomSize: {x: 1, y: 1}
   isActivated: 0
   isOccupied: 0
