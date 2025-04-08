@@ -290,6 +290,12 @@ public class BuildManager : NetworkBehaviour
             if (worldPipeData.TryGetValue(currentCoordinate, out GameObject pipe))
             {
                 pipe.GetComponent<NonRoom>().Activate();
+                //해당 위치에 물레가 존재하면 인접한 방을 활성화
+                var room = worldRoomData.GetValueOrDefault(currentCoordinate, null);
+                if (room != null && room.GetComponent<Room>().roomType == RoomType.물레)
+                {
+                    ActivatePower(currentCoordinate);
+                }
                 // 인접한 좌표를 큐에 추가
                 Vector2Int[] adjacentCoordinates = new Vector2Int[4]
                 {
@@ -305,12 +311,6 @@ public class BuildManager : NetworkBehaviour
                     {
                         queue.Enqueue(adjacentCoordinate);
                         visited.Add(adjacentCoordinate);
-                    }
-                    // 인접한 방이 물레라면 활성화
-                    var room = worldRoomData.GetValueOrDefault(adjacentCoordinate, null);
-                    if (room != null && !visited.Contains(adjacentCoordinate))// && room.GetComponent<WaterMill>() != null)
-                    {
-                        ActivatePower(adjacentCoordinate);
                     }
                 }
             }
@@ -375,7 +375,7 @@ public class BuildManager : NetworkBehaviour
             // 빈 방 업그레이드
             BuildUpgradeManager.Instance.CmdRoomUpgrade(coordinate, _selectRoom);
         }
-        
+
     }
 
     /// <summary>
@@ -505,6 +505,25 @@ public class BuildManager : NetworkBehaviour
         if (!worldRoomData.TryAdd(coordinate, room.gameObject))
         {
             Debug.LogWarning("Data already exists at the specified coordinates. Please check the room placement code again.");
+            return;
+        }
+        // 주변에 물레가 있을경우 활성화
+        Vector2Int[] adjacentCoordinates = new Vector2Int[4]
+        {
+            coordinate + Vector2Int.up,
+            coordinate + Vector2Int.down,
+            coordinate + Vector2Int.left,
+            coordinate + Vector2Int.right
+        };
+        foreach (Vector2Int adjacentCoordinate in adjacentCoordinates)
+        {
+            if (worldRoomData.TryGetValue(adjacentCoordinate, out GameObject roomObj))
+            {
+                if (roomObj.GetComponent<Room>().roomType == RoomType.물레)
+                {
+                    room.Activate();
+                }
+            }
         }
     }
 
@@ -513,6 +532,7 @@ public class BuildManager : NetworkBehaviour
         if (!worldLadderData.TryAdd(coordinate, nonRoom.gameObject))
         {
             Debug.LogWarning("Data already exists at the specified coordinates. Please check the room placement code again.");
+            return;
         }
     }
     public void AddPipeData(Vector2Int coordinate, NonRoom nonRoom)
@@ -520,7 +540,10 @@ public class BuildManager : NetworkBehaviour
         if (!worldPipeData.TryAdd(coordinate, nonRoom.gameObject))
         {
             Debug.LogWarning("Data already exists at the specified coordinates. Please check the room placement code again.");
+            return;
         }
+        // 활성화
+        ActivatePipe(coordinate);
     }
 
     /// <summary>
@@ -694,6 +717,25 @@ public class BuildManager : NetworkBehaviour
             {
                 Debug.LogWarning("<color=red>[에러 발생]</color>데이터를 추가하고자 하는 좌표에 이미 데이터가 있습니다.");
                 return false;
+            }
+            if (replaceRoom.roomType == RoomType.빗물저장소)
+            {
+                // 방이 빗물 저장소일 경우 인접한 파이프를 활성화
+                ActivatePipe(coordinate);
+            }
+            // 방이 물레일 경우
+            else if (replaceRoom.roomType == RoomType.물레)
+            {
+                // 해당위치에 활성화된 파이프가 존재하고
+                if (worldPipeData.TryGetValue(coordinate, out GameObject pipe))
+                {
+                    //해당 파이프가 활성화 되어있다면
+                    if (pipe.GetComponent<NonRoom>().IsActivated)
+                    {
+                        // 인접한 방을 활성화
+                        ActivatePower(coordinate);
+                    }
+                }
             }
             return true;
         }

@@ -30,9 +30,9 @@ public abstract class Room : NetworkBehaviour
     public Vector2Int RoomPosition { get { return roomPosition; } }
 
     [Tooltip("활성화 되어있는지, 일꾼이 일할 수 있는 상태인지")]
-    [SyncVar]
+    [SyncVar(hook = nameof(OnIsActivatedChanged))]
     [SerializeField]
-    private bool isActivated = false;
+    protected bool isActivated = false;
     [SyncVar(hook = nameof(OnIsOccupiedChanged))]
     [SerializeField]
     private bool isOccupied = false; // 다른 클라이언트가 방을 사용중인지 확인하기 위한 변수
@@ -54,7 +54,7 @@ public abstract class Room : NetworkBehaviour
     public bool IsConnectedWithSupport { get { return isConnectedWithSupport; } }
 
     [SerializeField] private bool isEmptyRoom = false;
-    public bool IsEmptyRoom {  get { return isEmptyRoom; } }
+    public bool IsEmptyRoom { get { return isEmptyRoom; } }
     [SerializeField] private bool isFoundationRoom = false;
     public bool IsFoundationRoom { get { return isFoundationRoom; } }
 
@@ -84,6 +84,27 @@ public abstract class Room : NetworkBehaviour
     public void OnIsOccupiedChanged(bool oldValue, bool newValue)
     {
         isOccupied = newValue;
+    }
+
+    public void OnIsActivatedChanged(bool oldValue, bool newValue)
+    {
+        isActivated = newValue;
+        if (isActivated)
+        {
+            //CraftingRoom이면 UI에서 자동화 UI on
+            if (this is CraftingRoom)
+            {
+                GetComponent<CraftingRoom>().ShowAutoCrafting(true);
+            }
+        }
+        else
+        {
+            //CraftingRoom이면 UI에서 자동화 UI off
+            if (this is CraftingRoom)
+            {
+                GetComponent<CraftingRoom>().ShowAutoCrafting(false);
+            }
+        }
     }
 
     protected virtual void Start()
