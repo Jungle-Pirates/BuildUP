@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3770961869477751544, guid: 41dfb023a7147854a9aaa92002dfa3a0, type: 3}
       propertyPath: RequiredItems.Array.data[0].amount
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3770961869477751544, guid: 41dfb023a7147854a9aaa92002dfa3a0, type: 3}
       propertyPath: RequiredItems.Array.data[0].itemID
@@ -70,7 +70,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3770961869477751544, guid: 41dfb023a7147854a9aaa92002dfa3a0, type: 3}
       propertyPath: RequiredItems.Array.data[1].amount
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3770961869477751544, guid: 41dfb023a7147854a9aaa92002dfa3a0, type: 3}
       propertyPath: RequiredItems.Array.data[1].itemID

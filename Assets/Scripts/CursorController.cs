@@ -29,11 +29,11 @@ public class CursorController : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 // 일단 사다리만
-                BuildManager.Instance.CmdBuildNonRoom(cursorCoordinate, NonRoomType.ladder);
+                BuildManager.Instance.CheckAndBuildNonRoom(cursorCoordinate, NonRoomType.ladder);
             }
             else if (Input.GetMouseButtonDown(1))
             {
-                BuildManager.Instance.CmdBuildNonRoom(cursorCoordinate, NonRoomType.pipe);
+                BuildManager.Instance.CheckAndBuildNonRoom(cursorCoordinate, NonRoomType.pipe);
             }
 
             DrawCursor();

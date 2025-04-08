@@ -125,10 +125,10 @@ MonoBehaviour:
   RoomName: Rain Storage
   RoomSprite: {fileID: -1620141733, guid: dbf65a0a636d67e43ad1561395889de6, type: 3}
   RequiredItems:
-  - itemID: Ingredient_09
+  - itemID: Ingredient_11
     amount: 10
-  - itemID: Ingredient_07
-    amount: 5
+  - itemID: Ingredient_10
+    amount: 10
   roomSize: {x: 1, y: 1}
   isActivated: 0
   isOccupied: 0

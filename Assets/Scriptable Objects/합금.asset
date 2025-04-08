@@ -22,4 +22,4 @@ MonoBehaviour:
   - itemID: Ingredient_04
     amount: 1
   craftAmount: 1
-  craftTime: 10
+  craftTime: 20

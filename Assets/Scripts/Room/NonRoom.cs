@@ -19,6 +19,12 @@ public class NonRoom : NetworkBehaviour
     private NonRoomType nonRoomType;
     public NonRoomType NonRoomType { get { return nonRoomType; } }
 
+    [Tooltip("설치물 재료")]
+    [SerializeField]
+    protected RequiredItem[] requiredItems;
+    public RequiredItem[] RequiredItems { get { return requiredItems; } }
+
+
     [Tooltip("설치물 위치")]
     [SerializeField]
     private Vector2Int nonRoomPosition = Vector2Int.zero;

@@ -240,9 +240,9 @@ MonoBehaviour:
   RoomSprite: {fileID: 1339194287, guid: dbf65a0a636d67e43ad1561395889de6, type: 3}
   RequiredItems:
   - itemID: Ingredient_00
-    amount: 10
+    amount: 5
   - itemID: Ingredient_01
-    amount: 10
+    amount: 5
   roomSize: {x: 1, y: 1}
   isActivated: 0
   isOccupied: 0
@@ -268,7 +268,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4979076817549971353, guid: a51a98f8e4f0b81498f3e8ffb6b5afa2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6999549421640914662, guid: a51a98f8e4f0b81498f3e8ffb6b5afa2, type: 3}
       propertyPath: m_AnchorMax.y
@@ -296,7 +296,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7646762320637933895, guid: a51a98f8e4f0b81498f3e8ffb6b5afa2, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7646762320637933895, guid: a51a98f8e4f0b81498f3e8ffb6b5afa2, type: 3}
       propertyPath: m_AnchorMax.y
@@ -304,7 +304,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7646762320637933895, guid: a51a98f8e4f0b81498f3e8ffb6b5afa2, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7646762320637933895, guid: a51a98f8e4f0b81498f3e8ffb6b5afa2, type: 3}
       propertyPath: m_AnchorMin.y
@@ -348,7 +348,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7646762320637933895, guid: a51a98f8e4f0b81498f3e8ffb6b5afa2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1254
+      value: -318
       objectReference: {fileID: 0}
     - target: {fileID: 7646762320637933895, guid: a51a98f8e4f0b81498f3e8ffb6b5afa2, type: 3}
       propertyPath: m_AnchoredPosition.y

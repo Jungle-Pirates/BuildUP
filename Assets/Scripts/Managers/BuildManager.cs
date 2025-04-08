@@ -240,6 +240,16 @@ public class BuildManager : NetworkBehaviour
         return true;
     }
 
+    public bool HasResourceToBuild(NonRoom nonRoom)
+    {
+        foreach (RequiredItem requiredItem in nonRoom.RequiredItems)
+        {
+            if (!InventoryManager.Instance.HasItemAmount(requiredItem.itemID, requiredItem.amount))
+                return false;
+        }
+        return true;
+    }
+
     #endregion
 
     #region 방 인접 정보
@@ -380,7 +390,40 @@ public class BuildManager : NetworkBehaviour
             UseRequiredItem(_selectRoom);
             CmdBuildRoom(coordinate);
         }
+    }
 
+    public void CheckAndBuildNonRoom(Vector2Int coordinate, NonRoomType nonRoomType)
+    {
+        if (nonRoomType == NonRoomType.pipe)
+        {
+            if (!CanBuildPipe(coordinate))
+            {
+                Debug.Log("<color=red>해당 위치에 설치물을 지을 수 없습니다.</color>");
+            }
+            else if (!HasResourceToBuild(PipePrefab.GetComponent<NonRoom>()))
+            {
+                Debug.Log("<color=red>해당 방을 짓기에 자원이 부족합니다.</color>");
+            }
+            else
+            {
+                CmdBuildNonRoom(coordinate, nonRoomType);
+            }
+        }
+        else if (nonRoomType == NonRoomType.ladder)
+        {
+            if (!CanBuildLadder(coordinate))
+            {
+                Debug.Log("<color=red>해당 위치에 설치물을 지을 수 없습니다.</color>");
+            }
+            else if (!HasResourceToBuild(LadderPrefab.GetComponent<NonRoom>()))
+            {
+                Debug.Log("<color=red>해당 방을 짓기에 자원이 부족합니다.</color>");
+            }
+            else
+            {
+                CmdBuildNonRoom(coordinate, nonRoomType);
+            }
+        }
     }
 
     [Command(requiresAuthority = false)]
@@ -404,25 +447,11 @@ public class BuildManager : NetworkBehaviour
     {
         if (nonRoomType == NonRoomType.pipe)
         {
-            if (CanBuildPipe(coordinate))
-            {
-                BuildNonRoom(nonRoomType, coordinate);
-            }
-            else
-            {
-                Debug.Log("설치물을 지을 수 없습니다.");
-            }
+            BuildNonRoom(nonRoomType, coordinate);
         }
         else if (nonRoomType == NonRoomType.ladder)
         {
-            if (CanBuildLadder(coordinate))
-            {
-                BuildNonRoom(nonRoomType, coordinate);
-            }
-            else
-            {
-                Debug.Log("설치물을 지을 수 없습니다.");
-            }
+            BuildNonRoom(nonRoomType, coordinate);
         }
         else
         {
