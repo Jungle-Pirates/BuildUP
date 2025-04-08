@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -74,7 +75,7 @@ public abstract class CraftingRoom : Room
         Recipe recipe = CraftingManager.Instance.GetRecipeByItemID(ItemID);
         if (recipe == null)
         {
-            Debug.LogError($"레시피를 찾을 수 없음: {recipe.recipeName}");
+            Debug.LogError($"레시피를 찾을 수 없음: {ItemID}");
             return;
         }
         if (!CraftingManager.Instance.IsAbleToCraft(recipe))
@@ -159,12 +160,12 @@ public abstract class CraftingRoom : Room
             autoCraftingUI.SetActive(false);
         }
     }
-
+    [Command(requiresAuthority = false)] // 아무 클라이언트나 호출 가능
     public void AssignWorker()
     {
         HumanResourcesManager.Instance.AssignWorkersToRoom(this, 1);
     }
-
+    [Command(requiresAuthority = false)] // 아무 클라이언트나 호출 가능
     public void ReleaseWorker()
     {
         HumanResourcesManager.Instance.ReleaseWorkers(this, 1);

@@ -41,6 +41,7 @@ public abstract class Room : NetworkBehaviour
     public bool isOccupiedByMe = false; // 내가 방을 사용중인지 확인하기 위한 변수
 
     public int maxWorkers = 1;
+    [SyncVar]
     private int currentWorkers = 0;
     public int CurrentWorkers => currentWorkers;
     public int priority = 0;
