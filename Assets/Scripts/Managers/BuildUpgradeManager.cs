@@ -41,14 +41,14 @@ public class BuildUpgradeManager : NetworkBehaviour
             // 업그레이드 가능 조건 충족 시,
             // 자원 소모 후 방 업그레이드
             BuildManager.Instance.UseRequiredItem(_selectRoom);
-            CmdUpgradeRoom(coordinate);
+            CmdUpgradeRoom(coordinate, BuildManager.Instance.SelectRoom.gameObject);
         }
     }
 
     [Command(requiresAuthority = false)]
-    private void CmdUpgradeRoom(Vector2Int coordinate)
+    private void CmdUpgradeRoom(Vector2Int coordinate, GameObject roomObject)
     {
-        ReplaceRoom(coordinate);
+        ReplaceRoom(coordinate, roomObject);
     }
 
     /// <summary>
@@ -74,17 +74,17 @@ public class BuildUpgradeManager : NetworkBehaviour
     /// </summary>
     /// <param name="coordinate">업그레이드할 좌표</param>
     [Server]
-    private void ReplaceRoom(Vector2Int coordinate)
+    private void ReplaceRoom(Vector2Int coordinate, GameObject roomObject)
     {
         // 새 방 오브젝트를 생성
-        GameObject newRoomObj = Instantiate(BuildManager.Instance.SelectRoom.gameObject, BuildManager.Instance.FromBasisIntCoordinates(coordinate), Quaternion.identity);
+        GameObject newRoomObj = Instantiate(roomObject, BuildManager.Instance.FromBasisIntCoordinates(coordinate), Quaternion.identity);
         Debug.Log($"new1: {newRoomObj}");
         NetworkServer.Spawn(newRoomObj);
         Debug.Log($"new2: {newRoomObj}");
 
         // 기존 방 데이터 불러오기
         Room oldRoom = BuildManager.Instance.GetRoomWithCoordinate(coordinate);
-        Debug.Log($"old: {newRoomObj}");
+        Debug.Log($"old: {oldRoom}");
 
         // 새로 만들어진 방으로 데이터 교체
         if (BuildManager.Instance.ReplaceRoomData(coordinate, newRoomObj.GetComponent<Room>()))
@@ -97,6 +97,6 @@ public class BuildUpgradeManager : NetworkBehaviour
     [Server]
     public void RoomDowngrade(Vector2Int coordinate)
     {
-        //ReplaceRoom(coordinate, EmptyRoom.GetComponent<Room>());
+        ReplaceRoom(coordinate, EmptyRoom);
     }
 }
