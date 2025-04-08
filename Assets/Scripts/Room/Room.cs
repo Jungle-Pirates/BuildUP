@@ -60,6 +60,7 @@ public abstract class Room : NetworkBehaviour
     [SerializeField] private bool isFoundationRoom = false;
     public bool IsFoundationRoom { get { return isFoundationRoom; } }
 
+    [ClientRpc]
     public void SetRoomData(Vector2Int coordinate, Vector2Int setSize, bool setFoundationConnected)
     {
         roomPosition = coordinate;

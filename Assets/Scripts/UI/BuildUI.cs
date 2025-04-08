@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class BuildUI : MonoBehaviour
 {
@@ -31,7 +30,7 @@ public class BuildUI : MonoBehaviour
         for (int i = 0; i < BuildUpgradeManager.Instance.Rooms.Length; i++)
         {
             RoomUpgradeUIContent resource = Instantiate(roomUpgradeContentPrefab, upgradeRoomsParent).GetComponent<RoomUpgradeUIContent>();
-            resource.SetRoomData(BuildUpgradeManager.Instance.Rooms[i].GetComponent<Room>());
+            resource.SetRoomData(BuildUpgradeManager.Instance.Rooms[i].GetComponent<Room>(), i);
             upgradeRooms.Add(resource);
         }
     }

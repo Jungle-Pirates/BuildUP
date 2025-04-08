@@ -102,25 +102,29 @@ MonoBehaviour:
   upgradeRequiredItems:
   - items:
     - itemID: Ingredient_09
-      amount: 3
+      amount: 10
     - itemID: Ingredient_07
-      amount: 3
+      amount: 10
     - itemID: Ingredient_06
-      amount: 3
+      amount: 10
   - items:
     - itemID: Ingredient_10
-      amount: 5
+      amount: 15
     - itemID: Ingredient_07
-      amount: 5
+      amount: 15
     - itemID: Ingredient_06
-      amount: 5
+      amount: 15
+    - itemID: Ingredient_05
+      amount: 50
   - items:
     - itemID: Ingredient_11
-      amount: 7
+      amount: 20
     - itemID: Ingredient_10
-      amount: 7
+      amount: 20
     - itemID: Ingredient_04
-      amount: 7
+      amount: 10
+    - itemID: Ingredient_05
+      amount: 100
 --- !u!114 &1542805017527539659
 MonoBehaviour:
   m_ObjectHideFlags: 0

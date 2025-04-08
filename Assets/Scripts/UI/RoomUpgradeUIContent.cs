@@ -15,15 +15,17 @@ public class RoomUpgradeUIContent : MonoBehaviour
     [SerializeField] private Image roomImage;
     [SerializeField] private TextMeshProUGUI roomNameText;
 
-    private Room data;
+    private Room _data;
+    private int _prefabIndex;
 
     /// <summary>
     /// 해당하는 방의 방 데이터를 설정하고 UI를 업데이트하는 메서드
     /// </summary>
     /// <param name="data"></param>
-    public void SetRoomData(Room data)
+    public void SetRoomData(Room data, int index)
     {
-        this.data = data;
+        this._data = data;
+        _prefabIndex = index;
         UpdateUI();
     }
 
@@ -39,20 +41,20 @@ public class RoomUpgradeUIContent : MonoBehaviour
         }
 
         // 레시피 출력 피벗에 레시피 적용
-        for (int i = 0; i < data.RequiredItems.Length; i++)
+        for (int i = 0; i < _data.RequiredItems.Length; i++)
         {
             RoomUpgradeUIResourceContent resource = Instantiate(resourceContentPrefab, resourceContentsParent).GetComponent<RoomUpgradeUIResourceContent>();
-            resource.SetData(data.RequiredItems[i].itemID, data.RequiredItems[i].amount);
+            resource.SetData(_data.RequiredItems[i].itemID, _data.RequiredItems[i].amount);
             resourceContents.Add(resource);
         }
 
         // 방의 이미지와 이름 적용
-        roomImage.sprite = data.RoomSprite;
-        roomNameText.text = data.RoomName;
+        roomImage.sprite = _data.RoomSprite;
+        roomNameText.text = _data.RoomName;
     }
 
     public void SetSelectedRoom()
     {
-        BuildManager.Instance.SetSelectedRoom(data);
+        BuildManager.Instance.SetSelectedRoom(_data, _prefabIndex);
     }
 }
