@@ -407,6 +407,10 @@ public class BuildManager : NetworkBehaviour
             }
             else
             {
+                foreach(RequiredItem item in PipePrefab.GetComponent<NonRoom>().RequiredItems)
+                {
+                    InventoryManager.Instance.RemoveItem(item.itemID, item.amount);
+                }
                 CmdBuildNonRoom(coordinate, nonRoomType);
             }
         }
@@ -422,6 +426,10 @@ public class BuildManager : NetworkBehaviour
             }
             else
             {
+                foreach (RequiredItem item in LadderPrefab.GetComponent<NonRoom>().RequiredItems)
+                {
+                    InventoryManager.Instance.RemoveItem(item.itemID, item.amount);
+                }
                 CmdBuildNonRoom(coordinate, nonRoomType);
             }
         }
