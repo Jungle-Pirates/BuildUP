@@ -23,6 +23,7 @@ public class BuildManager : NetworkBehaviour
     public SyncDictionary<Vector2Int, GameObject> WorldRoomData => worldRoomData;
 
     [SerializeField] private GameObject testFoundationObject;
+    [SerializeField] private GameObject emptyRoom;
 
     private bool _isBuildMode = false;
     public bool IsBuildMode { get { return _isBuildMode; } }
@@ -407,7 +408,7 @@ public class BuildManager : NetworkBehaviour
             }
             else
             {
-                foreach(RequiredItem item in PipePrefab.GetComponent<NonRoom>().RequiredItems)
+                foreach (RequiredItem item in PipePrefab.GetComponent<NonRoom>().RequiredItems)
                 {
                     InventoryManager.Instance.RemoveItem(item.itemID, item.amount);
                 }
@@ -485,7 +486,7 @@ public class BuildManager : NetworkBehaviour
                 break;
             case 1:
                 Debug.Log("빈 방 건설");
-                roomObject = Instantiate(_selectRoom.gameObject, FromBasisIntCoordinates(coordinate), Quaternion.identity);
+                roomObject = Instantiate(emptyRoom, FromBasisIntCoordinates(coordinate), Quaternion.identity);
                 break;
             default:
                 Debug.Log($"An invalid room type input has been entered.");

@@ -8,7 +8,6 @@ public class BuildUpgradeManager : NetworkBehaviour
     public static BuildUpgradeManager Instance { get; private set; }
 
     public GameObject[] Rooms;
-    public GameObject EmptyRoom;
 
     private Room _selectRoom => BuildManager.Instance.SelectRoom;
 

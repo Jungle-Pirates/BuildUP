@@ -53,6 +53,7 @@ MonoBehaviour:
   cursorController: {fileID: 0}
   roomUnitSize: {x: 4, y: 3}
   testFoundationObject: {fileID: 5424020133352042080, guid: 9a053a80c647b9f468779981797eac9f, type: 3}
+  emptyRoom: {fileID: 5424020133352042080, guid: 005efcedd3f37204f86f9310a9e72547, type: 3}
   buildUI: {fileID: 0}
   LadderPrefab: {fileID: 5690240786786780139, guid: 3c748d1175f92af43990f55ce06bce96, type: 3}
   PipePrefab: {fileID: 5690240786786780139, guid: 9c808b7186405a84292d88a68fa2f7df, type: 3}
@@ -81,7 +82,6 @@ MonoBehaviour:
   - {fileID: 5424020133352042080, guid: da72f7ec4fd25854d8d27f21dcc081ce, type: 3}
   - {fileID: 5424020133352042080, guid: db177bb3462d5fe4ba421d724362d0b7, type: 3}
   - {fileID: 5424020133352042080, guid: 69e3c702f565ff54c8c56a716a1aa722, type: 3}
-  EmptyRoom: {fileID: 5424020133352042080, guid: 005efcedd3f37204f86f9310a9e72547, type: 3}
 --- !u!114 &9025140563914109110
 MonoBehaviour:
   m_ObjectHideFlags: 0
